@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap 
+    PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+    "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="MST_USER_LOGIN">
+	<typeAlias alias="PARA_USER" type="org.evm.biz.user.entity.UserVO" />
+	
+	<resultMap id="RESULT_USER" class="org.evm.biz.user.entity.UserVO">
+		<result property="uid" column="USER_ID" />
+		<result property="uname" column="USER_NAME" />
+		<result property="ufullName" column="USER_FULLNAME" />
+		<result property="funcList" column="USER_ID"  select ="MS_SQL_FIND_FUNC_BY_UID"/>
+	</resultMap>
+	 <select id="MS_SQL_USER_LOGIN" resultMap="RESULT_USER"  parameterClass="PARA_USER">
+		<![CDATA[
+			select  USER_ID,USER_NAME,USER_FULLNAME FROM QR_USER
+			WHERE 1=1 and user_status=0
+			]]>
+		<dynamic>
+			<isNotEmpty prepend="and" property="uname">
+				<![CDATA[ USER_NAME =#uname#]]>
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="upwd">
+			 	<![CDATA[ USER_PWD =#upwd#]]>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	<resultMap id="RESULT_LOGIN_FUNC" class="org.evm.biz.func.entity.FuncVO">
+		<result property="funcId" column="function_id" />
+		<result property="funcName" column="function_name" />
+	</resultMap>
+	<select id="MS_SQL_FIND_FUNC_BY_UID" parameterClass="java.lang.Integer" resultMap="RESULT_LOGIN_FUNC">
+	    <![CDATA[
+	          SELECT 
+					    func.function_id, function_name
+					FROM
+					    qr_user user
+					        JOIN
+					    qr_rel_user_role rur ON user.USER_ID = rur.user_id
+					        AND user.USER_ID = #value#
+					        JOIN
+					    qr_rel_role_func rrf ON rur.role_id = rrf.role_id
+					        JOIN
+					    qr_function func ON rrf.function_id = func.function_id
+					    where user.USER_STATUS=0
+					GROUP BY user.user_id , rrf.function_id
+		]]>
+	 </select>
+</sqlMap>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script type="text/javascript" src="./../jquery-easyui-1.5/jquery.min.js"></script>
+<script type="text/javascript" src="./../jquery-easyui-1.5/jquery.easyui.min.js"></script>
+<link rel="stylesheet" type="text/css" href="./../jquery-easyui-1.5/themes/gray/easyui.css">
+<script type="text/javascript" src="./../jquery-easyui-1.5/locale/easyui-lang-zh_CN.js"></script>
+<link rel="stylesheet" type="text/css" href="./../jquery-easyui-1.5/themes/icon.css">
+<!--自定义文件-->
+<link rel="stylesheet" type="text/css" href="./../css/style.css">
+<script type="text/javascript" src="./../js/common/BasePage.js"></script>
+<script type="text/javascript" src="./../js/common/BaseMap.js"></script>
+<script type="text/javascript" src="./../js/common/Util.js"></script>
+<script type="text/javascript" src="./../js/statistics4Maintain.js"></script>
+<script type="text/javascript" src="./../js/chart/highcharts.js"></script>
+ <!-- 测试数据 -->
+<script type="text/javascript" src="./../js/customerJson.js"></script>
+<title>用户信息统计</title>
+</head>
+<body class="easyui-layout">
+	<div data-options="region:'north', border:true" style="height: 65px;">
+	     <table style="padding-top:15px;padding-left:10px">
+	         <tr>
+				<td>区域</td>
+				<td><input id="projectId" style="width: 120px"type="text" class="easyui-combobox"
+					data-options=" panelHeight:'120',valueField:'pno',textField:'pno'" /></td>
+				<td>年份</td>
+				<td><input id="yearCnt"  style="width: 120px" type="text" class="easyui-combobox"
+					data-options=" panelHeight:'120',valueField:'id',textField:'text'" /></td>
+				<td>月份</td>
+				<td><input id="monthCnt"  style="width: 120px"type="text" class="easyui-combobox"
+					data-options=" panelHeight:'auto',valueField:'id',textField:'text'" /></td>
+				<td>开始时间</td>
+				<td><input id="beginDate" style="width: 120px"type="text" class="easyui-datebox" /></td>
+				<td>结束时间</td>
+				<td><input  id="endDate"  style="width: 120px" type="text" class="easyui-datebox" /></td>
+	            <td> <a href="#" class="easyui-linkbutton c6" style="width:100px">搜索</a></td>
+	         </tr>
+	     </table>
+	</div>
+	<div data-options="region:'west', border: true" style="width: 40%">
+		<table style="padding-left: 30px">
+			<tr style="height: 80px">
+				<td colspan=4><span style="color: blue; font-size: 18px">朝阳区集成项目设备故障点位统计分析</span></td>
+			</tr>
+			<tr>
+				<td colspan=4><span style="color: blue; font-size: 18px">故障类型分析</span></td>
+			</tr>
+			<tr>
+				<td rowspan="2" style="width:50px"><div>
+						<img src="./../images/web_button_05.png">
+					</div></td>
+				<td colspan="3">市电故障:</td>
+			</tr>
+			<tr>
+				<td style="width:80px">故障次数：43</td>
+				<td style="width:80px">维修次数：15</td>
+				<td style="width:80px">设备数量：32</td>
+			</tr>
+			<tr>
+				<td rowspan="2"><div>
+						<img src="./../images/web_button_06.png">
+					</div></td>
+				<td colspan="3">光缆故障:</td>
+			</tr>
+			<tr>
+				<td>故障次数：43</td>
+				<td>维修次数：15</td>
+				<td>设备数量：32</td>
+			</tr>
+			<tr>
+				<td rowspan="2"><div>
+						<img src="./../images/web_button_07.png">
+					</div></td>
+				<td colspan="3">装修:</td>
+			</tr>
+			<tr>
+				<td>故障次数：43</td>
+				<td>维修次数：15</td>
+				<td>设备数量：32</td>
+			</tr>
+			<tr>
+				<td rowspan="2"><div>
+						<img src="./../images/web_button_06.png">
+					</div></td>
+				<td colspan="3">设备故障:</td>
+			</tr>
+			<tr>
+				<td>故障次数：43</td>
+				<td>维修次数：15</td>
+				<td>设备数量：32</td>
+			</tr>
+			<tr>
+				<td rowspan="2"><div>
+						<img src="./../images/web_button_03.png">
+					</div></td>
+				<td colspan="3">施工质量:</td>
+			</tr>
+			<tr>
+				<td>故障次数：43</td>
+				<td>维修次数：15</td>
+				<td>设备数量：32</td>
+			</tr>
+			<tr>
+				<td rowspan="2"><div>
+						<img src="./../images/web_button_04.png">
+					</div></td>
+				<td colspan="3">人为破坏:</td>
+			</tr>
+			<tr>
+				<td>故障次数：43</td>
+				<td>维修次数：15</td>
+				<td>设备数量：32</td>
+			</tr>
+			<tr>
+				<td rowspan="2"><div>
+						<img src="./../images/web_button_05.png">
+					</div></td>
+				<td colspan="3">迁移调角度:</td>
+			</tr>
+			<tr>
+				<td>故障次数：43</td>
+				<td>维修次数：15</td>
+				<td>设备数量：32</td>
+			</tr>
+		</table>
+	</div>
+	<div data-options="region:'center', border: true">
+	        <div id="container" style="min-width:400px;height:400px"></div>
+	</div>
+</body>
+</html>

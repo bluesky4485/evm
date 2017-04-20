@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap 
+    PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+    "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="MST_DATAST">	
+<typeAlias alias="PARA_CUSTOMPAGESTVO" type="org.evm.biz.datast.entity.CustomPageStVO" />
+    <!-- 项目统计 -->
+    <select id="MS_SQL_FIND_PROJ_TODAY_END_COUNT" resultClass="java.lang.Integer"
+		parameterClass="java.lang.Integer">
+		<![CDATA[
+			select  count(1)
+			from qr_project
+		  where PRO_STATUS=0 
+		     and TIMESTAMPDIFF(DAY,WORK_END_DATE,sysdate())=0;
+			]]>
+	</select>
+	<select id="MS_SQL_FIND_PROJ_END_COUNT" resultClass="java.lang.Integer"
+		parameterClass="java.lang.Integer">
+		<![CDATA[
+			select  count(1)
+			from qr_project
+		  where PRO_STATUS=0 
+		    and TIMESTAMPDIFF(DAY,WORK_END_DATE,sysdate())>=0
+		     and TIMESTAMPDIFF(DAY,WORK_END_DATE,sysdate())<=#value#;
+			]]>
+	</select>
+	<select id="MS_SQL_FIND_PROJ_MONTH_END_COUNT" resultClass="java.lang.Integer"
+		parameterClass="java.lang.Integer">
+		<![CDATA[
+			select  count(1)
+			from qr_project
+		  where PRO_STATUS=0 
+		   AND  WORK_END_DATE >= DATE_ADD(curdate(),interval -day(curdate())+1 day)
+		   AND  WORK_END_DATE <= last_day(curdate())
+			]]>
+	</select>
+	<select id="MS_SQL_FIND_PROJ_SIGN_COUNT" resultClass="java.lang.Integer"
+		parameterClass="java.lang.Integer">
+		<![CDATA[
+			select  count(1)
+			from qr_project
+		  where PRO_STATUS=0 
+		     and TIMESTAMPDIFF(DAY,SIGN_DATE,sysdate())<=#value#
+			]]>
+	</select>
+		<select id="MS_SQL_FIND_ALL_PROJECT" resultClass="java.lang.Integer"
+		parameterClass="java.lang.Integer">
+		<![CDATA[
+			select  count(1)
+			from qr_project
+		  where PRO_STATUS=0 
+			]]>
+	</select>
+	<!-- 客户统计 -->
+	<!--今日停止的服务  -->
+	<select id="MS_SQL_FIND_CUSTOM_TODAY_STOP_SERVICE_COUNT" resultClass="java.lang.Integer"
+		parameterClass="java.lang.Integer">
+		<![CDATA[
+			SELECT   COUNT(1)
+			FROM
+			    (SELECT   CUS_ID   FROM  qr_project
+			     WHERE  pro_status = 0 AND TIMESTAMPDIFF(DAY, SERVICE_END_DATE, SYSDATE()) =0  GROUP BY CUS_ID
+			     ) ST
+			   join  QR_CUSTOM  cus
+			   on ST.CUS_ID=cus.CUS_ID
+			   and cus.CUS_STATUS=0
+			]]>
+	</select>
+	<!--3日内停止服务的  -->
+	<select id="MS_SQL_FIND_CUSTOM_STOP_SERVICE_COUNT" resultClass="java.lang.Integer"
+		parameterClass="java.lang.Integer">
+		<![CDATA[
+			SELECT   COUNT(1)
+			FROM
+			    (SELECT   CUS_ID   FROM  qr_project
+			     WHERE  pro_status = 0 AND TIMESTAMPDIFF(DAY, SERVICE_END_DATE, SYSDATE()) >=0
+			                                         AND TIMESTAMPDIFF(DAY, SERVICE_END_DATE, SYSDATE()) <=#value#   GROUP BY CUS_ID
+			     ) ST
+			     join  QR_CUSTOM  cus
+			   on ST.CUS_ID=cus.CUS_ID
+			   and cus.CUS_STATUS=0
+			]]>
+	</select>
+	<!--  本月-->
+	<select id="MS_SQL_FIND_CUSTOM_STOP_MONTH_SERVICE_COUNT" resultClass="java.lang.Integer"
+		parameterClass="java.lang.Integer">
+		<![CDATA[
+			SELECT   COUNT(1)
+			FROM
+			    (SELECT   CUS_ID   FROM  qr_project
+			     WHERE  pro_status = 0  
+			         AND  SERVICE_END_DATE >= DATE_ADD(curdate(),interval -day(curdate())+1 day)
+			         AND  SERVICE_END_DATE <= last_day(curdate())
+			       GROUP BY CUS_ID
+			     ) ST
+			     join  QR_CUSTOM  cus
+			   on ST.CUS_ID=cus.CUS_ID
+			   and cus.CUS_STATUS=0
+			]]>
+	</select>
+	<!--全部客户  -->
+	<select id="MS_SQL_FIND_CUSTOM_ALL_CNT" resultClass="java.lang.Integer"
+		parameterClass="java.lang.Integer">
+		<![CDATA[
+			SELECT   COUNT(1)
+			FROM
+			    QR_CUSTOM  cus
+			   where  cus.CUS_STATUS=0
+			]]>
+	</select>
+	
+	<!-- 订单统计 -->
+	<!-- 今日未处理的订单 -->
+	<select id="MS_SQL_FIND_ORDER_TODAY_NODO_COUNT" resultClass="java.lang.Integer"
+		parameterClass="java.lang.Integer">
+		<![CDATA[
+			SELECT   COUNT(1)
+             FROM  qr_order ord 
+             join qr_project pro 
+               on ord.project_id=pro.project_id 
+              and pro.pro_status=0
+            WHERE  ord.WORK_STATUS=0  and  ord.order_status=0
+            AND TIMESTAMPDIFF(DAY, ord.INS_Date, SYSDATE()) =0
+			]]>
+	</select>
+	<!-- 7日内未处理的订单 -->
+	<select id="MS_SQL_FIND_ORDER_WEEK_NODO_COUNT" resultClass="java.lang.Integer"
+		parameterClass="java.lang.Integer">
+		<![CDATA[
+			select  count(1)
+			from qr_order ord 
+			join qr_project pro 
+               on ord.project_id=pro.project_id 
+              and pro.pro_status=0
+			where ord.WORK_STATUS=0    and  ord.order_status=0
+			   AND TIMESTAMPDIFF(DAY, ord.INS_Date, SYSDATE()) >=0
+			   AND TIMESTAMPDIFF(DAY, ord.INS_Date, SYSDATE()) <= 7
+			]]>
+	</select>
+	<!--本月未处理的订单  -->
+	<select id="MS_SQL_FIND_ORDER_MONTH_NODO_COUNT" resultClass="java.lang.Integer">
+		<![CDATA[
+			select  count(1)
+			from qr_order ord 
+			join qr_project pro 
+              on ord.project_id=pro.project_id 
+             and pro.pro_status=0
+		   where ord.WORK_STATUS=0  and ord.order_status=0
+			 AND  ord.INS_Date >= DATE_ADD(curdate(),interval -day(curdate())+1 day)
+			 AND  ord.INS_Date <= last_day(curdate())
+			]]>
+	</select>
+	<!-- 所有的订单 -->
+	<select id="MS_SQL_FIND_ORDER_ALLCOUNT" resultClass="java.lang.Integer">
+		<![CDATA[
+			select  count(1)
+			from qr_order ord
+			join qr_project pro 
+              on ord.project_id=pro.project_id 
+             and pro.pro_status=0
+		   where   order_status=0
+		  
+			]]>
+	</select>
+	<!-- 运维订单统计 -->
+	<select id="MS_SQL_FIND_PORDER_ACOUNT" resultClass="java.lang.Integer"
+		parameterClass="java.lang.Long">
+		<![CDATA[
+			select  count(1)
+			from qr_morder a 
+			JOIN
+			 qr_order bizorder ON a.ORDER_ID = bizorder.order_id and bizorder.order_status=0
+	          JOIN
+	        qr_project project ON bizorder.PROJECT_ID = project.PROJECT_ID and project.pro_status=0
+			where a.MORDER_PM=#value#
+			 and   a.MAINTAIN_STATUS=0
+			  and MORDER_STATUS=0
+	]]>
+	</select>
+	<select id="MS_SQL_FIND_PORDER_STATUS_ACOUNT" resultClass="java.lang.Integer"
+		parameterClass="java.lang.Integer">
+		<![CDATA[
+			select  count(1)
+			from qr_morder  a 
+			JOIN
+			 qr_order bizorder ON a.ORDER_ID = bizorder.order_id and bizorder.order_status=0
+	          JOIN
+	        qr_project project ON bizorder.PROJECT_ID = project.PROJECT_ID and project.pro_status=0
+			where a.MAINTAIN_STATUS=#value#  and a.MORDER_STATUS=0
+	]]>
+	</select>
+	<select id="MS_SQL_FIND_PORDER_STATUSING_ACOUNT" resultClass="java.lang.Integer">
+		<![CDATA[
+			select  count(1)
+			from qr_morder a
+			JOIN
+			 qr_order bizorder ON a.ORDER_ID = bizorder.order_id and bizorder.order_status=0
+	          JOIN
+	        qr_project project ON bizorder.PROJECT_ID = project.PROJECT_ID and project.pro_status=0
+			 where (a.MAINTAIN_STATUS=1 OR a.MAINTAIN_STATUS=2)and a.MORDER_STATUS=0
+	]]>
+	</select>
+	<select id="MS_SQL_FIND_ALL_MORDER_CNT" resultClass="java.lang.Integer">
+		<![CDATA[
+			select  count(1)
+			from qr_morder a
+			JOIN
+			 qr_order bizorder ON a.ORDER_ID = bizorder.order_id and bizorder.order_status=0
+	          JOIN
+	        qr_project project ON bizorder.PROJECT_ID = project.PROJECT_ID and project.pro_status=0
+			 where  a.MORDER_STATUS=0
+	]]>
+	</select>
+</sqlMap>

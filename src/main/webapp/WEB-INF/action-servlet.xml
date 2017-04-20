@@ -1,0 +1,180 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:lang="http://www.springframework.org/schema/lang"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+		http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-3.2.xsd
+		  http://www.springframework.org/schema/aop           http://www.springframework.org/schema/aop/spring-aop.xsd">
+	<!--置扫描controller -->
+ 
+ 
+	<aop:aspectj-autoproxy proxy-target-class="true" />
+	<bean class="org.evm.biz.log.aop.SpringControllerAop">
+	</bean>
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass">
+			<value>
+				org.springframework.web.servlet.view.JstlView
+			</value>
+		</property>
+		<property name="prefix">
+			<value>/pages/</value>
+		</property>
+		<property name="suffix">
+			<value>.jsp</value>
+		</property>
+	</bean>
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- set the max upload size100MB -->
+		<property name="maxUploadSize">
+			<value>104857600</value>
+		</property>
+		<property name="maxInMemorySize">
+			<value>4096</value>
+		</property>
+	</bean>
+
+	<bean id="paraMethodResolver"
+		class="org.springframework.web.servlet.mvc.multiaction.ParameterMethodNameResolver">
+		<property name="paramName">
+			<value>method</value>
+		</property>
+		<property name="defaultMethodName">
+			<value>list</value>
+		</property>
+	</bean>
+	<bean id="urlMapping"
+		class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+		<property name="mappings">
+			<props>
+				<prop key="/customController.do">customController</prop>
+				<prop key="/loginController.do">loginController</prop>
+				<prop key="/projectController.do">projectController</prop>
+				<prop key="/userController.do">userController</prop>
+				<prop key="/deviceController.do">deviceController</prop>
+				<prop key="/faultTypeController.do">faultTypeController</prop>
+				<prop key="/morderController.do">morderController</prop>
+				<prop key="/orderController.do">orderController</prop>
+				<prop key="/deviceItemController.do">deviceItemController</prop>
+				<prop key="/roleController.do">roleController</prop>
+				<prop key="/funcController.do">funcController</prop>
+				<prop key="/logController.do">logController</prop>
+				<prop key="/pageDatastController.do">pageDatastController</prop>
+				<prop key="/staticsController.do">staticsController</prop>
+				<prop key="/databaseManagerController.do">databaseManagerController</prop>
+			</props>
+		</property>
+
+	</bean>
+	<!--用户登录 -->
+	<bean id="loginController" class="org.evm.biz.user.web.LoginController">
+		<property name="methodNameResolver">
+			<ref bean="paraMethodResolver" />
+		</property>
+		<property name="loginUserService" ref="loginUserService" />
+	</bean>
+	<!--用户管理 -->
+	<bean id="userController" class="org.evm.biz.user.web.UserController">
+		<property name="methodNameResolver">
+			<ref bean="paraMethodResolver" />
+		</property>
+		<property name="userDbService" ref="userDbService" />
+	</bean>
+	<!--客户管理 -->
+	<bean id="customController" class="org.evm.biz.custom.web.CustomController">
+		<property name="methodNameResolver">
+			<ref bean="paraMethodResolver" />
+		</property>
+		<property name="customDbService" ref="customDbService" />
+	</bean>
+	<!--项目管理 -->
+	<bean id="projectController" class="org.evm.biz.project.web.ProjectController">
+		<property name="methodNameResolver">
+			<ref bean="paraMethodResolver" />
+		</property>
+		<property name="projectDbService" ref="projectDbService" />
+	</bean>
+	<!--Device管理 -->
+	<bean id="deviceController" class="org.evm.biz.device.web.DeviceTypeController">
+		<property name="methodNameResolver">
+			<ref bean="paraMethodResolver" />
+		</property>
+		<property name="deviceTypeDbService" ref="deviceTypeDbService" />
+	</bean>
+	<!--FaultType管理 -->
+	<bean id="faultTypeController" class="org.evm.biz.faulttype.web.FaultTypeController">
+		<property name="methodNameResolver">
+			<ref bean="paraMethodResolver" />
+		</property>
+		<property name="faultTypeDbService" ref="faultTypeDbService" />
+	</bean>
+	<!--维护订单管理 -->
+	<bean id="morderController" class="org.evm.biz.morder.web.MOrderController">
+		<property name="methodNameResolver">
+			<ref bean="paraMethodResolver" />
+		</property>
+		<property name="morderDbService" ref="morderDbService" />
+	</bean>
+	<!--订单管理 -->
+	<bean id="orderController" class="org.evm.biz.order.web.OrderController">
+		<property name="methodNameResolver">
+			<ref bean="paraMethodResolver" />
+		</property>
+		<property name="orderDbService" ref="orderDbService" />
+	</bean>
+	<!--设备管理 -->
+	<bean id="deviceItemController" class="org.evm.biz.order.web.DeviceItemController">
+		<property name="methodNameResolver">
+			<ref bean="paraMethodResolver" />
+		</property>
+		<property name="deviceItemService" ref="deviciceItemService" />
+		<property name="orderDeviceService" ref="orderDeviceService" />
+	</bean>
+	<!--角色管理 -->
+	<bean id="roleController" class="org.evm.biz.role.web.RoleController">
+		<property name="methodNameResolver">
+			<ref bean="paraMethodResolver" />
+		</property>
+		<property name="roleDbService" ref="roleDbService" />
+	</bean>
+	<!--权限管理 -->
+	<bean id="funcController" class="org.evm.biz.func.web.FuncController">
+		<property name="methodNameResolver">
+			<ref bean="paraMethodResolver" />
+		</property>
+		<property name="funcDbService" ref="funcDbService" />
+	</bean>
+	<!--日志管理 -->
+	<bean id="logController" class="org.evm.biz.log.web.LogController">
+		<property name="methodNameResolver">
+			<ref bean="paraMethodResolver" />
+		</property>
+		<property name="logDbService" ref="logDbService" />
+	</bean>
+	<!--统计管理 -->
+	<bean id="pageDatastController" class="org.evm.biz.datast.web.PageDataStController">
+		<property name="methodNameResolver">
+			<ref bean="paraMethodResolver" />
+		</property>
+		<property name="pageDataStService" ref="pageDataStService" />
+	</bean>
+	<!--统计管理 -->
+	<bean id="staticsController" class="org.evm.biz.statics.web.StaticsController">
+		<property name="methodNameResolver">
+			<ref bean="paraMethodResolver" />
+		</property>
+		<property name="staticsDbService" ref="staticsDbService" />
+	</bean>
+	<!--统计管理 -->
+	<bean id="databaseManagerController" class="org.evm.biz.dbmanager.web.DatabaseManagerController">
+		<property name="methodNameResolver">
+			<ref bean="paraMethodResolver" />
+		</property>
+		<property name="comboPooledDataSource" ref="dataSource" />
+	</bean> 
+</beans>

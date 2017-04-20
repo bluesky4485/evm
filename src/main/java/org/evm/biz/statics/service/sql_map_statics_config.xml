@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap 
+    PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+    "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="MST_STATICS">
+    <typeAlias alias="PARA_STATICS_PROJECT" type="org.evm.biz.project.entity.ProjectVO" />
+    <typeAlias alias="PARA_STATICS_MOREDER" type="org.evm.biz.morder.entity.MOrderVO" />
+    <typeAlias alias="PARA_STATICS_OREDER" type="org.evm.biz.order.entity.OrderVO" />
+	<typeAlias alias="PARA_STATICS_DEVICEITEM" type="org.evm.biz.order.entity.DeviceItemVO" />
+	<resultMap id="RESULT_STATICS_PROJECT" class="org.evm.biz.project.entity.ProjectVO">
+	   <result property="projectId" column="PROJECT_ID" />
+		<result property="projectNo" column="PROJECT_NO" />
+		<result property="projectName" column="PROJECT_NAME" />
+		<result property="cusId" column="CUS_ID" /><result property="cusName" column="CUS_NAME" />
+		<result property="cmId" column="CM_ID" /><result property="cmName" column="CM_NAME" />
+		<result property="pmId" column="PM_ID" /><result property="pmName" column="PM_NAME" />
+		<result property="projectType" column="PROJECT_TYPE" /><result property="projectTypeDesc" column="PROJECT_TYPE_DESC" />
+		<result property="contractId" column="CONTRACT_ID" />
+		<result property="contractSum" column="CONTRACT_SUM" />
+		<result property="signDate" column="SIGN_DATE" />
+		<result property="payType" column="PAY_TYPE" />
+		<result property="workEndDate" column="WORK_END_DATE" />
+		<result property="workStartDate" column="WORK_START_DATE" />
+		<result property="yearPay" column="YEAR_PAY" />
+		<result property="serviceEndDate" column="SERVICE_END_DATE" />
+		<result property="payDate" column="PAY_DATE" />
+		<result property="buildType" column="BUILD_TYPE" /><result property="buildTypeDesc" column="BUILD_TYPE_DESC" />
+		<result property="joinDate" column="JOIN_DATE" />
+		<result property="stopDate" column="STOP_DATE" />
+		<result property="projectRemark" column="PROJECT_REMARK" />
+		<result property="insUser" column="INS_USER" />
+		<result property="updUser" column="UPD_USER" />
+		<result property="insDate" column="INS_DATE" />
+		<result property="updDate" column="UPD_DATE" />
+	</resultMap>
+	<select id="MS_FIND_STATICS_PROJECT" resultMap="RESULT_STATICS_PROJECT"  parameterClass="PARA_STATICS_PROJECT">
+		<![CDATA[
+			 SELECT 
+					    pro.PROJECT_ID,
+					    pro.PROJECT_NO,
+					    pro.PROJECT_NAME,
+					    pro.CUS_ID,
+					    cus.CUS_NAME,
+					    pro.CM_ID,
+					    cmusr.USER_FULLNAME CM_NAME,
+					    pro.PM_ID,
+					    pmusr.USER_FULLNAME PM_NAME,
+					    pro.PROJECT_TYPE,
+					    ptt.text PROJECT_TYPE_DESC,
+					    pro.CONTRACT_ID,
+					    pro.CONTRACT_SUM,
+					     DATE_FORMAT(pro.SIGN_DATE, '%Y-%m-%d') SIGN_DATE,
+					    pro.PAY_TYPE,
+					    DATE_FORMAT(pro.WORK_END_DATE, '%Y-%m-%d') WORK_END_DATE,
+					    DATE_FORMAT(pro.WORK_START_DATE, '%Y-%m-%d') WORK_START_DATE,
+					    pro.YEAR_PAY,
+					    DATE_FORMAT(pro.SERVICE_END_DATE, '%Y-%m-%d') SERVICE_END_DATE,
+					    DATE_FORMAT(pro.PAY_DATE, '%Y-%m-%d') PAY_DATE,
+					    pro.BUILD_TYPE,
+					    dbt.text BUILD_TYPE_DESC,
+					    DATE_FORMAT(pro.JOIN_DATE, '%Y-%m-%d') JOIN_DATE,
+					    DATE_FORMAT(pro.STOP_DATE, '%Y-%m-%d') STOP_DATE,
+					    pro.PROJECT_REMARK,
+					    DATE_FORMAT(pro.UPD_DATE, '%Y-%m-%d %k:%i:%s') UPD_DATE,
+					    DATE_FORMAT(pro.INS_DATE, '%Y-%m-%d %k:%i:%s') INS_DATE,
+					    insusr.USER_FULLNAME INS_USER,
+					    updusr.USER_FULLNAME UPD_USER
+					FROM
+					    qr_project pro
+					        LEFT JOIN
+					    qr_custom cus ON pro.CUS_ID = cus.CUS_ID
+					        LEFT JOIN
+					    qr_user cmusr ON pro.CM_ID = cmusr.USER_ID
+					        LEFT JOIN
+					    qr_user pmusr ON pro.PM_ID = pmusr.USER_ID
+					        LEFT JOIN
+					    qr_dict_buildtype dbt ON pro.BUILD_TYPE = dbt.id
+					        LEFT JOIN
+					    qr_dict_projecttype ptt ON pro.PROJECT_TYPE = ptt.id
+					        LEFT JOIN
+					    qr_user updusr ON pro.INS_USER = updusr.USER_ID
+					        LEFT JOIN
+					    qr_user insusr ON pro.INS_USER = insusr.USER_ID
+                   where pro.PRO_STATUS = 0
+			]]>
+		<dynamic>
+			<isNotEmpty prepend="and" property="condName">
+				<![CDATA[  $condName$ like '%$condValue$%']]>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	 
+	 <resultMap id="RESULT_MOREDER_ST" class="org.evm.biz.morder.entity.MOrderVO">
+	    <result property="projectNo" column="PROJECT_NO" />
+	    <result property="projectName" column="PROJECT_NAME" />
+		<result property="orderNo" column="ORDER_NO" />
+		<result property="morderId" column="MORDER_ID" /> 
+		<result property="morderNo" column="MORDER_NO" /> 
+		<result property="morderPmId" column="MORDER_PM" />
+		<result property="pmName" column="MORDER_PM_NAME" />
+		<result property="maintainDate" column="MAINTAIN_DATE" />
+		<result property="faultDesc" column="FAULT_DESC" />
+		<result property="appointmentDate" column="APPOINTMENT_DATE" />
+		<result property="planEndDate" column="PLAN_END_DATE" />
+		<result property="mworkerCnt" column="MWORKER_CNT" />
+		<result property="maintainBeginDate" column="MAINTAIN_BEGIN_DATE" />
+		<result property="maintainStatus" column="MAINTAIN_STATUS" /> 
+			<result property="maintainStatusDesc" column="maintain_status_desc" />
+		<result property="maintainSpeed" column="MAINTAIN_SPEED" />
+		<result property="faultType" column="FAULT_TYPE" />
+		<result property="faultTypeDesc" column="fault_type_desc" />
+		<result property="maintainPmId" column="MAINTAIN_PM" />
+		<result property="maintainPmName" column="MAINTAIN_PM_NAME" />
+		<result property="acceptStatus" column="ACCEPT_STATUS" />
+		<result property="acceptStatusDesc" column="ACCEPT_STATUS_DESC" />
+		<result property="acceptecallMan" column="ACCEPTECALL_MAN" />
+		
+		<result property="callbackDate" column="CALLBACK_DATE" />
+		<result property="solution" column="SOLUTION" />
+		<result property="maintainResultdesc" column="MAINTAIN_RESULTDESC" />
+		<result property="maintainRemark" column="MAINTAIN_REMARK" />
+		<result property="userScore" column="USER_SCORE" />
+		<result property="userProposal" column="USER_PROPOSAL" />
+		<result property="lastUpdDate" column="last_UpdDate" />
+		<result property="insUser" column="INS_USER" />
+		<result property="updUser" column="UPD_USER" />
+		<result property="insDate" column="INS_DATE" />
+		<result property="updDate" column="UPD_DATE" />
+	</resultMap>
+	 <select id="MS_FIND_STATICS_MORDER" resultMap="RESULT_MOREDER_ST"  parameterClass="PARA_STATICS_MOREDER">
+		<![CDATA[
+			SELECT 
+					    pro.PROJECT_NO,
+					    pro.PROJECT_NAME,
+					    ord.ORDER_NO,
+					    mord.MORDER_ID,
+					    mord.MORDER_NO,
+					    mord.MORDER_PM,
+					    pmuser.USER_FULLNAME MORDER_PM_name,
+					    DATE_FORMAT(mord.MAINTAIN_DATE, '%Y-%m-%d') MAINTAIN_DATE,
+					    mord.FAULT_DESC,
+					    DATE_FORMAT(mord.APPOINTMENT_DATE, '%Y-%m-%d') APPOINTMENT_DATE,
+					    DATE_FORMAT(mord.PLAN_END_DATE, '%Y-%m-%d') PLAN_END_DATE,
+					    mord.MWORKER_CNT,
+					    DATE_FORMAT(mord.MAINTAIN_BEGIN_DATE, '%Y-%m-%d') MAINTAIN_BEGIN_DATE,
+					    mord.MAINTAIN_STATUS,
+					    ms.text maintain_status_desc,
+					    mord.MAINTAIN_SPEED,
+					    mord.FAULT_TYPE,
+					    ft.FAULTTYPE_NAME fault_type_desc,
+					    mord.MAINTAIN_PM,
+					    pmuser.USER_FULLNAME MAINTAIN_PM_NAME,
+					    mord.ACCEPT_STATUS,
+					    astust.text ACCEPT_STATUS_DESC,
+					    mord.ACCEPTECALL_MAN,
+					    mord.CALLBACK_DATE,
+					    mord.SOLUTION,
+					    mord.MAINTAIN_RESULTDESC,
+					    mord.MAINTAIN_REMARK,
+					    mord.USER_SCORE,
+					    mord.USER_PROPOSAL,
+					    DATE_FORMAT(mord.LAST_UPDDATE, '%Y-%m-%d %k:%i:%s') LAST_UPDDATE,
+					    DATE_FORMAT(mord.UPD_DATE, '%Y-%m-%d %k:%i:%s') UPD_DATE,
+					    DATE_FORMAT(mord.INS_DATE, '%Y-%m-%d %k:%i:%s') INS_DATE,
+					    insusr.USER_FULLNAME INS_USER,
+					    updusr.USER_FULLNAME UPD_USER
+					FROM
+					    qr_morder mord
+					        JOIN
+					    qr_order ord ON mord.ORDER_ID = ord.order_id and ord.order_status=0
+					        JOIN
+					    qr_project pro ON ord.PROJECT_ID = pro.PROJECT_ID and pro.pro_status=0
+					        LEFT JOIN
+					    qr_user pmorderuser ON mord.MAINTAIN_PM = pmorderuser.USER_ID
+					        LEFT JOIN
+					    qr_dict_maintainstatus ms ON mord.maintain_status = ms.id
+					        LEFT JOIN
+					    qr_faulttype ft ON FAULT_TYPE = ft.FAULTTYPE_ID
+					        LEFT JOIN
+					    qr_user pmuser ON mord.MAINTAIN_PM = pmuser.USER_ID
+					        LEFT JOIN
+					    qr_dict_acceptstatus astust ON mord.ACCEPT_STATUS = astust.id
+					       
+					        LEFT JOIN
+					    qr_user updusr ON mord.INS_USER = updusr.USER_ID
+					        LEFT JOIN
+					    qr_user insusr ON mord.INS_USER = insusr.USER_ID
+				 where mord.MORDER_STATUS = 0
+			]]>
+		<dynamic>
+			 <isNotEqual property="projectId" compareValue="-1" prepend="and">
+		           <![CDATA[  pro.PROJECT_ID =#projectId# ]]>
+		    </isNotEqual>
+		     <isNotEqual property="faultType" compareValue="-1" prepend="and">
+		           <![CDATA[  mord.FAULT_TYPE =#faultType# ]]>
+		    </isNotEqual>
+		     <isNotEqual property="maintainStatus" compareValue="-1" prepend="and">
+		           <![CDATA[  mord.MAINTAIN_STATUS =#maintainStatus# ]]>
+		    </isNotEqual>
+		</dynamic>
+	</select>
+	
+	<resultMap id="RESULT_OREDER_ST" class="org.evm.biz.order.entity.OrderVO">
+		<result property="orderId" column="ORDER_ID" />
+		<result property="orderNo" column="ORDER_NO" />
+		<result property="projectId" column="PROJECT_ID" />
+		<result property="projectNo" column="PROJECT_NO" />
+		<result property="projectName" column="PROJECT_NAME" />
+		<result property="workPmId" column="WORK_PM_ID" />
+		<result property="workPmName" column="WORK_PM_Name" />
+		<result property="workCnt" column="WORK_CNT" />
+		<result property="workAddress" column="WORK_ADDRESS" />
+		<result property="workCompany" column="WORK_COMPANY" />
+		<result property="workCompanyQualified" column="WORK_COMPANY_QUALIFIED" />
+		<result property="workType" column="WORK_TYPE" />
+		<result property="workTypeDesc" column="WORK_TYPE_DESC" />
+		
+		<result property="workDays" column="WORK_DAYS" />
+		<result property="planBeginDate" column="PLAN_BEGIN_DATE" />
+		<result property="planEndDate" column="PLAN_END_DATE" />
+		
+		<result property="storePmId" column="STORE_PM_ID" />
+		<result property="storePmName" column="STORE_PM_NAME" />
+		<result property="planOutstoreDate" column="PLAN_OUTSTORE_DATE" />
+		<result property="workStatus" column="WORK_STATUS" />
+		<result property="workStatusDesc" column="WORK_STATUS_DESC" />
+		<result property="workBeginDate" column="WORK_BEGIN_DATE" />
+		<result property="workEndDate" column="WORK_END_DATE" />
+		
+		<result property="workProgress" column="WORK_PROGRESS" />
+		
+		<result property="lastWorkupdDate" column="LAST_WORKUPD_DATE" />
+		<result property="checkerId" column="CHECKER_ID" />
+		<result property="checkerName" column="CHECKER_NAME" />
+		<result property="checkResult" column="CHECK_RESULT" />
+		<result property="checkResultDesc" column="CHECK_RESULT_DESC" />
+		
+		<result property="checkDate" column="CHECK_DATE" />
+		
+		<result property="userRating" column="USER_RATING" />
+		<result property="userAppraise" column="USER_APPRAISE" />
+		<result property="workRemark" column="WORK_REMARK" />
+		<result property="insUser" column="INS_USER" />
+		<result property="updUser" column="UPD_USER" />
+		<result property="insDate" column="INS_DATE" />
+		<result property="updDate" column="UPD_DATE" />
+	</resultMap>
+	<select id="MS_SQL_FIND_STATICS_ORDER" resultMap="RESULT_OREDER_ST"  parameterClass="PARA_STATICS_OREDER">
+	      <![CDATA[
+	            SELECT 
+					    ord.order_id,
+					    ord.ORDER_NO,
+					    ord.PROJECT_ID,
+					    pro.PROJECT_NAME,
+					    pro.PROJECT_NO,
+					    ord.WORK_PM_ID,
+					    workpm.USER_FULLNAME WORK_PM_Name,
+					    ord.WORK_CNT,
+					    ord.WORK_ADDRESS,
+					    ord.WORK_COMPANY,
+					    ord.WORK_COMPANY_QUALIFIED,
+					    ord.WORK_TYPE,
+					    qdwt.text WORK_TYPE_DESC,
+					    ord.WORK_DAYS,
+					    ord.PLAN_BEGIN_DATE,
+					    ord.PLAN_END_DATE,
+					    ord.STORE_PM_ID,
+					    storepm.USER_FULLNAME STORE_PM_Name,
+					    ord.PLAN_OUTSTORE_DATE,
+					    ord.WORK_STATUS,
+					    qdws.text WORK_STATUS_DESC,
+					    ord.WORK_BEGIN_DATE,
+					    ord.WORK_END_DATE,
+					    ord.WORK_PROGRESS,
+					    ord.LAST_WORKUPD_DATE,
+					    ord.CHECKER_ID,
+					    checkPm.USER_FULLNAME CHECKER_NAME,
+					    ord.CHECK_RESULT,
+					    qdwcr.text  CHECK_RESULT_DESC,
+					    ord.CHECK_DATE,
+					    ord.USER_RATING,
+					    ord.USER_APPRAISE,
+					    ord.WORK_REMARK,
+					    DATE_FORMAT(ord.UPD_DATE, '%Y-%m-%d %k:%i:%s') UPD_DATE,
+					    DATE_FORMAT(ord.INS_DATE, '%Y-%m-%d %k:%i:%s') INS_DATE,
+					    insusr.USER_FULLNAME INS_USER,
+					    updusr.USER_FULLNAME UPD_USER
+					FROM
+					    qr_order ord
+					          JOIN
+					    qr_project pro ON ord.PROJECT_ID = pro.PROJECT_ID and pro.pro_status=0
+					        LEFT JOIN
+					    qr_user workpm ON ord.WORK_PM_ID = workpm.USER_ID
+					        LEFT JOIN
+					    qr_dict_worktype qdwt ON ord.WORK_TYPE = qdwt.id
+					        LEFT JOIN
+					    qr_user storepm ON ord.WORK_PM_ID = storepm.USER_ID
+					        LEFT JOIN
+					    qr_dict_workstatus qdws ON ord.WORK_STATUS = qdws.id
+					        LEFT JOIN
+					    qr_user checkPm ON ord.CHECKER_ID = checkPm.USER_ID
+					       LEFT JOIN
+					    qr_dict_workcheckresult qdwcr  ON ord.CHECK_RESULT=qdwcr.id
+					        LEFT JOIN
+					    qr_user updusr ON ord.INS_USER = updusr.USER_ID
+					        LEFT JOIN
+					    qr_user insusr ON ord.INS_USER = insusr.USER_ID
+					WHERE
+					    ord.order_status = 0
+	      ]]>
+	      <dynamic>
+			 <isNotEqual property="projectId" compareValue="-1" prepend="and">
+		           <![CDATA[  pro.PROJECT_ID =#projectId# ]]>
+		    </isNotEqual>
+		     <isNotEqual property="workStatus" compareValue="-1" prepend="and">
+		           <![CDATA[  ord.WORK_STATUS=#workStatus# ]]>
+		    </isNotEqual>
+		</dynamic>
+	</select>
+	<resultMap id="RESULT_DEVICEITEM_ST" class="org.evm.biz.order.entity.DeviceItemVO">
+	    <result property="projectNo" column="PROJECT_NO" />
+		<result property="projectName" column="PROJECT_NAME" />
+		<result property="orderId" column="ORDER_ID" />
+		<result property="orderNo" column="ORDER_NO" />
+ 	    <result property="deviceTypeId" column="device_type_id" />
+		<result property="deviceTypeName" column="device_type_name" />
+		<result property="deviceItemId" column="deviceitem_id" />
+		<result property="deviceItemName" column="deviceitem_Name" />
+		<result property="deviceTypeClassType" column="class_type" />
+		<result property="deviceTypeClassTypeDesc" column="class_type_desc" />
+		<result property="insUser" column="INS_USER" />
+		<result property="updUser" column="UPD_USER" />
+		<result property="insDate" column="INS_DATE" />
+		<result property="updDate" column="UPD_DATE" />
+ 	
+		<result property="deviceItemUid" column="deviceitem_uid" />
+	 </resultMap>
+	<select id="MS_SQL_FIND_STATICS_DEVICEITEM" resultMap="RESULT_DEVICEITEM_ST"  parameterClass="PARA_STATICS_DEVICEITEM">
+	      <![CDATA[
+	      SELECT * from (
+	          SELECT 
+					pro.PROJECT_NO,
+					pro.PROJECT_NAME,
+					di.order_id,
+					ord.ORDER_NO,
+					di.device_type_id,
+					dt.text device_type_name,
+					di.deviceitem_id,
+					di.deviceitem_uid,
+					CONCAT(dt.text, di.deviceitem_id) deviceitem_Name,
+				 
+					if(dt.class_type is null,'',dt.class_type)  class_type,
+					if(qddt.text is null,'',qddt.text) class_type_desc,
+					DATE_FORMAT(di.UPD_DATE, '%Y-%m-%d %k:%i:%s') UPD_DATE,
+					DATE_FORMAT(di.INS_DATE, '%Y-%m-%d %k:%i:%s') INS_DATE,
+					insusr.USER_FULLNAME INS_USER,
+					updusr.USER_FULLNAME UPD_USER
+				FROM
+					qr_deviceitem di
+						  JOIN
+					qr_order ord ON di.order_id = ord.order_id and ord.order_status=0
+						  JOIN
+					qr_project pro ON ord.PROJECT_ID = pro.PROJECT_ID and pro.pro_status=0
+						LEFT JOIN
+					qr_device_type dt ON di.device_type_id = dt.id
+						LEFT JOIN
+					qr_dict_device_type qddt ON dt.class_type = qddt.id
+						LEFT JOIN
+					qr_user updusr ON pro.INS_USER = updusr.USER_ID
+						LEFT JOIN
+					qr_user insusr ON pro.INS_USER = insusr.USER_ID
+				WHERE
+					di.deviceitem_status = 0
+	      ]]>
+	       <dynamic>
+			 <isNotEqual property="projectId" compareValue="-1" prepend="and">
+		           <![CDATA[  pro.PROJECT_ID =#projectId# ]]>
+		    </isNotEqual>
+		     <isNotEqual property="deviceTypeClassType" compareValue="-1" prepend="and">
+		           <![CDATA[  qddt.id=#deviceTypeClassType# ]]>
+		    </isNotEqual>
+		     <![CDATA[)  st where 1=1 ]]>
+		    <isNotEmpty property="deviceTypeName" prepend="and">
+		           <![CDATA[  st.deviceitem_Name  like '%$deviceTypeName$%']]>
+		    </isNotEmpty>
+		</dynamic>
+	</select>
+</sqlMap>

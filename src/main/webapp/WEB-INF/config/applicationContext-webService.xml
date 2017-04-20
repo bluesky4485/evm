@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+ http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schemas/configuration/http-conf.xsd
+		http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
+		http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd
+ http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
+	<import resource="classpath:META-INF/cxf/cxf.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+	<!-- WebService 接口服务 -->
+	<bean id="evmWebService"
+		class="org.evm.biz.webService.webservice.impl.EvmWebServiceImpl">
+		<property name="appUserService" ref="appUserService" />
+		<property name="appMorderService" ref="appMorderService" />
+		<property name="appOrderService" ref="appOrderService" />
+		<property name="appProjectService" ref="appProjectService" />
+	</bean>
+	<!-- <jaxws:endpoint id="evmWebServiceJaws" implementor="#evmWebService" 
+		address="/evmWebService" /> -->
+	<!-- restful webservice -->
+	<jaxrs:server id="rs1" address="/rest">
+		<jaxrs:serviceBeans>
+			<bean class="org.evm.biz.webService.webservice.impl.EvmWebServiceImpl">
+				<property name="appUserService" ref="appUserService" />
+				<property name="appMorderService" ref="appMorderService" />
+				<property name="appOrderService" ref="appOrderService" />
+				<property name="appProjectService" ref="appProjectService" />
+				<property name="logDbService" ref="logDbService" />
+			</bean>
+		</jaxrs:serviceBeans>
+		<jaxrs:providers>
+			<bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" />
+		</jaxrs:providers>
+	</jaxrs:server>
+	 
+	<!--用户APP -->
+	<bean id="appUserService" class="org.evm.biz.webService.service.impl.AppUserServiceImpl">
+		<property name="userDbService" ref="userDbService" />
+		<property name="loginUserService" ref="loginUserService" />
+		<property name="appDbService" ref="appDbService" />
+		<property name="orderDbService" ref="orderDbService" />
+		<property name="funcDbService" ref="funcDbService" />
+	</bean>
+	<!--维修订单APP -->
+	<bean id="appMorderService"
+		class="org.evm.biz.webService.service.impl.AppMorderServiceImpl">
+		<property name="morderDbService" ref="morderDbService" />
+		<property name="appDbService" ref="appDbService" />
+		<property name="faultTypeDbService" ref="faultTypeDbService" />
+	</bean>
+	<!--订单APP -->
+	<bean id="appOrderService" class="org.evm.biz.webService.service.impl.AppOrderServiceImpl">
+		<property name="orderDbService" ref="orderDbService" />
+		<property name="orderDeviceService" ref="orderDeviceService" />
+		<property name="appDbService" ref="appDbService" />
+		<property name="projectDbService" ref="projectDbService" />
+		<property name="deviceItemService" ref="deviciceItemService" />
+	</bean>
+	<!--项目APP -->
+	<bean id="appProjectService"
+		class="org.evm.biz.webService.service.impl.AppProjectServiceImpl">
+		<property name="projectDbService" ref="projectDbService" />
+		<property name="deviceTypeDbService" ref="deviceTypeDbService" />
+	</bean>
+
+</beans>

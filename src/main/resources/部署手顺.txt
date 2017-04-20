@@ -1,0 +1,25 @@
+A.部署evm
+1.修改index.jsp content="0;URL=./login.jsp"
+2.修改 web.xml <param-value>webapp.root</param-value>
+3.修改 log4j.properties 文件路径配置 ${webapp.root}/logs//*.log
+4.修改 /config/applicationContext-config.xml 修改配置文件
+       <property name="location">
+			<value>classpath:evm.properties</value>
+		</property>
+5.修改 数据库导出的ip和端口：classes/evm.properties 中 backUpdbName，dbIp，dbPort
+B.部署evmis 
+1.修改index.jsp content="0;URL=./login_mis.jsp"
+2.修改 web.xml <param-value>webapp.root.mis</param-value>
+3.修改 log4j.properties 配置 ${webapp.root.mis}/logs//*.log
+4.修改 /config/applicationContext-config.xml 修改配置文件
+       <property name="location">
+			<value>classpath:evmis.properties</value>
+		</property>
+5.修改 数据库导出的ip和端口：classes/evm.properties 中 backUpdbName，dbIp，dbPort
+一键备份/还原中服务器需配置；
+在cmd命令下执行mysql，如果提示无命令字，需对服务器进行如下配置；
+应用服务器环境变量配置
+创建变量 MYSQL_HOME
+值：C:\Program Files\MySQL\MySQL Server 5.7
+path中追击;%MYSQL_HOME%/bin;
+在cmd命令下执行mysql，进行测试；

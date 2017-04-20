@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap 
+    PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+    "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="MST_CUSTOM">
+	<typeAlias alias="PARA_CUSTOM" type="org.evm.biz.custom.entity.CustomVO" />
+	<resultMap id="RESULT_CUSTOM" class="org.evm.biz.custom.entity.CustomVO">
+		<result property="cno" column="CUS_ID" />
+		<result property="cname" column="CUS_NAME" />
+		<result property="ctel1" column="CUS_TEL1" />
+		<result property="ctel2" column="CUS_TEL2" />
+		<result property="csex" column="CUS_SEX" />
+		<result property="cidCard" column="CUS_CARID" />
+		<result property="ctype" column="CUS_TYPE" />
+		<result property="caddress" column="CUS_ADDRESS" />
+		<result property="lat" column="LAT" />
+		<result property="lng" column="LNG" />
+		<result property="policestation" column="CUS_POLICESTATION" />
+		<result property="substation" column="CUS_SUBSTATION" />
+		<result property="remark" column="CUS_REMARK" />
+		<result property="cstatus" column="CUS_STATUS" />
+		<result property="insUser" column="INS_USER" />
+		<result property="updUser" column="UPD_USER" />
+		<result property="insDate" column="INS_DATE" />
+		<result property="updDate" column="UPD_DATE" />
+		<!--  一对多映射-->
+		<result property="listProjects" column="CUS_ID"  select ="MS_FIND_PROJECT_BY_CUSID"/>
+	</resultMap>
+	<resultMap id="RESULT_CUSTOM_NOE" class="org.evm.biz.custom.entity.CustomVO">
+		<result property="cno" column="CUS_ID" />
+		<result property="cname" column="CUS_NAME" />
+		<result property="ctel1" column="CUS_TEL1" />
+		<result property="ctel2" column="CUS_TEL2" />
+		<result property="csex" column="CUS_SEX" />
+		<result property="cidCard" column="CUS_CARID" />
+		<result property="ctype" column="CUS_TYPE" />
+		<result property="caddress" column="CUS_ADDRESS" />
+		<result property="lat" column="LAT" />
+		<result property="lng" column="LNG" />
+		<result property="policestation" column="CUS_POLICESTATION" />
+		<result property="substation" column="CUS_SUBSTATION" />
+		<result property="remark" column="CUS_REMARK" />
+		<result property="cstatus" column="CUS_STATUS" />
+		<result property="insUser" column="INS_USER" />
+		<result property="updUser" column="UPD_USER" />
+		<result property="insDate" column="INS_DATE" />
+		<result property="updDate" column="UPD_DATE" />
+	</resultMap>
+	<select id="MS_FIND_CUSTOM_BYID" resultMap="RESULT_CUSTOM_NOE"
+		parameterClass="java.lang.Long">
+		select CUS_ID,CUS_NAME,CUS_TEL1,CUS_TEL2,CUS_SEX,CUS_CARID,CUS_TYPE,CUS_ADDRESS,LAT,LNG,CUS_POLICESTATION,CUS_SUBSTATION,
+		       CUS_REMARK,CUS_STATUS,INS_USER,UPD_USER,DATE_FORMAT(UPD_DATE,'%Y-%m-%d %k:%i:%s') UPD_DATE,
+               DATE_FORMAT(INS_DATE,'%Y-%m-%d %k:%i:%s') INS_DATE
+		FROM QR_CUSTOM
+		WHERE 1=1 and CUS_STATUS=0 and CUS_ID=#cno#
+	</select>
+
+	<select id="MS_FIND_CUSTOM_PAGE" resultMap="RESULT_CUSTOM"
+		parameterClass="PARA_CUSTOM">
+		<![CDATA[
+			select  CUS_ID,CUS_NAME,CUS_TEL1, CUS_TEL2, CUS_SEX, CUS_CARID,CUS_TYPE,CUS_ADDRESS,CUS_POLICESTATION,CUS_SUBSTATION,
+			        CUS_REMARK,CUS_STATUS,INS_USER,UPD_USER,DATE_FORMAT(UPD_DATE,'%Y-%m-%d %k:%i:%s') UPD_DATE,
+               DATE_FORMAT(INS_DATE,'%Y-%m-%d %k:%i:%s') INS_DATE,
+               LAT,LNG
+			FROM QR_CUSTOM  cus
+			WHERE 1=1  and CUS_STATUS=0 
+			]]>
+		<dynamic>
+			<isNotEmpty prepend="and" property="cname">
+				<![CDATA[ CUS_NAME LIKE '%$cname$%']]>
+			</isNotEmpty>
+			<isNotEqual prepend="and" property="cno" compareValue="0" >
+				<![CDATA[ CUS_ID=#cno#]]>
+			</isNotEqual>
+			<isNotEmpty property="queryStat"  prepend="and" >
+			    <isEqual property="queryStat" compareValue="1"  >
+			          <![CDATA[ exists (SELECT   CUS_ID   FROM  qr_project pro
+					     WHERE  pro_status = 0 AND TIMESTAMPDIFF(DAY, SERVICE_END_DATE, SYSDATE()) =#stopServiceDays#
+					                                         AND pro.cus_id=cus.cus_id  GROUP BY CUS_ID
+					     ) ]]>
+			     </isEqual>
+			     <isEqual property="queryStat" compareValue="2"  >
+			            <![CDATA[ exists (SELECT   CUS_ID   FROM  qr_project pro
+					     WHERE  pro_status = 0 AND TIMESTAMPDIFF(DAY, SERVICE_END_DATE, SYSDATE()) >=0
+					                                         AND TIMESTAMPDIFF(DAY, SERVICE_END_DATE, SYSDATE()) <=7
+					                                         AND  pro.cus_id=cus.cus_id
+					                                           GROUP BY CUS_ID
+					     ) ]]>
+			     </isEqual>
+			     <isEqual property="queryStat" compareValue="3"  >
+			          <![CDATA[ exists (SELECT   CUS_ID   FROM  qr_project pro
+					     WHERE  pro_status = 0 
+                             AND  SERVICE_END_DATE >= DATE_ADD(curdate(),interval -day(curdate())+1 day)
+			                 AND  SERVICE_END_DATE <= last_day(curdate())
+			                  AND pro.cus_id = cus.cus_id
+                          GROUP BY CUS_ID
+					     ) ]]>
+			     </isEqual>
+            </isNotEmpty>
+		</dynamic>
+		<![CDATA[
+			  order by CUS_ID ASC
+			]]>
+		<dynamic>
+			<isNotEqual prepend=" limit"  compareValue="0"  property="pageSize">
+				<![CDATA[     #startPageNum# ,#pageSize# ]]>
+			</isNotEqual>
+		</dynamic>
+	</select>
+	<select id="MS_FIND_CUSTOM_ALL_CNT" resultClass="java.lang.Integer"
+		parameterClass="PARA_CUSTOM">
+		<![CDATA[
+			select  count(1)  FROM QR_CUSTOM  cus
+			WHERE 1=1  and CUS_STATUS=0
+			]]>
+		<dynamic>
+			<isNotEmpty prepend="and" property="cname">
+				<![CDATA[ CUS_NAME LIKE '%$cname$%']]>
+			</isNotEmpty>
+			<isNotEqual prepend="and" property="cno" compareValue="0" >
+				<![CDATA[ CUS_ID=#cno#]]>
+			</isNotEqual>
+			<isNotEmpty property="queryStat"  prepend="and" >
+			     <isEqual property="queryStat" compareValue="1"  >
+			          <![CDATA[ exists (SELECT   CUS_ID   FROM  qr_project pro
+					     WHERE  pro_status = 0 AND TIMESTAMPDIFF(DAY, SERVICE_END_DATE, SYSDATE()) =#stopServiceDays#
+					                                         AND pro.cus_id=cus.cus_id  GROUP BY CUS_ID
+					     ) ]]>
+			     </isEqual>
+			     <isEqual property="queryStat" compareValue="2"  >
+			            <![CDATA[ exists (SELECT   CUS_ID   FROM  qr_project pro
+					     WHERE  pro_status = 0 AND TIMESTAMPDIFF(DAY, SERVICE_END_DATE, SYSDATE()) >=0
+					                                         AND TIMESTAMPDIFF(DAY, SERVICE_END_DATE, SYSDATE()) <=7
+					                                         AND  pro.cus_id=cus.cus_id
+					                                           GROUP BY CUS_ID
+					     ) ]]>
+			     </isEqual>
+			     <isEqual property="queryStat" compareValue="3"  >
+			          <![CDATA[ exists (SELECT   CUS_ID   FROM  qr_project pro
+					     WHERE  pro_status = 0 
+                             AND  SERVICE_END_DATE >= DATE_ADD(curdate(),interval -day(curdate())+1 day)
+			                 AND  SERVICE_END_DATE <= last_day(curdate())
+			                 AND pro.cus_id = cus.cus_id
+                             GROUP BY CUS_ID
+					     ) ]]>
+			     </isEqual>
+            </isNotEmpty>
+		</dynamic>
+	</select>
+	<!-- 更新 -->
+	<update id="MS_UPDATE_CUATOM" parameterClass="PARA_CUSTOM">
+	    <![CDATA[
+	        update QR_CUSTOM 
+	               set UPD_DATE=sysdate(),
+	                    CUS_NAME=#cname#,
+	                    CUS_TEL1=#ctel1#, 
+	                    CUS_TEL2=#ctel2#,
+	                    CUS_SEX=#csex#,
+	                    CUS_CARID=#cidCard#,
+	                    CUS_TYPE=#ctype#,
+	                    CUS_ADDRESS=#caddress#,
+	                    LAT=#lat#,
+	                    LNG=#lng#,
+	                   CUS_POLICESTATION=#policestation#,
+	                   CUS_SUBSTATION=#substation#,
+	                   CUS_REMARK=#remark#
+	    ]]>
+		<![CDATA[ 
+		      where CUS_ID=#cno#
+		        and UPD_DATE=STR_TO_DATE(#updDate#,'%Y-%m-%d %H:%i:%s')
+		]]>
+	</update>
+	<!-- 插入 -->
+	<insert id="MS_INSERT_CUSTOM" parameterClass="PARA_CUSTOM">
+	    <![CDATA[ 
+			INSERT INTO QR_CUSTOM (
+			                            CUS_NAME, 
+										 CUS_TEL1,
+										 CUS_TEL2, 
+										 CUS_SEX, 
+										 CUS_CARID,
+										 CUS_TYPE,
+										 CUS_ADDRESS,
+										 LAT,
+										 LNG,
+										 CUS_POLICESTATION,
+										 CUS_SUBSTATION,
+										 CUS_REMARK,
+										 INS_USER,
+										 UPD_USER,
+										 INS_DATE,
+										 UPD_DATE)
+	                              VALUES(
+										 #cname#, 
+										 #ctel1#, 
+										 #ctel2#, 
+	                                     #csex#,
+										 #cidCard#,
+										 #ctype#,
+										 #caddress#,
+										 #lat#,
+										 #lng#,
+										 #policestation#,
+										 #substation#,
+										 #remark#,
+										 #insUser#,
+										 #updUser#,
+										 sysdate(),
+										 sysdate())
+			]]>
+		<selectKey resultClass="int"  keyProperty="cno" >    
+             SELECT last_insert_id() as cno  
+        </selectKey>
+	</insert>
+	<!-- 删除 -->
+	<update id="MS_DELETE_CUSTOM" parameterClass="PARA_CUSTOM">
+	    <![CDATA[
+	        update QR_CUSTOM set CUS_STATUS=1,UPD_USER=#updUser#,UPD_DATE=sysdate() 
+	           where   CUS_ID=#cno# and UPD_DATE=STR_TO_DATE(#updDate#,'%Y-%m-%d %H:%i:%s')
+	    ]]>
+	</update>
+
+</sqlMap>

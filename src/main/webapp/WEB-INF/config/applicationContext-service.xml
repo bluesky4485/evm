@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:lang="http://www.springframework.org/schema/lang"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	<bean id="sqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+		<property name="configLocation" value="/WEB-INF/sqlmap-config.xml" />
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<!-- 用户管理 -->
+	<bean id="userDbService" class="org.evm.biz.user.service.impl.UserDbServiceImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	<!-- 日志管理 -->
+	<bean id="logDbService" class="org.evm.biz.log.service.impl.LogDbServiceImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	<!-- 用户登录 -->
+	<bean id="loginUserService" class="org.evm.biz.user.service.impl.LoginUserServiceImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+		<property name="userDbService" ref="userDbService" />
+		<property name="logDbService" ref="logDbService" />
+		<property name="funcDbService" ref="funcDbService" />
+	</bean>
+	<!-- 客户管理 -->
+	<bean id="customDbService" class="org.evm.biz.custom.service.impl.CustomDbServiceImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	<!-- 项目管理 -->
+	<bean id="projectDbService" class="org.evm.biz.project.service.impl.ProjectDbServiceImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	<!-- Device管理 -->
+	<bean id="deviceTypeDbService" class="org.evm.biz.device.service.impl.DeviceTypeDbServiceImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	<!-- faulttype管理 -->
+	<bean id="faultTypeDbService"
+		class="org.evm.biz.faulttype.service.impl.FaultTypeDbServiceImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	<!-- 维护订单管理 -->
+	<bean id="morderDbService" class="org.evm.biz.morder.service.impl.MOrderDbServiceImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	<!-- 订单管理 -->
+	<bean id="orderDbService" class="org.evm.biz.order.service.impl.OrderDbServiceImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	<!-- 订单/设备管理 -->
+	<bean id="orderDeviceService" class="org.evm.biz.order.service.impl.OrderDeviceServiceImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	<!-- 设备管理 -->
+	<bean id="deviciceItemService" class="org.evm.biz.order.service.impl.DeviceItemServiceImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	<!-- 角色管理 -->
+	<bean id="roleDbService" class="org.evm.biz.role.service.impl.RoleDbServiceImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	<!-- 权限管理 -->
+	<bean id="funcDbService" class="org.evm.biz.func.service.impl.FuncDbServiceImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	<!-- 数据统计管理 -->
+	<bean id="pageDataStService" class="org.evm.biz.datast.service.impl.PageDataStServiceImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	<!-- App管理 -->
+	<bean id="appDbService" class="org.evm.biz.phoneapp.service.impl.AppDbServiceImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	<!-- statics管理 -->
+	<bean id="staticsDbService" class="org.evm.biz.statics.service.impl.StaticsDbServiceImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+</beans>

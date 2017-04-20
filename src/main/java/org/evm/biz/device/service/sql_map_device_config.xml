@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap 
+    PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+    "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="MST_DEVICE">
+	<typeAlias alias="PARA_DEVICE" type="org.evm.biz.device.entity.DeviceTypeVO" />
+	<typeAlias alias="PARA_DEVICE_PROPERTY" type="org.evm.biz.device.entity.DeviceTypePropertyVO" />
+	<resultMap id="RESULT_DEVICE" class="org.evm.biz.device.entity.DeviceTypeVO">
+		<result property="deviceId" column="ID" />
+		<result property="deviceName" column="TEXT" />
+		<result property="classType" column="CLASS_TYPE" />
+	 
+		<result property="insUser" column="INS_USER" />
+		<result property="updUser" column="UPD_USER" />
+		<result property="insDate" column="INS_DATE" />
+		<result property="updDate" column="UPD_DATE" />
+	</resultMap>
+	<resultMap id="RESULT_DEVICE_PROPERTY" class="org.evm.biz.device.entity.DeviceTypePropertyVO">
+		<result property="deviceTypeId" column="device_id" />
+		<result property="propertyName" column="propert_name" />
+		<result property="propertyId" column="property_id" />
+	</resultMap>
+	<select id="MS_FIND_DEVICE_ALL_DEVICE" resultMap="RESULT_DEVICE"
+		parameterClass="PARA_DEVICE">
+		<![CDATA[
+		   select ID,TEXT,CLASS_TYPE,INS_USER,UPD_USER,
+		        DATE_FORMAT(UPD_DATE,'%Y-%m-%d %k:%i:%s') UPD_DATE,
+                DATE_FORMAT(INS_DATE,'%Y-%m-%d %k:%i:%s') INS_DATE
+		    from qr_device_type qdt
+		   where DEV_STATUS=0 
+		]]>
+		<dynamic>
+			<isNotEqual prepend="and" compareValue="0" property="deviceId">
+				<![CDATA[ qdt.id=#deviceId#]]>
+			</isNotEqual>
+			<isNotEmpty prepend="and" property="deviceName">
+				<![CDATA[ qdt.TEXT like '%$deviceName$%']]>
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="classType">
+				<![CDATA[ qdt.CLASS_TYPE =#classType#]]>
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="projectNo">
+				<![CDATA[
+                    EXISTS( SELECT   qrpd.Device_TYPE_id   FROM    qr_rel_project_device qrpd
+                      JOIN
+				            qr_project pro ON qrpd.project_id = pro.PROJECT_ID
+				        WHERE
+				           pro.PROJECT_No=#projectNo# and qdt.id=qrpd.Device_TYPE_id)
+                 ]]>
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="projectId">
+				<![CDATA[
+                    EXISTS( SELECT   qrpd.Device_TYPE_id   FROM    qr_rel_project_device qrpd
+                      JOIN
+				            qr_project pro ON qrpd.project_id = pro.PROJECT_ID
+				        WHERE
+				           pro.PROJECT_ID=#projectId# and qdt.id=qrpd.Device_TYPE_id)
+                 ]]>
+			</isNotEmpty>
+		</dynamic>
+		<![CDATA[ order by qdt.CLASS_TYPE desc ,qdt.id desc  ]]>
+	</select>
+	<!-- find property -->
+	<select id="MS_FIND_DEVICE_PROPERTY_DEVICEID" resultMap="RESULT_DEVICE_PROPERTY" 	 parameterClass="java.lang.Long">
+		<![CDATA[
+		   select property_id, propert_name,device_id  from qr_device_property
+		   where 1=1 and  device_id=#value# order by propert_name desc
+		]]>
+		 
+	</select>
+	<!-- page -->
+	<select id="MS_FIND_DEVICE_ALL_PAGE" resultMap="RESULT_DEVICE"
+		parameterClass="PARA_DEVICE">
+		<![CDATA[
+		   select ID,TEXT,CLASS_TYPE,  INS_USER,UPD_USER, DATE_FORMAT(UPD_DATE,'%Y-%m-%d %k:%i:%s') UPD_DATE,
+           DATE_FORMAT(INS_DATE,'%Y-%m-%d %k:%i:%s') INS_DATE
+		   from qr_device_type qdt
+		   where DEV_STATUS=0 
+		]]>
+		<dynamic>
+			<isNotEqual prepend="and" compareValue="0" property="deviceId">
+				<![CDATA[ qdt.id=#deviceId#]]>
+			</isNotEqual>
+			<isNotEmpty prepend="and" property="deviceName">
+				<![CDATA[ qdt.TEXT like '%$deviceName$%']]>
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="projectId">
+				<![CDATA[
+                    EXISTS( SELECT   qrpd.Device_TYPE_id   FROM    qr_rel_project_device qrpd
+                      JOIN
+				            qr_project pro ON qrpd.project_id = pro.PROJECT_ID
+				        WHERE
+				           pro.PROJECT_ID=#projectId# and qdt.id=qrpd.Device_TYPE_id)
+                 ]]>
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="orderId">
+					<![CDATA[
+	                    EXISTS(SELECT  qrpd.Device_TYPE_id FROM qr_rel_project_device qrpd JOIN
+                     qr_order ord ON qrpd.project_id = ord.PROJECT_ID
+                      WHERE ord.order_id =#orderId# and qdt.id=qrpd.Device_TYPE_id)
+	                 ]]>
+			</isNotEmpty>
+		</dynamic>
+		<![CDATA[ order by  qdt.id desc  ]]>
+		<dynamic>
+		       <isNotEqual prepend=" limit" compareValue="0" property="pageSize">
+		  	           <![CDATA[     #startPageNum# ,#pageSize# ]]>
+				</isNotEqual>
+		</dynamic>
+	</select>
+	<select id="MS_FIND_DEVICE_ALL_CNT" resultClass="java.lang.Integer"
+		parameterClass="PARA_DEVICE">
+		<![CDATA[
+		   select count(1) 
+		   from qr_device_type qdt
+		   where DEV_STATUS=0 
+		]]>
+		<dynamic>
+				<isNotEqual prepend="and" compareValue="0" property="deviceId">
+					<![CDATA[ qdt.id=#deviceId#]]>
+				</isNotEqual>
+				<isNotEmpty prepend="and" property="deviceName">
+				<![CDATA[ qdt.TEXT like '%$deviceName$%']]>
+				</isNotEmpty>
+				<isNotEmpty prepend="and" property="projectId">
+					<![CDATA[
+	                    EXISTS( SELECT   qrpd.Device_TYPE_id   FROM    qr_rel_project_device qrpd
+	                      JOIN
+					            qr_project pro ON qrpd.project_id = pro.PROJECT_ID
+					        WHERE
+					           pro.PROJECT_ID=#projectId# and qdt.id=qrpd.Device_TYPE_id)
+	                 ]]>
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="orderId">
+					<![CDATA[
+	                    EXISTS(SELECT  qrpd.Device_TYPE_id FROM qr_rel_project_device qrpd JOIN
+                     qr_order ord ON qrpd.project_id = ord.PROJECT_ID
+                      WHERE ord.order_id =#orderId# and qdt.id=qrpd.Device_TYPE_id)
+	                 ]]>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	<!-- 插入 -->
+	<insert id="MS_INSERT_DEVICE" parameterClass="PARA_DEVICE">
+	    <![CDATA[ 
+			INSERT INTO qr_device_type (
+			                             text,CLASS_TYPE,
+										 INS_USER,
+										 UPD_USER,
+										 INS_DATE,
+										 UPD_DATE)
+	                              VALUES(
+											#deviceName#, #classType#,
+											#insUser#,
+											#updUser#,
+											sysdate(),
+											sysdate())
+			]]>
+			<selectKey resultClass="int" keyProperty="deviceId" > 
+				SELECT @@IDENTITY AS deviceId 
+			</selectKey> 
+	</insert>
+	<!-- 插入PROPERTY -->
+	<insert id="MS_INSERT_DEVICE_PROPERTY" parameterClass="PARA_DEVICE_PROPERTY">
+	    <![CDATA[ 
+			INSERT INTO qr_device_property (
+			                             propert_name,
+			                             device_id,
+										 INS_USER,
+										 UPD_USER,
+										 INS_DATE,
+										 UPD_DATE)
+	                              VALUES(
+										    #propertyName#, 
+										    #deviceTypeId#, 
+											#insUser#,
+											#updUser#,
+											sysdate(),
+											sysdate())
+			]]>
+	</insert>
+	<!-- 删除 -->
+	<update id="MS_DELETE_DEVICE" parameterClass="PARA_DEVICE">
+	     <![CDATA[ 
+	      update qr_device_type set  DEV_STATUS=1,
+	                                               UPD_DATE=sysdate(),
+	                                               UPD_USER=#updUser#
+	                                                
+	      where id=#deviceId# and UPD_DATE=STR_TO_DATE(#updDate#,'%Y-%m-%d %H:%i:%s')
+	     ]]>
+	</update>
+	<update id="MS_UPDATE_DEVICE" parameterClass="PARA_DEVICE">
+	     <![CDATA[ 
+	      update qr_device_type set  text=#deviceName#,CLASS_TYPE=#classType#,
+	                                               UPD_DATE=sysdate(),
+	                                               UPD_USER=#updUser#
+	                                                
+	      where id=#deviceId# and UPD_DATE=STR_TO_DATE(#updDate#,'%Y-%m-%d %H:%i:%s')
+	     ]]>
+	</update>
+	<delete id="MS_DELETE_DEVICE_PROPERTY"  parameterClass="java.lang.Long">
+	         <![CDATA[ 
+	              delete from qr_device_property  where device_id= #value#
+	         ]]>
+	</delete>
+	<delete id="MS_DELETE_DEVICE_PROPERTY_BY_ID"  parameterClass="java.lang.Long">
+	         <![CDATA[ 
+	              delete from qr_device_property  where property_id= #value#
+	         ]]>
+	</delete>
+	<!-- 更新属性 -->
+	<update id="MS_UPDATE_DEVICE_PROPERTY" parameterClass="PARA_DEVICE_PROPERTY">
+	     <![CDATA[ 
+	      update qr_device_property set  propert_name=#propertyName#,
+	                                               UPD_DATE=sysdate(),
+	                                               UPD_USER=#updUser#
+	                                                
+	      where property_id=#propertyId#
+	     ]]>
+	</update>
+	<resultMap id="RESULT_DEVICE_AND_PROPERTY" class="org.evm.biz.device.entity.DeviceTypeVO">
+		<result property="deviceId" column="ID" />
+		<result property="deviceName" column="TEXT" />
+		<result property="classType" column="CLASS_TYPE" />
+	 
+		<result property="insUser" column="INS_USER" />
+		<result property="updUser" column="UPD_USER" />
+		<result property="insDate" column="INS_DATE" />
+		<result property="updDate" column="UPD_DATE" />
+		<result property="properties" column="ID"  select ="MS_FIND_DEVICE_PROPERTY_DEVICEID"/>
+	</resultMap>
+	<select id="MS_FIND_DEVICE_PROPERTY_ALL" resultMap="RESULT_DEVICE_AND_PROPERTY"
+		parameterClass="PARA_DEVICE">
+		<![CDATA[
+		   select ID,TEXT,CLASS_TYPE,INS_USER,UPD_USER,
+		        DATE_FORMAT(UPD_DATE,'%Y-%m-%d %k:%i:%s') UPD_DATE,
+                DATE_FORMAT(INS_DATE,'%Y-%m-%d %k:%i:%s') INS_DATE
+		    from qr_device_type qdt
+		   where DEV_STATUS=0 
+		]]>
+		<dynamic>
+			<isNotEqual prepend="and" compareValue="0" property="deviceId">
+				<![CDATA[ qdt.id=#deviceId#]]>
+			</isNotEqual>
+			<isNotEmpty prepend="and" property="deviceName">
+				<![CDATA[ qdt.TEXT like '%$deviceName$%']]>
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="classType">
+				<![CDATA[ qdt.CLASS_TYPE =#classType#]]>
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="projectNo">
+				<![CDATA[
+                    EXISTS( SELECT   qrpd.Device_TYPE_id   FROM    qr_rel_project_device qrpd
+                      JOIN
+				            qr_project pro ON qrpd.project_id = pro.PROJECT_ID
+				        WHERE
+				           pro.PROJECT_No=#projectNo# and qdt.id=qrpd.Device_TYPE_id)
+                 ]]>
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="projectId">
+				<![CDATA[
+                    EXISTS( SELECT   qrpd.Device_TYPE_id   FROM    qr_rel_project_device qrpd
+                      JOIN
+				            qr_project pro ON qrpd.project_id = pro.PROJECT_ID
+				        WHERE
+				           pro.PROJECT_ID=#projectId# and qdt.id=qrpd.Device_TYPE_id)
+                 ]]>
+			</isNotEmpty>
+		</dynamic>
+		<![CDATA[ order by qdt.CLASS_TYPE desc ,qdt.id desc  ]]>
+	</select>
+</sqlMap>

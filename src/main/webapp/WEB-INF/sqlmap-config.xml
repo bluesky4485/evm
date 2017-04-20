@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+<sqlMapConfig>
+
+	<sqlMap resource="org/evm/biz/custom/service/sql_map_custom_config.xml" />
+	<sqlMap resource="org/evm/biz/project/service/sql_map_project_config.xml" />
+	<sqlMap resource="org/evm/biz/project/service/sql_map_rel_project_device_config.xml" />
+	<sqlMap resource="org/evm/biz/project/service/sql_map_rel_project_user_config.xml" />
+	<sqlMap resource="org/evm/biz/device/service/sql_map_device_config.xml" />
+	<sqlMap resource="org/evm/biz/faulttype/service/sql_map_faulttype_config.xml" />
+	<sqlMap resource="org/evm/biz/morder/service/sql_map_morder_config.xml" />
+	<sqlMap resource="org/evm/biz/morder/service/sql_map_rel_morder_file_config.xml" />
+	<sqlMap resource="org/evm/biz/order/service/sql_map_order_config.xml" />
+	<sqlMap resource="org/evm/biz/order/service/sql_map_rel_order_device_config.xml" />
+    <sqlMap resource="org/evm/biz/order/service/sql_map_rel_order_file_config.xml" />
+    <sqlMap resource="org/evm/biz/order/service/sql_map_deviceitem_config.xml" />
+	<sqlMap resource="org/evm/biz/user/service/sql_map_user_config.xml" />
+	<sqlMap resource="org/evm/biz/user/service/sql_map_login_config.xml" />
+	
+	<sqlMap resource="org/evm/biz/role/service/sql_map_role_config.xml" />
+	<sqlMap resource="org/evm/biz/log/service/sql_map_log_config.xml" />
+	<sqlMap resource="org/evm/biz/func/service/sql_map_func_config.xml" />
+	<sqlMap resource="org/evm/biz/datast/service/sql_map_datast_config.xml" />
+	<sqlMap resource="org/evm/biz/statics/service/sql_map_statics_config.xml" />
+	
+	<!-- app -->
+	<sqlMap resource="org/evm/biz/phoneapp/service/sql_map_app_config.xml" />
+</sqlMapConfig>

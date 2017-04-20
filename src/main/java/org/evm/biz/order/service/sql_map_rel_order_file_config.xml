@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap 
+    PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+    "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="MST_REL_ORDER_FILE">
+	<typeAlias alias="PARA_ORDER_FILES" type="org.evm.biz.order.entity.OrderFileVO" />
+	<resultMap id="RESULT_ORDER_FILES" class="org.evm.biz.order.entity.OrderFileVO">
+		<result property="orderId" column="ORDER_ID" />
+		<result property="fileId" column="FILE_ID" />
+		<result property="filePath" column="FILE_PATH" />
+		<result property="fileName" column="FILE_NAME" />
+		<result property="bizType" column="BIZ_TYPE" />
+	</resultMap>
+	<!-- 插入 -->
+	<insert id="MS_INSERT_REL_OREDER_FILE" parameterClass="PARA_ORDER_FILES">
+	    <![CDATA[ 
+			INSERT INTO qr_rel_order_file (
+			                             ORDER_ID,
+			                             FILE_PATH,
+			                             FILE_NAME,
+			                             BIZ_TYPE,
+										 INS_USER,
+										 UPD_USER,
+										 INS_DATE,
+										 UPD_DATE)
+	                              VALUES(
+										    #orderId#,
+										    #filePath#,
+										    #fileName#,
+										    #bizType#,
+											#insUser#,
+											#updUser#,
+											sysdate(),
+											sysdate())
+			]]>
+			<selectKey resultClass="long" keyProperty="fileId">
+			SELECT last_insert_id() as fileId ;
+		</selectKey>
+	</insert>
+	<select id="MS_FILE_ORDER_FILE_BY_ORDER_ID" resultMap="RESULT_ORDER_FILES"    parameterClass="java.lang.Long">
+	          <![CDATA[
+			      select  ORDER_ID,
+			              FILE_ID,
+			              FILE_PATH,
+			              FILE_NAME,
+			              BIZ_TYPE
+				 from qr_rel_order_file
+				 where  ORDER_ID=#orderId#
+              ]]>			  
+	</select>
+	<delete id="MS_DELETE_ORDER_FILE_BY_ORDER_ID"  parameterClass="java.lang.Long">
+	             <![CDATA[
+				    delete from qr_rel_order_file where ORDER_ID =#value#
+				 ]]>		
+	</delete>
+	<delete id="MS_DELETE_ORDER_FILE_BY_FILE_ID"  parameterClass="PARA_ORDER_FILES">
+	             <![CDATA[
+				    delete from qr_rel_order_file where FILE_ID =#fileId#
+				 ]]>		
+	</delete>
+</sqlMap>

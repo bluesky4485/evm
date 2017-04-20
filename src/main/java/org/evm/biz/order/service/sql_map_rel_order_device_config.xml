@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap 
+    PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+    "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="MST_REL_ORDER_DEVICE">
+	<typeAlias alias="PARA_REL_ORDER_DEVICE" type="org.evm.biz.order.entity.OrderDeviceVO" />
+	<resultMap id="RESULT_REL_ORDER_DEVICE" class="org.evm.biz.order.entity.OrderDeviceVO">
+		<result property="orderId" column="order_id" />
+		<result property="deviceId" column="device_id" />
+		<result property="deviceCnt" column="work_cnt" />
+		<result property="planCnt" column="plan_cnt" />
+		<result property="storeCnt" column="store_cnt" />
+		<result property="deviceName" column="DEVICE_NAME" />
+		<result property="deviceClassType" column="CLASS_TYPE" />
+		 
+	</resultMap>
+	<!-- 插入订单设备 -->
+	<insert id="MS_INSERT_REL_ORDER_DEVICE" parameterClass="PARA_REL_ORDER_DEVICE">
+	    <![CDATA[ 
+			INSERT INTO qr_rel_order_device (  order_id, device_id,  work_cnt, plan_cnt,  store_cnt,  INS_USER,  UPD_USER,  INS_DATE,  UPD_DATE)
+	        VALUES(  #orderId#,  #deviceId#,  #deviceCnt#,  #planCnt#, #storeCnt#, #insUser#, #updUser#, sysdate(), sysdate())
+			]]>
+	</insert>
+	<select id="MS_FIND_REL_ORDER_DEVICE_BY_ORDER_ID" resultMap="RESULT_REL_ORDER_DEVICE"  parameterClass="java.lang.Long">
+	          <![CDATA[
+			         SELECT 
+						    rel.order_id,
+						    rel.device_id,
+						    rel.work_cnt,
+						    rel.plan_cnt,
+						    if(st.cnt is null,0,st.cnt) store_cnt,
+						    device.TEXT DEVICE_NAME,
+						    device.CLASS_TYPE
+						FROM
+						    qr_rel_order_device rel
+						        LEFT JOIN
+						    (SELECT 
+						        order_id, device_type_id, COUNT(1) cnt
+						    FROM
+						        qr_deviceitem qd
+						    WHERE
+						        qd.order_id = #orderId# 
+						    and qd.deviceitem_status=0
+						    GROUP BY order_id , device_type_id) st ON st.order_id = rel.order_id
+						        AND st.device_type_id = rel.device_id
+						        LEFT JOIN
+						    qr_device_type device ON rel.device_id = device.ID
+						WHERE
+						    rel.order_id = #orderId#
+						    
+              ]]>			  
+	</select>
+	<select id="MS_FIND_REL_ORDER_DEVICE_BY_ORDER_ID_DEVICE_ID" resultMap="RESULT_REL_ORDER_DEVICE"  parameterClass="PARA_REL_ORDER_DEVICE">
+	          <![CDATA[
+			         SELECT 
+						    rel.order_id,
+						    rel.device_id,
+						    rel.work_cnt,
+						    rel.plan_cnt,
+						    if(st.cnt is null,0,st.cnt) store_cnt,
+						    device.TEXT DEVICE_NAME,
+						    device.CLASS_TYPE
+						FROM
+						    qr_rel_order_device rel
+						        LEFT JOIN
+						    (SELECT 
+						        order_id, device_type_id, COUNT(1) cnt
+						    FROM
+						        qr_deviceitem qd
+						    WHERE
+						        qd.order_id = #orderId# 
+						    and qd.device_type_id=#deviceId#
+						    and qd.deviceitem_status=0
+						    GROUP BY order_id , device_type_id) st ON st.order_id = rel.order_id
+						        AND st.device_type_id = rel.device_id
+						        LEFT JOIN
+						    qr_device_type device ON rel.device_id = device.ID
+						WHERE
+						    rel.order_id = #orderId# and rel.device_id=#deviceId#
+              ]]>			  
+	</select>
+	<delete id="MS_DELETE_REL_ORDER_DEVICE_BY_ORDER_ID"  parameterClass="java.lang.Long">
+	             <![CDATA[
+				    delete from qr_rel_order_device where order_id =#value#
+				 ]]>		
+	</delete>
+
+     <!--删除订单设备  -->
+     <delete id="MS_DELETE_REL_ORDER_DEVICE_BY_RELID" parameterClass="PARA_REL_ORDER_DEVICE">
+           <![CDATA[
+                 delete from qr_rel_order_device where order_id =#orderId# and device_id=#deviceId#
+            ]]>
+     </delete>
+     <!-- 更新订单设备 -->
+     <update id="MS_UPDATE_REL_ORDER_DEVICE_BY_RELID" parameterClass="PARA_REL_ORDER_DEVICE">
+           <![CDATA[
+               update qr_rel_order_device set work_cnt=#deviceCnt#,plan_cnt=#planCnt#,store_cnt=#storeCnt#
+               where order_id =#orderId# and device_id=#deviceId#
+            ]]>
+     </update>
+     <!-- 增加一个设备，如果设备类型不存在的情况，插入订单设备 -->
+	<insert id="MS_INSERT_REL_ORDER_DEVICE_BY_ADD_DEVICEITEM" parameterClass="PARA_REL_ORDER_DEVICE">
+	    <![CDATA[ 
+			INSERT INTO qr_rel_order_device (  order_id, device_id,  work_cnt, plan_cnt,    INS_USER,  UPD_USER,  INS_DATE,  UPD_DATE)
+	        VALUES(  #orderId#,  #deviceId#,  #deviceCnt#,  #planCnt#, #insUser#, #updUser#, sysdate(), sysdate())
+			]]>
+	</insert>
+	 
+</sqlMap>

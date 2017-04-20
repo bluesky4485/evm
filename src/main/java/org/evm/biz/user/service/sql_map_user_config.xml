@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap 
+    PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+    "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="MST_USER">
+	<typeAlias alias="PARA_USER" type="org.evm.biz.user.entity.UserVO" />
+	
+	<resultMap id="RESULT_USER" class="org.evm.biz.user.entity.UserVO">
+		<result property="uid" column="USER_ID" />
+		<result property="uname" column="USER_NAME" />
+		<result property="upwd" column="USER_PWD" />
+		<result property="ufullName" column="USER_FULLNAME" />
+		<result property="usex" column="USER_SEX" />
+		<result property="utel1" column="USER_TEL1" />
+		<result property="utel2" column="USER_TEL2" />
+		<result property="uidCard" column="USER_IDCARD" />
+		<result property="uaddress" column="USER_ADDRESS" />
+		<result property="lat" column="LAT" />
+		<result property="lng" column="LNG" />
+		<result property="uremark" column="USER_REMARK" />
+		<result property="ustatus" column="USER_STATUS" />
+		<result property="updDate" column="UPD_DATE" />
+		<result property="insDate" column="INS_DATE" />
+		<result property="insUser" column="INS_USER" />
+		<result property="updUser" column="UPD_USER" />
+		<result property="roleList" column="USER_ID"  select="MS_SQL_FIND_ROLE_BY_UID"/>
+	</resultMap>
+	 <select id="MS_FIND_USER_COND" resultMap="RESULT_USER"
+		parameterClass="PARA_USER">
+		<![CDATA[
+			select  USER_ID,USER_NAME,USER_PWD,USER_FULLNAME,USER_SEX,USER_TEL1,USER_TEL2,USER_IDCARD,
+			        USER_ADDRESS,LAT,LNG,USER_REMARK,USER_STATUS,INS_USER,UPD_USER,
+			        DATE_FORMAT(UPD_DATE, '%Y-%m-%d %k:%i:%s') UPD_DATE,
+					DATE_FORMAT(INS_DATE,'%Y-%m-%d %H:%i:%S')  INS_DATE
+			        
+			        FROM QR_USER
+			WHERE 1=1 and user_status=0
+			]]>
+		<dynamic>
+			<isNotEmpty prepend="and" property="uname">
+				<![CDATA[ USER_NAME =#uname#]]>
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="upwd">
+			 	<![CDATA[ USER_PWD =#upwd#]]>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	<select id="MS_FIND_USER_BYID" resultMap="RESULT_USER"
+		parameterClass="java.lang.Long">
+		<![CDATA[
+			select  USER_ID,USER_NAME,USER_PWD,USER_FULLNAME,USER_SEX,USER_TEL1,USER_TEL2,USER_IDCARD,
+			        USER_ADDRESS,LAT,LNG,USER_REMARK,USER_STATUS,INS_USER,UPD_USER,
+			        DATE_FORMAT(UPD_DATE, '%Y-%m-%d %k:%i:%s') UPD_DATE,
+					DATE_FORMAT(INS_DATE,'%Y-%m-%d %H:%i:%S')  INS_DATE  FROM QR_USER
+			WHERE 1=1  
+			and USER_ID=#pmId# 
+			and user_status=0
+			]]>
+		 
+	</select>
+	<!--分页查询  -->
+	<select id="MS_FIND_USER_CNT" resultClass="java.lang.Integer"
+		parameterClass="PARA_USER">
+		<![CDATA[
+			select  count(1)  FROM QR_USER
+			WHERE 1=1 and user_status=0
+			]]>
+		<dynamic>
+		     <isNotEmpty prepend="and" property="ufullName">
+				<![CDATA[ USER_FULLNAME like '%$ufullName$%']]>
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="uname">
+				<![CDATA[ USER_NAME =#uname#]]>
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="upwd">
+			 	<![CDATA[ USER_PWD =#upwd#]]>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	<!--分页查询  -->
+	<select id="MS_FIND_USER_PAGE" resultMap="RESULT_USER"
+		parameterClass="PARA_USER">
+		<![CDATA[
+			select  USER_ID,USER_NAME,USER_PWD,USER_FULLNAME,USER_SEX,USER_TEL1,USER_TEL2,USER_IDCARD,
+			        USER_ADDRESS,LAT,LNG,USER_REMARK,USER_STATUS,INS_USER,UPD_USER,
+			        DATE_FORMAT(UPD_DATE, '%Y-%m-%d %k:%i:%s') UPD_DATE,
+					DATE_FORMAT(INS_DATE,'%Y-%m-%d %H:%i:%S')  INS_DATE  FROM QR_USER
+			WHERE 1=1 and user_status=0
+			]]>
+		<dynamic>
+		 <isNotEmpty prepend="and" property="ufullName">
+				<![CDATA[ USER_FULLNAME like '%$ufullName$%']]>
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="uname">
+				<![CDATA[ USER_NAME =#uname#]]>
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="upwd">
+			 	<![CDATA[ USER_PWD =#upwd#]]>
+			</isNotEmpty>
+		</dynamic>
+		<![CDATA[
+			  order by USER_ID ASC 
+			]]>
+			<dynamic>
+			<isNotEqual prepend=" limit"  compareValue="0"  property="pageSize">
+				<![CDATA[     #startPageNum# ,#pageSize# ]]>
+			</isNotEqual>
+		</dynamic>
+	</select>
+	<!-- 插入 -->
+	<insert id="MS_INSERT_USER" parameterClass="PARA_USER">
+	    <![CDATA[ 
+			INSERT INTO qr_user (
+			                             USER_NAME,
+			                             USER_FULLNAME,
+										 USER_PWD,
+										 USER_SEX,
+										 USER_TEL1,
+										 USER_TEL2,
+										 USER_IDCARD,
+										 USER_ADDRESS,
+										 LAT,
+										 LNG,
+										 USER_REMARK,
+										 INS_USER,
+										 UPD_USER,
+										 INS_DATE,
+										 UPD_DATE)
+	                              VALUES(
+											#uname#,
+											#ufullName#,
+											#upwd#,
+											#usex#,
+											#utel1#,
+											#utel2#,
+											#uidCard#,
+											#uaddress#,
+											#lat#,
+											#lng#,
+											#uremark#,
+											#insUser#,
+											#updUser#,
+											sysdate(),
+											sysdate())
+			]]>
+			<selectKey resultClass="int" keyProperty="uid" > 
+				 SELECT last_insert_id() as uid  
+			</selectKey> 
+	</insert>
+	<!--更新 -->
+	<update id="MS_UPDATE_USER" parameterClass="PARA_USER">
+	    <![CDATA[ 
+	      update qr_user set   PWD_CHANGE=if(USER_PWD=#upwd#,0,1),
+	                                     USER_FULLNAME=#ufullName#,
+										 USER_PWD=#upwd#,
+										 USER_SEX=#usex#,
+										 USER_TEL1=#utel1#,
+										 USER_TEL2=#utel2#,
+										 USER_IDCARD=#uidCard#,
+										 USER_ADDRESS=#uaddress#,
+										 LAT=#lat#,
+										 LNG=#lng#,
+										 USER_REMARK=#uremark#
+										 where  USER_ID=#uid#
+										 and UPD_DATE=STR_TO_DATE(#updDate#,'%Y-%m-%d %H:%i:%s')
+	    ]]>
+	</update>
+	<!-- 删除 -->
+	<update id="MS_DELETE_USER"  parameterClass="PARA_USER">
+	         <![CDATA[ 
+	               update qr_user set user_status=1,   
+	                                            UPD_DATE=sysdate(),
+	                                             UPD_USER=#updUser#
+	                   where  USER_ID=#uid# and UPD_DATE=STR_TO_DATE(#updDate#,'%Y-%m-%d %H:%i:%s')
+	         ]]>	       
+	</update>
+	<typeAlias alias="PARA_USER_ROLE_REL" type="org.evm.biz.user.entity.UserRoleRelVO" />
+	<!-- 建立用户角色关联 -->
+	<insert id="MS_INSERT_USER_ROLE_REL" parameterClass="PARA_USER_ROLE_REL">
+	   <![CDATA[ 
+	          insert into QR_REL_USER_ROLE(user_id,role_id,upd_date,ins_date,ins_user,upd_user)
+	          values(#userId#,#roleId#,sysdate(),sysdate(),#insUser#,#updUser#)
+	   ]]>
+	</insert>
+	<!-- 删除用户角色关联 -->
+	<delete id="MS_DELETE_USER_ROLE_REL_BY_UID" parameterClass="java.lang.Long">
+	   <![CDATA[ 
+	          delete from QR_REL_USER_ROLE where user_id =#value#
+	   ]]>
+	</delete>
+	<!-- 更新用户密码 -->
+	<update id="MS_UPDATE_USER_PWD"  parameterClass="PARA_USER">
+	         <![CDATA[ 
+	               update qr_user set PWD_CHANGE=if(USER_PWD=#newPwd#,0,1),  
+	                                            UPD_DATE=sysdate(),
+	                                            UPD_USER=#updUser#,
+	                                            USER_PWD=#newPwd#
+	                   where  USER_ID=#updUser#  
+	                               and USER_PWD=#upwd#
+	         ]]>	       
+	</update>
+</sqlMap>

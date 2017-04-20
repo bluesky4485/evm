@@ -1,0 +1,660 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap 
+    PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+    "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="MST_ORDER">
+	<typeAlias alias="PARA_OREDER" type="org.evm.biz.order.entity.OrderVO" />
+	<resultMap id="RESULT_OREDER_ID_NO" class="org.evm.biz.order.entity.OrderVO">
+		<result property="orderId" column="ORDER_ID" />
+		<result property="orderNo" column="ORDER_NO" />
+	</resultMap>
+	<resultMap id="RESULT_OREDER_PAGE" class="org.evm.biz.order.entity.OrderVO">
+		<result property="orderId" column="ORDER_ID" />
+		<result property="orderNo" column="ORDER_NO" />
+		<result property="projectId" column="PROJECT_ID" />
+		<result property="projectNo" column="PROJECT_NO" />
+		<result property="projectName" column="PROJECT_NAME" />
+		<result property="cusId" column="CUS_ID" />
+		<result property="cusName" column="CUS_NAME" />
+		<result property="pmId" column="PM_ID" />
+		<result property="pmName" column="PM_NAME" />
+		<result property="workAddress" column="WORK_ADDRESS" />
+		<result property="workPmId" column="WORK_PM_ID" />
+		<result property="workPmName" column="WORK_PM_NAME" />
+		<result property="workStatus" column="WORK_STATUS" />
+		<result property="updDate" column="UPD_DATE" />
+		<result property="insDate" column="INS_DATE" />
+		<result property="lng" column="lng" />
+		 <result property="lat" column="lat" />
+	</resultMap>
+    <!-- 查询所有ID -->
+    <select id="MS_SELECT_ORDER_IDNO_COND" resultMap="RESULT_OREDER_ID_NO"  parameterClass="PARA_OREDER">
+		<![CDATA[
+		   select ORDER_ID,ORDER_NO from qr_order  ord
+					                JOIN qr_project project 
+					                  ON ord.PROJECT_ID = project.PROJECT_ID
+					                 and project.PRO_STATUS=0
+            where ord.order_status=0
+		]]>
+	 </select>
+    <!--分页查询  -->
+    <select id="MS_SELECT_ORDER_PAGE_CNT" resultClass="java.lang.Integer" parameterClass="PARA_OREDER">
+		<![CDATA[
+			 SELECT   count(1)
+					FROM
+					    qr_order ord
+					          JOIN
+					    qr_project project ON ord.PROJECT_ID = project.PROJECT_ID
+					        LEFT JOIN
+					    qr_custom custom ON project.CUS_ID = custom.CUS_ID
+					        LEFT JOIN
+					    qr_user pmuser ON project.PM_ID = pmuser.USER_ID
+					        LEFT JOIN
+					    qr_user wuser ON ord.WORK_PM_ID = wuser.USER_ID
+				]]>
+			<![CDATA[
+			        WHERE  ord.order_status = 0  and project.PRO_STATUS=0
+			 ]]>
+			<dynamic>
+					<isNotEmpty prepend="and" property="orderNo">
+						<![CDATA[ ord.order_no LIKE '%$orderNo$%' ]]>
+					</isNotEmpty>
+					<isNotEmpty prepend="and" property="projectName">
+						<![CDATA[ project.PROJECT_NAME LIKE '%$projectName$%' ]]>
+					</isNotEmpty>
+					<isNotEmpty prepend="and" property="strLike">
+						<![CDATA[ (ord.order_no LIKE '%$strLike$%'  or project.PROJECT_NO LIKE '%$strLike$%'  or pmuser.USER_FULLNAME LIKE '%$strLike$%' ) ]]>
+					</isNotEmpty>
+					<isNotEmpty property="queryStat"  prepend="and" >
+					       <isEqual property="queryStat" compareValue="1"  >
+					          <![CDATA[ 
+					                 TIMESTAMPDIFF(DAY, ord.INS_Date, SYSDATE()) =0
+					                  AND WORK_STATUS=0
+					          ]]>
+					       </isEqual>
+					       <isEqual property="queryStat" compareValue="2"  >
+					            <![CDATA[
+					                      TIMESTAMPDIFF(DAY, ord.INS_Date, SYSDATE()) >=0
+			                      AND TIMESTAMPDIFF(DAY, ord.INS_Date, SYSDATE()) <= 7
+			                       AND WORK_STATUS=0
+					             ]]>
+					       </isEqual>
+					       <isEqual property="queryStat" compareValue="3"  >
+					            <![CDATA[ 
+					               ord.INS_Date >= DATE_ADD(curdate(),interval -day(curdate())+1 day)
+			                      AND  ord.INS_Date <= last_day(curdate())
+			                       AND WORK_STATUS=0
+					            ]]>
+					       </isEqual>
+			    </isNotEmpty>
+			    <isLessThan property="systemId" compareValue="400"  >
+			           AND (
+							#insUser# = ord.WORK_PM_ID
+							OR #insUser# = project.PM_ID
+							OR #insUser# = ord.STORE_PM_ID
+							OR EXISTS (
+								SELECT user_id FROM qr_rel_project_user qrpu
+								 WHERE qrpu.project_id = project.PROJECT_ID
+								   AND qrpu.user_id = #insUser#
+							)
+						)   
+			</isLessThan>
+			</dynamic>
+	</select>
+	<select id="MS_SELECT_ORDER_PAGE" resultMap="RESULT_OREDER_PAGE" parameterClass="PARA_OREDER">
+		<![CDATA[
+			 SELECT 
+					    ord.order_id,
+					    ord.ORDER_NO,
+					    ord.PROJECT_ID,
+					    project.PROJECT_NO,
+					    project.PROJECT_NAME,
+					    project.CUS_ID,
+					    custom.CUS_NAME,
+					    project.PM_ID,
+					    pmuser.USER_FULLNAME PM_NAME,
+					    ord.WORK_ADDRESS,
+					    ord.WORK_PM_ID,
+					    wuser.USER_FULLNAME WORK_PM_NAME,
+					    ord.WORK_STATUS,				    
+						DATE_FORMAT(ord.UPD_DATE,'%Y-%m-%d %k:%i:%s') UPD_DATE,
+						DATE_FORMAT(ord.INS_DATE,'%Y-%m-%d %k:%i:%s') INS_DATE,
+					    ord.lng,
+					    ord.lat
+					FROM
+					    qr_order ord
+					          JOIN
+					    qr_project project ON ord.PROJECT_ID = project.PROJECT_ID
+					        LEFT JOIN
+					    qr_custom custom ON project.CUS_ID = custom.CUS_ID
+					        LEFT JOIN
+					    qr_user pmuser ON project.PM_ID = pmuser.USER_ID
+					        LEFT JOIN
+					    qr_user wuser ON ord.WORK_PM_ID = wuser.USER_ID
+					]]>
+			<![CDATA[
+			        WHERE  ord.order_status = 0 and project.PRO_STATUS=0
+			 ]]>
+		<dynamic>
+		         <isNotEmpty property="queryStat"  prepend="and" >
+					       <isEqual property="queryStat" compareValue="1"  >
+					          <![CDATA[ 
+					                 TIMESTAMPDIFF(DAY, ord.INS_Date, SYSDATE()) =0
+					                 AND WORK_STATUS=0
+					          ]]>
+					       </isEqual>
+					       <isEqual property="queryStat" compareValue="2"  >
+					            <![CDATA[
+					              TIMESTAMPDIFF(DAY, ord.INS_Date, SYSDATE()) >=0
+			                      AND TIMESTAMPDIFF(DAY,ord. INS_Date, SYSDATE()) <= 7
+			                      AND ord.WORK_STATUS=0
+					             ]]>
+					       </isEqual>
+					       <isEqual property="queryStat" compareValue="3"  >
+					            <![CDATA[ 
+					               ord.INS_Date >= DATE_ADD(curdate(),interval -day(curdate())+1 day)
+			                      AND  ord.INS_Date <= last_day(curdate())
+			                      AND WORK_STATUS=0
+					            ]]>
+					       </isEqual>
+			    </isNotEmpty>
+		    <isNotEmpty prepend="and" property="orderNo">
+				<![CDATA[ ord.order_no LIKE '%$orderNo$%' ]]>
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="projectName">
+				 <![CDATA[ project.PROJECT_NAME LIKE '%$projectName$%' ]]>
+			 </isNotEmpty>
+			<isNotEmpty prepend="and" property="strLike">
+				<![CDATA[ (ord.order_no LIKE '%$strLike$%'  or project.PROJECT_NO LIKE '%$strLike$%'  or pmuser.USER_FULLNAME LIKE '%$strLike$%' ) ]]>
+			</isNotEmpty>
+			<isLessThan property="systemId" compareValue="400"  >
+			           AND (
+							#insUser# = ord.WORK_PM_ID
+							OR #insUser# = project.PM_ID
+							OR #insUser# = ord.STORE_PM_ID
+							OR EXISTS (
+								SELECT user_id FROM qr_rel_project_user qrpu
+								 WHERE qrpu.project_id = project.PROJECT_ID
+								   AND qrpu.user_id = #insUser#
+							)
+						)   
+			</isLessThan>
+		</dynamic>
+				  <![CDATA[ORDER BY  ord.ins_date DESC]]>
+		<dynamic>
+			<isNotEqual prepend=" limit"  compareValue="0"  property="pageSize">
+				<![CDATA[     #startPageNum# ,#pageSize# ]]>
+			</isNotEqual>
+		</dynamic>
+	</select>
+	<!--删除  -->
+	<update id="MS_DELETE_ORDER" parameterClass="PARA_OREDER">
+	     <![CDATA[ 
+	      update qr_order set  order_status=1,
+	                                               UPD_DATE=sysdate(),
+	                                               UPD_USER=#updUser#
+	      where order_id=#orderId# and UPD_DATE=STR_TO_DATE(#updDate#,'%Y-%m-%d %H:%i:%s')
+	     ]]>
+	</update>
+	<!--修改  -->
+	<update id="MS_UPDATE_ORDER" parameterClass="PARA_OREDER">
+	     <![CDATA[ 
+	     update qr_order set 
+					WORK_PM_ID=#workPmId#,
+					WORK_CNT=#workCnt#,
+					WORK_ADDRESS=#workAddress#,
+					LNG=#lng#,
+					LAT=#lat#,
+					WORK_COMPANY=#workCompany#,
+					WORK_COMPANY_QUALIFIED=#workCompanyQualified#,
+					WORK_TYPE=#workType#,
+					WORK_DAYS=#workDays#,
+					PLAN_BEGIN_DATE=if(#planBeginDate#='' ,null,STR_TO_DATE(#planBeginDate# ,'%Y-%m-%d')),  
+					PLAN_END_DATE=if(#planEndDate#='' ,null,STR_TO_DATE(#planEndDate# ,'%Y-%m-%d')), 
+					STORE_PM_ID=#storePmId#,
+					PLAN_OUTSTORE_DATE=if(#planOutstoreDate#='' ,null,STR_TO_DATE(#planOutstoreDate# ,'%Y-%m-%d')),  
+					WORK_STATUS=#workStatus#,
+					WORK_BEGIN_DATE=if(#workBeginDate#='' ,null,STR_TO_DATE(#workBeginDate# ,'%Y-%m-%d')), 
+					WORK_END_DATE=if(#workEndDate#='' ,null,STR_TO_DATE(#workEndDate# ,'%Y-%m-%d')), 
+					WORK_PROGRESS=#workProgress#,
+					LAST_WORKUPD_DATE=sysdate(), 
+					CHECKER_ID=#checkerId#,
+					CHECK_RESULT=#checkResult#,
+					CHECK_DATE=if(#checkDate#='' ,null,STR_TO_DATE(#checkDate# ,'%Y-%m-%d')), 
+					USER_RATING=#userRating#,
+					USER_APPRAISE=#userAppraise#,
+					WORK_REMARK=#workRemark#,
+					UPD_DATE=sysdate(),
+					UPD_USER=#updUser#
+					where  order_id=#orderId# 
+					and    UPD_DATE=STR_TO_DATE(#updDate#,'%Y-%m-%d %H:%i:%s')
+	        ]]>
+	</update>
+     <!-- 插入 -->
+	<insert id="MS_INSERT_ORDER"  parameterClass="PARA_OREDER">
+	     <![CDATA[
+	       insert into qr_order(
+ORDER_NO,
+PROJECT_ID,
+WORK_PM_ID,
+WORK_CNT,
+WORK_ADDRESS,
+LNG,
+LAT,
+WORK_COMPANY,
+WORK_COMPANY_QUALIFIED,
+WORK_TYPE,
+WORK_DAYS,
+PLAN_BEGIN_DATE,
+PLAN_END_DATE,
+STORE_PM_ID,
+PLAN_OUTSTORE_DATE,
+WORK_STATUS,
+WORK_BEGIN_DATE,
+WORK_END_DATE,
+WORK_PROGRESS,
+LAST_WORKUPD_DATE,
+CHECKER_ID,
+CHECK_RESULT,
+CHECK_DATE,
+USER_RATING,
+USER_APPRAISE,
+WORK_REMARK,
+UPD_DATE,
+INS_DATE,
+INS_USER,
+UPD_USER
+)values(
+#orderNo#,
+#projectId#,
+#workPmId#,
+#workCnt#,
+#workAddress#,
+#lng#,
+#lat#,
+#workCompany#,
+#workCompanyQualified#,
+#workType#,
+#workDays#,
+if(#planBeginDate#='' ,null,STR_TO_DATE(#planBeginDate# ,'%Y-%m-%d')),
+if(#planEndDate#='' ,null,STR_TO_DATE(#planEndDate# ,'%Y-%m-%d')),
+#storePmId#,
+if(#planOutstoreDate#='' ,null,STR_TO_DATE(#planOutstoreDate# ,'%Y-%m-%d')),
+#workStatus#,
+if(#workBeginDate#='' ,null,STR_TO_DATE(#workBeginDate# ,'%Y-%m-%d')),
+if(#workEndDate#='' ,null,STR_TO_DATE(#workEndDate# ,'%Y-%m-%d')),
+#workProgress#,
+if(#lastWorkupdDate#='' ,null,STR_TO_DATE(#lastWorkupdDate# ,'%Y-%m-%d')),
+#checkerId#,
+#checkResult#,
+
+if(#checkDate#='' ,null,STR_TO_DATE(#checkDate# ,'%Y-%m-%d')),
+#userRating#,
+#userAppraise#,
+#workRemark#,
+sysdate(),
+sysdate(),
+#insUser#,
+#updUser#
+)
+	     ]]>
+	     <selectKey resultClass="int"  keyProperty="orderId" >    
+             SELECT last_insert_id() as orderId  
+        </selectKey>
+	</insert>
+    <resultMap id="RESULT_OREDER_ID" class="org.evm.biz.order.entity.OrderVO">
+		<result property="orderId" column="ORDER_ID" />
+		<result property="orderNo" column="ORDER_NO" />
+		<result property="projectId" column="PROJECT_ID" />
+		<result property="workPmId" column="WORK_PM_ID" />
+		<result property="workCnt" column="WORK_CNT" />
+		<result property="workAddress" column="WORK_ADDRESS" />
+		<result property="lng" column="LNG" />
+		<result property="lat" column="LAT" />
+		<result property="workCompany" column="WORK_COMPANY" />
+		<result property="workCompanyQualified" column="WORK_COMPANY_QUALIFIED" />
+		<result property="workType" column="WORK_TYPE" />
+		<result property="workDays" column="WORK_DAYS" />
+		<result property="planBeginDate" column="PLAN_BEGIN_DATE" />
+		<result property="planEndDate" column="PLAN_END_DATE" />
+		<result property="storePmId" column="STORE_PM_ID" />
+		<result property="planOutstoreDate" column="PLAN_OUTSTORE_DATE" />
+		<result property="workStatus" column="WORK_STATUS" />
+		<result property="workBeginDate" column="WORK_BEGIN_DATE" />
+		<result property="workEndDate" column="WORK_END_DATE" />
+		<result property="workProgress" column="WORK_PROGRESS" />
+		<result property="lastWorkupdDate" column="LAST_WORKUPD_DATE" />
+		<result property="checkerId" column="CHECKER_ID" />
+		<result property="checkResult" column="CHECK_RESULT" />
+		<result property="checkDate" column="CHECK_DATE" />
+		<result property="userRating" column="USER_RATING" />
+		<result property="userAppraise" column="USER_APPRAISE" />
+		<result property="workRemark" column="WORK_REMARK" />
+		
+		<result property="project"  column="PROJECT_ID" select="MS_FIND_PROJECT_BYID" />
+		<result property="workPm"  column="WORK_PM_ID" select="MS_FIND_USER_BYID" />
+		<result property="storePm"  column="STORE_PM_ID" select="MS_FIND_USER_BYID" />
+		<result property="checkePm"  column="CHECKER_ID" select="MS_FIND_USER_BYID" />
+		<result property="deviceList"  column="ORDER_ID" select="MS_FIND_REL_ORDER_DEVICE_BY_ORDER_ID" />
+		<result property="filesList"  column="ORDER_ID" select="MS_FILE_ORDER_FILE_BY_ORDER_ID" />
+		
+		
+		<result property="insUser" column="INS_USER" />
+		<result property="updUser" column="UPD_USER" />
+		<result property="insDate" column="INS_DATE" />
+		<result property="updDate" column="UPD_DATE" />
+	</resultMap>
+   <select id="MS_GET_ORDER_BYID"  resultMap="RESULT_OREDER_ID"   parameterClass="java.lang.Long">
+		    <![CDATA[
+		        select  ORDER_ID,
+		                  ORDER_NO,
+						PROJECT_ID,
+						WORK_PM_ID,
+						WORK_CNT,
+						WORK_ADDRESS,
+						LNG,
+						LAT,
+						WORK_COMPANY,
+						WORK_COMPANY_QUALIFIED,
+						WORK_TYPE,
+						WORK_DAYS,
+						PLAN_BEGIN_DATE,
+						PLAN_END_DATE,
+						STORE_PM_ID,
+						PLAN_OUTSTORE_DATE,
+						WORK_STATUS,
+						WORK_BEGIN_DATE,
+						WORK_END_DATE,
+						WORK_PROGRESS,
+						LAST_WORKUPD_DATE,
+						CHECKER_ID,
+						CHECK_RESULT,
+						CHECK_DATE,
+						USER_RATING,
+						USER_APPRAISE,
+						WORK_REMARK,
+						DATE_FORMAT(UPD_DATE,'%Y-%m-%d %k:%i:%s') UPD_DATE,
+                        DATE_FORMAT(INS_DATE,'%Y-%m-%d %k:%i:%s') INS_DATE,
+						INS_USER,
+						UPD_USER 
+						from qr_order where ORDER_ID=#orderId#
+		    ]]>
+   </select>
+   <!-- 根据订单编号查询订单 -->
+   <select id="MS_GET_ORDER_BY_ORDERNO"  resultMap="RESULT_OREDER_ID"   parameterClass="java.lang.String">
+		    <![CDATA[
+		        select  ORDER_ID,
+		                  ORDER_NO,
+						PROJECT_ID,
+						WORK_PM_ID,
+						WORK_CNT,
+						WORK_ADDRESS,
+						LNG,
+						LAT,
+						WORK_COMPANY,
+						WORK_COMPANY_QUALIFIED,
+						WORK_TYPE,
+						WORK_DAYS,
+						PLAN_BEGIN_DATE,
+						PLAN_END_DATE,
+						STORE_PM_ID,
+						PLAN_OUTSTORE_DATE,
+						WORK_STATUS,
+						WORK_BEGIN_DATE,
+						WORK_END_DATE,
+						WORK_PROGRESS,
+						LAST_WORKUPD_DATE,
+						CHECKER_ID,
+						CHECK_RESULT,
+						CHECK_DATE,
+						USER_RATING,
+						USER_APPRAISE,
+						WORK_REMARK,
+						DATE_FORMAT(UPD_DATE,'%Y-%m-%d %k:%i:%s') UPD_DATE,
+                        DATE_FORMAT(INS_DATE,'%Y-%m-%d %k:%i:%s') INS_DATE,
+						INS_USER,
+						UPD_USER 
+						from qr_order where order_status=0 and ORDER_NO=#orderNo#
+		    ]]>
+   </select>
+   <!--  根据项目ID 查询低订单-->
+   <resultMap id="RESULT_OREDER_BYPROJECTID" class="org.evm.biz.order.entity.OrderVO">
+		<result property="orderId" column="ORDER_ID" />
+		<result property="orderNo" column="ORDER_NO" />
+		<result property="projectId" column="PROJECT_ID" />
+		<result property="workPmId" column="WORK_PM_ID" />
+		<result property="workCnt" column="WORK_CNT" />
+		<result property="workAddress" column="WORK_ADDRESS" />
+		<result property="lng" column="LNG" />
+		<result property="lat" column="LAT" />
+		<result property="workCompany" column="WORK_COMPANY" />
+		<result property="workCompanyQualified" column="WORK_COMPANY_QUALIFIED" />
+		<result property="workType" column="WORK_TYPE" />
+		<result property="workDays" column="WORK_DAYS" />
+		<result property="planBeginDate" column="PLAN_BEGIN_DATE" />
+		<result property="planEndDate" column="PLAN_END_DATE" />
+		<result property="storePmId" column="STORE_PM_ID" />
+		<result property="planOutstoreDate" column="PLAN_OUTSTORE_DATE" />
+		<result property="workStatus" column="WORK_STATUS" />
+		<result property="workBeginDate" column="WORK_BEGIN_DATE" />
+		<result property="workEndDate" column="WORK_END_DATE" />
+		<result property="workProgress" column="WORK_PROGRESS" />
+		<result property="lastWorkupdDate" column="LAST_WORKUPD_DATE" />
+		<result property="checkerId" column="CHECKER_ID" />
+		<result property="checkResult" column="CHECK_RESULT" />
+		<result property="checkDate" column="CHECK_DATE" />
+		<result property="userRating" column="USER_RATING" />
+		<result property="userAppraise" column="USER_APPRAISE" />
+		<result property="workRemark" column="WORK_REMARK" />
+		
+		<result property="project"  column="PROJECT_ID" select="MS_FIND_PROJECT_BYID" />
+		<result property="workPm"  column="WORK_PM_ID" select="MS_FIND_USER_BYID" />
+		<result property="storePm"  column="STORE_PM_ID" select="MS_FIND_USER_BYID" />
+		<result property="checkePm"  column="CHECKER_ID" select="MS_FIND_USER_BYID" />
+		 
+		<result property="morderCnt"  column="MORDE_CNT"  />
+		
+		 
+	</resultMap>
+   <select id="MS_SELECT_ORDER_BY_PROJECTID"  resultMap="RESULT_OREDER_BYPROJECTID"   parameterClass="java.lang.Long">
+		    <![CDATA[
+		        select  ord.ORDER_ID,
+		                  ord.ORDER_NO,
+						ord.PROJECT_ID,
+						ord.WORK_PM_ID,
+						ord.WORK_CNT,
+						ord.WORK_ADDRESS,
+						ord.LNG,
+						ord.LAT,
+						ord.WORK_COMPANY,
+						ord.WORK_COMPANY_QUALIFIED,
+						ord.WORK_TYPE,
+						ord.WORK_DAYS,
+						ord.PLAN_BEGIN_DATE,
+						ord.PLAN_END_DATE,
+						ord.STORE_PM_ID,
+						ord.PLAN_OUTSTORE_DATE,
+						ord.WORK_STATUS,
+						ord.WORK_BEGIN_DATE,
+						ord.WORK_END_DATE,
+						ord.WORK_PROGRESS,
+						ord.LAST_WORKUPD_DATE,
+						ord.CHECKER_ID,
+						ord.CHECK_RESULT,
+						ord.CHECK_DATE,
+						ord.USER_RATING,
+						ord.USER_APPRAISE,
+						ord.WORK_REMARK,
+					   if(st.cnt is null,0,st.cnt) MORDE_CNT
+			FROM
+				    qr_order ord
+				    left      JOIN
+				    (SELECT 
+				        mo.order_id, COUNT(1) cnt
+				    FROM
+				        qr_morder mo
+				    WHERE
+				        mo.MAINTAIN_STATUS=0  and mo.MORDER_STATUS!= 4
+				    GROUP BY mo.order_id) st ON ord.order_id = st.order_id
+				WHERE
+				    ord.PROJECT_ID =#value#
+				    and ord.order_status=0
+		    ]]>
+   </select>
+   <select id="MS_SELECT_ORDER_INDEX"  resultMap="RESULT_OREDER_BYPROJECTID"   parameterClass="PARA_OREDER">
+		    <![CDATA[
+		        select  ord.ORDER_ID,
+		                  ord.ORDER_NO,
+						ord.PROJECT_ID,
+						ord.WORK_PM_ID,
+						ord.WORK_CNT,
+						ord.WORK_ADDRESS,
+						ord.LNG,
+						ord.LAT,
+						ord.WORK_COMPANY,
+						ord.WORK_COMPANY_QUALIFIED,
+						ord.WORK_TYPE,
+						ord.WORK_DAYS,
+						ord.PLAN_BEGIN_DATE,
+						ord.PLAN_END_DATE,
+						ord.STORE_PM_ID,
+						ord.PLAN_OUTSTORE_DATE,
+						ord.WORK_STATUS,
+						ord.WORK_BEGIN_DATE,
+						ord.WORK_END_DATE,
+						ord.WORK_PROGRESS,
+						ord.LAST_WORKUPD_DATE,
+						ord.CHECKER_ID,
+						ord.CHECK_RESULT,
+						ord.CHECK_DATE,
+						ord.USER_RATING,
+						ord.USER_APPRAISE,
+						ord.WORK_REMARK,
+					   if(st.cnt is null,0,st.cnt) MORDE_CNT
+					FROM qr_order ord
+				    join qr_project pro 
+				     on   ord.PROJECT_ID = pro.PROJECT_ID and pro.pro_status=0
+				    left      JOIN
+				    (SELECT 
+				        mo.order_id, COUNT(1) cnt
+				    FROM
+				        qr_morder mo
+				    WHERE
+				        mo.MAINTAIN_STATUS=0  and mo.MORDER_STATUS!= 4
+				    GROUP BY mo.order_id) st ON ord.order_id = st.order_id
+				WHERE 
+				    ord.order_status=0
+				  
+		    ]]>
+	    <dynamic>
+		    <isNotEqual property="projectId" compareValue="-1" prepend="and">
+		           <![CDATA[  ord.PROJECT_ID =#projectId# ]]>
+		    </isNotEqual>
+		    <isNotEmpty prepend="and" property="orderNo">
+					<![CDATA[ ord.order_no LIKE '%$orderNo$%' ]]>
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="deviceItemPara">
+					<![CDATA[ EXISTS( SELECT   order_id  FROM  qr_deviceitem di 
+					                              WHERE  ord.order_id = di.order_id
+                                                      AND di.deviceitem_uid LIKE '%$deviceItemPara$%' ) ]]>
+			</isNotEmpty>
+	    </dynamic>
+   </select>
+   <resultMap id="RESULT_OREDER_INDEX_ST" class="org.evm.biz.order.entity.IndexOrderStVO">
+		<result property="ordeStatus" column="work_Status" />
+		<result property="mStatus" column="MORDE_CN" /> 
+		<result property="orderCnt" column="CNT" />
+	</resultMap>
+   <select id="MS_SELECT_ORDER_INDEX_ST"  resultMap="RESULT_OREDER_INDEX_ST"   parameterClass="PARA_OREDER">
+		    <![CDATA[
+		      SELECT count(1) CNT, work_Status,MORDE_CN from (SELECT 
+						    ord.ORDER_ID,
+						    ord.ORDER_NO,
+						    ord.PROJECT_ID,
+						    ord.WORK_PM_ID,
+						    ord.WORK_CNT,
+						    ord.WORK_ADDRESS,
+						    ord.LNG,
+						    ord.LAT,
+						    ord.WORK_COMPANY,
+						    ord.WORK_COMPANY_QUALIFIED,
+						    ord.WORK_TYPE,
+						    ord.WORK_DAYS,
+						    ord.PLAN_BEGIN_DATE,
+						    ord.PLAN_END_DATE,
+						    ord.STORE_PM_ID,
+						    ord.PLAN_OUTSTORE_DATE,
+						    ord.WORK_BEGIN_DATE,
+						    ord.WORK_END_DATE,
+						    ord.WORK_PROGRESS,
+						    ord.LAST_WORKUPD_DATE,
+						    ord.CHECKER_ID,
+						    ord.CHECK_RESULT,
+						    ord.CHECK_DATE,
+						    ord.USER_RATING,
+						    ord.USER_APPRAISE,
+						    ord.WORK_REMARK,
+						    IF(ord.WORK_STATUS=4,4,0) WORK_STATUS,
+						    IF(IF(st.cnt IS NULL, 0, st.cnt)>0,1,0) MORDE_CN
+						FROM qr_order ord
+						join qr_project pro 
+				          on ord.PROJECT_ID = pro.PROJECT_ID and pro.pro_status=0
+						        LEFT JOIN
+						    (SELECT 
+						        mo.order_id, COUNT(1) cnt
+						    FROM
+						        qr_morder mo
+						    WHERE
+						        mo.MAINTAIN_STATUS = 0
+						            AND mo.MORDER_STATUS != 4
+						    GROUP BY mo.order_id) st ON ord.order_id = st.order_id and ord.WORK_STATUS!=4
+						WHERE
+						    ord.order_status = 0]]>
+    <dynamic>
+		    <isNotEqual property="projectId" compareValue="-1" prepend="and">
+		           <![CDATA[  ord.PROJECT_ID =#projectId# ]]>
+		    </isNotEqual>
+		    <isNotEmpty prepend="and" property="orderNo">
+					<![CDATA[ ord.order_no LIKE '%$orderNo$%' ]]>
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="deviceItemPara">
+					<![CDATA[ EXISTS( SELECT   order_id  FROM  qr_deviceitem di 
+					                              WHERE  ord.order_id = di.order_id
+                                                      AND di.deviceitem_uid LIKE '%$deviceItemPara$%' ) ]]>
+			</isNotEmpty>
+	    </dynamic>
+   
+   <![CDATA[ )ST  group by work_Status,MORDE_CN  ]]>
+	    
+   </select>
+    <!--更新用户评价  -->
+	<update id="MS_UPDATE_USERAPRRISE" parameterClass="PARA_OREDER">
+	     <![CDATA[ 
+	      update qr_order set  USER_RATING=#userRating#, USER_APPRAISE=#userAppraise#,
+	                                      UPD_DATE=sysdate(),  UPD_USER=#updUser#
+	      where order_id=#orderId# and UPD_DATE=STR_TO_DATE(#updDate#,'%Y-%m-%d %H:%i:%s')
+	     ]]>
+	</update>
+	 <!--更新订单施工进度  -->
+	<update id="MS_UPDATE_WORKPROGRESS" parameterClass="PARA_OREDER">
+	     <![CDATA[ 
+	      update qr_order set  WORK_PROGRESS=#workProgress#,  UPD_DATE=sysdate(),  UPD_USER=#updUser#
+	      where order_id=#orderId# and UPD_DATE=STR_TO_DATE(#updDate#,'%Y-%m-%d %H:%i:%s')
+	     ]]>
+	</update>
+	 <!--更新订单中的开工时间的-->
+	<update id="MS_UPDATE_WORKBEGINDATE" parameterClass="PARA_OREDER">
+	     <![CDATA[ 
+	      update qr_order set  WORK_BEGIN_DATE=if(#workBeginDate#='' ,null,STR_TO_DATE(#workBeginDate# ,'%Y-%m-%d')), 
+	                           UPD_DATE=sysdate(),  UPD_USER=#updUser#
+	      where order_id=#orderId# and UPD_DATE=STR_TO_DATE(#updDate#,'%Y-%m-%d %H:%i:%s')
+	     ]]>
+	</update>
+	<!--更新最新时间  -->
+	<update id="MS_UPDATE_ORDER_UPD_DATE" parameterClass="PARA_OREDER">
+	     <![CDATA[ 
+	      update qr_order set    UPD_DATE=sysdate(),  UPD_USER=#updUser#
+	      where order_id=#orderId# and UPD_DATE=STR_TO_DATE(#updDate#,'%Y-%m-%d %H:%i:%s')
+	     ]]>
+	</update>
+</sqlMap>

@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap 
+    PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+    "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="MST_PROJECT">
+	<typeAlias alias="PARA_PROJECT" type="org.evm.biz.project.entity.ProjectVO" />
+	<resultMap id="RESULT_PROJECT_CUS" class="org.evm.biz.project.entity.ProjectVO">
+		<result property="projectId" column="PROJECT_ID" />
+		<result property="projectNo" column="PROJECT_NO" />
+		<result property="projectName" column="PROJECT_NAME" />
+	</resultMap>
+	<select id="MS_FIND_PROJECT_BY_CUSID"  resultMap="RESULT_PROJECT_CUS"   parameterClass="java.lang.Long">
+           <![CDATA[ 
+                SELECT pro.PROJECT_ID,
+				    pro.PROJECT_NO,
+				    pro.PROJECT_NAME from QR_PROJECT pro where  pro.PRO_STATUS=0 
+				    and  pro.CUS_ID=#value#
+             ]]>
+     </select>
+	<resultMap id="RESULT_PROJECT" class="org.evm.biz.project.entity.ProjectVO">
+		<result property="projectId" column="PROJECT_ID" />
+		<result property="projectNo" column="PROJECT_NO" />
+		<result property="projectName" column="PROJECT_NAME" />
+		<result property="cusId" column="CUS_ID" />
+		<result property="cmId" column="CM_ID" />
+		<result property="pmId" column="PM_ID" />
+		<result property="projectType" column="PROJECT_TYPE" />
+		<result property="contractId" column="CONTRACT_ID" />
+		<result property="contractSum" column="CONTRACT_SUM" />
+		<result property="signDate" column="SIGN_DATE" />
+		<result property="payType" column="PAY_TYPE" />
+		<result property="workEndDate" column="WORK_END_DATE" />
+		<result property="workStartDate" column="WORK_START_DATE" />
+
+		<result property="yearPay" column="YEAR_PAY" />
+		<result property="serviceEndDate" column="SERVICE_END_DATE" />
+		<result property="payDate" column="PAY_DATE" />
+		<result property="buildType" column="BUILD_TYPE" />
+		<result property="joinDate" column="JOIN_DATE" />
+		<result property="stopDate" column="STOP_DATE" />
+		<result property="projectRemark" column="PROJECT_REMARK" />
+		<result property="proStat" column="pro_Stat" />
+
+		<result property="insUser" column="INS_USER" />
+		<result property="updUser" column="UPD_USER" />
+		<result property="insDate" column="INS_DATE" />
+		<result property="updDate" column="UPD_DATE" />
+		
+		<result property="cusType" column="CUS_TYPE" />
+		<result property="cusName" column="CUS_NAME" />
+		<result property="cusTypeDesc" column="CUS_TYPE_DESC" />
+		<result property="cusSex" column="CUS_SEX" />
+		<result property="cusTel" column="CUS_TEL" />
+		
+		<result property="cmName" column="CM_NAME" />
+		<result property="cmSex" column="CM_SEX" />
+		<result property="cmTel" column="CM_TEL" />
+		<result property="pmName" column="PM_NAME" />
+		<result property="pmSex" column="PM_SEX" />
+		<result property="pmTel" column="PM_TEL" />
+		
+		<result property="custom"  column="CUS_ID"  select="MS_FIND_CUSTOM_BYID" />
+		<result property="pmUser"  column="PM_ID"  select="MS_FIND_USER_BYID"/>
+		<result property="cmUser"  column="CM_ID"  select="MS_FIND_USER_BYID" />
+		<result property="deviceList"  column="PROJECT_ID"  select="MS_FIND_REL_PROJECT_DEVICE_BY_PROJECT_ID" />
+		<result property="relUserList"  column="PROJECT_ID"  select="MS_FIND_REL_PROJECT_USER_BY_PROJECT_ID" />
+	</resultMap>
+    <resultMap id="RESULT_PROJECT_PAGE" class="org.evm.biz.project.entity.ProjectVO">
+		<result property="projectId" column="PROJECT_ID" />
+		<result property="projectNo" column="PROJECT_NO" />
+		<result property="projectName" column="PROJECT_NAME" />
+		 
+		<result property="cusType" column="CUS_TYPE" />
+	 	<result property="buildType" column="BUILD_TYPE" />
+		<result property="cusName" column="CUS_NAME" />
+		<result property="cmName" column="CM_NAME" />
+		<result property="pmName" column="PM_NAME" />
+		<result property="signDate" column="SIGN_DATE" />
+		<result property="workEndDate" column="WORK_END_DATE" />
+		<result property="projectRemark" column="PROJECT_REMARK" />
+		<result property="updDate" column="UPD_DATE" />
+	</resultMap>
+	<!-- 插入 -->
+	<insert id="MS_INSERT_PROJECT" parameterClass="PARA_PROJECT">
+	    <![CDATA[ 
+			INSERT INTO QR_PROJECT (
+			                            PROJECT_NO, 
+										 PROJECT_NAME,
+										 CUS_ID, 
+										 CM_ID, 
+										 PM_ID,
+										 PROJECT_TYPE,
+										 CONTRACT_ID,
+										 CONTRACT_SUM,
+										 SIGN_DATE,
+										 PAY_TYPE,
+										 WORK_END_DATE,
+										 WORK_START_DATE,
+										 YEAR_PAY,
+										 SERVICE_END_DATE,
+										 PAY_DATE,
+										 BUILD_TYPE,
+										 JOIN_DATE,
+										 STOP_DATE,
+										 PROJECT_REMARK,
+										 PRO_STAT,
+										 INS_USER,
+										 UPD_USER,
+										 INS_DATE,
+										 UPD_DATE)
+	                              VALUES(
+										 #projectNo#, 
+											#projectName#, 
+											#cusId#, 
+											#cmId#,
+											#pmId#,
+											#projectType#,
+											#contractId#,
+											#contractSum#,
+											if(#signDate#='' ,null,STR_TO_DATE(#signDate# ,'%Y-%m-%d')),
+											#payType#,
+											if(#workEndDate#='' ,null,STR_TO_DATE(#workEndDate# ,'%Y-%m-%d')),
+											if(#workStartDate#='' ,null,STR_TO_DATE(#workStartDate# ,'%Y-%m-%d')),
+											#yearPay#,
+											if(#serviceEndDate#='' ,null,STR_TO_DATE(#serviceEndDate# ,'%Y-%m-%d')),
+											if(#payDate#='' ,null,STR_TO_DATE(#payDate# ,'%Y-%m-%d')),
+											#buildType#,
+											if(#joinDate#='' ,null,STR_TO_DATE(#joinDate# ,'%Y-%m-%d')),
+											if(#stopDate#='' ,null,STR_TO_DATE(#stopDate# ,'%Y-%m-%d')),
+											#projectRemark#,
+											#proStat#,
+											#insUser#,
+											#updUser#,
+											sysdate(),
+											sysdate())
+			]]>
+			<selectKey resultClass="int"  keyProperty="projectId" >    
+             SELECT last_insert_id() as projectId  
+        </selectKey>
+	</insert>
+	<!-- 分页查询 -->
+	<select id="MS_FIND_PROJECT_PAGE" resultMap="RESULT_PROJECT_PAGE"  parameterClass="PARA_PROJECT">
+		<![CDATA[
+			SELECT  pro.PROJECT_ID,
+				    pro.PROJECT_NO,
+				    pro.PROJECT_NAME,
+					cus.CUS_TYPE,
+					pro.BUILD_TYPE,
+				    cus.CUS_NAME,
+					user.USER_FULLNAME CM_NAME,
+				    usera.USER_FULLNAME PM_NAME,
+					if(pro.WORK_END_DATE is null ,'',DATE_FORMAT(pro.WORK_END_DATE ,'%Y-%m-%d')) WORK_END_DATE,
+					if(pro.SIGN_DATE is null ,'',DATE_FORMAT(pro.SIGN_DATE,'%Y-%m-%d')) SIGN_DATE,
+					pro.PROJECT_REMARK, 
+					DATE_FORMAT(pro.UPD_DATE, '%Y-%m-%d %k:%i:%s') UPD_DATE
+				FROM
+				    qr_project pro
+				        LEFT JOIN
+				    qr_custom cus ON pro.CUS_ID = cus.CUS_ID  and cus.CUS_STATUS=0 
+				        LEFT JOIN
+				    qr_dict_custom_type ctype ON cus.CUS_TYPE = ctype.id
+				        LEFT JOIN
+				    qr_user user ON pro.CM_ID = user.USER_ID
+				        LEFT JOIN
+				    qr_user usera ON pro.PM_ID = usera.USER_ID
+			WHERE 1=1   and pro.PRO_STATUS=0
+			]]>
+		 <dynamic>
+			<isNotEmpty prepend="and" property="projectName">
+				<![CDATA[ PROJECT_NAME LIKE '%$projectName$%']]>
+			</isNotEmpty>
+			<isNotEqual prepend="and" compareValue="0"    property="projectId">
+				<![CDATA[ PROJECT_ID = #projectId#]]>
+			</isNotEqual>
+			<isNotEmpty prepend="and" property="pmName">
+				<![CDATA[ usera.USER_FULLNAME LIKE '%$pmName$%']]>
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="projectNo">
+				<![CDATA[ pro.PROJECT_NO LIKE '%$projectNo$%']]>
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="beginDate">
+				<![CDATA[pro.SIGN_DATE>=STR_TO_DATE(#beginDate# ,'%Y-%m-%d')]]>
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="endDate">
+				<![CDATA[ pro.SIGN_DATE<=STR_TO_DATE(#endDate# ,'%Y-%m-%d')]]>
+			</isNotEmpty>
+			<isNotEmpty property="queryStat"  prepend="and" >
+			       <isEqual property="queryStat" compareValue="1"  >
+			          <![CDATA[ 
+			             TIMESTAMPDIFF(DAY,WORK_END_DATE,sysdate())=0
+			          ]]>
+			       </isEqual>
+			       <isEqual property="queryStat" compareValue="2"  >
+			            <![CDATA[
+			                  TIMESTAMPDIFF(DAY,WORK_END_DATE,sysdate())>=0
+		                    AND TIMESTAMPDIFF(DAY,WORK_END_DATE,sysdate())<=7
+			             ]]>
+			       </isEqual>
+			       <isEqual property="queryStat" compareValue="3"  >
+			            <![CDATA[ 
+			                   WORK_END_DATE >= DATE_ADD(curdate(),interval -day(curdate())+1 day)
+		                     AND  WORK_END_DATE <= last_day(curdate())
+			            ]]>
+			       </isEqual>
+			</isNotEmpty>
+		</dynamic>
+		<![CDATA[
+			  order by PROJECT_ID ASC
+			]]>
+	    <dynamic>
+			<isNotEqual prepend=" limit"  compareValue="0"  property="pageSize">
+				<![CDATA[     #startPageNum# ,#pageSize# ]]>
+			</isNotEqual>
+		</dynamic>
+	</select>
+	<!-- 分页查询 -->
+	 <select id="MS_FIND_PROJECT_CNT"  resultClass="java.lang.Integer" parameterClass="PARA_PROJECT">
+		<![CDATA[
+			select  count(1)  FROM qr_project pro
+				        LEFT JOIN
+				    qr_custom cus ON pro.CUS_ID = cus.CUS_ID  and cus.CUS_STATUS=0 
+				        LEFT JOIN
+				    qr_dict_custom_type ctype ON cus.CUS_TYPE = ctype.id
+				        LEFT JOIN
+				    qr_user user ON pro.CM_ID = user.USER_ID
+				        LEFT JOIN
+				    qr_user usera ON pro.PM_ID = usera.USER_ID
+			WHERE 1=1  and pro.PRO_STATUS=0
+			                   
+			]]>
+		 <dynamic>
+			<isNotEmpty prepend="and" property="projectName">
+				<![CDATA[ PROJECT_NAME LIKE '%$projectName$%']]>
+			</isNotEmpty>
+			<isNotEqual prepend="and" compareValue="0"    property="projectId">
+				<![CDATA[ PROJECT_ID = #projectId#]]>
+			</isNotEqual>
+			<isNotEmpty prepend="and" property="pmName">
+				<![CDATA[ usera.USER_FULLNAME LIKE '%$pmName$%']]>
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="projectNo">
+				<![CDATA[ pro.PROJECT_NO LIKE '%$projectNo$%']]>
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="beginDate">
+				<![CDATA[pro.SIGN_DATE>=STR_TO_DATE(#beginDate# ,'%Y-%m-%d')]]>
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="endDate">
+				<![CDATA[ pro.SIGN_DATE<=STR_TO_DATE(#endDate# ,'%Y-%m-%d')]]>
+			</isNotEmpty>
+			<isNotEmpty property="queryStat"  prepend="and" >
+			         <isEqual property="queryStat" compareValue="1"  >
+			          <![CDATA[ 
+			             TIMESTAMPDIFF(DAY,WORK_END_DATE,sysdate())=0
+			          ]]>
+			       </isEqual>
+			       <isEqual property="queryStat" compareValue="2"  >
+			            <![CDATA[
+			                  TIMESTAMPDIFF(DAY,WORK_END_DATE,sysdate())>=0
+		                    AND TIMESTAMPDIFF(DAY,WORK_END_DATE,sysdate())<=7
+			             ]]>
+			       </isEqual>
+			       <isEqual property="queryStat" compareValue="3"  >
+			            <![CDATA[ 
+			                   WORK_END_DATE >= DATE_ADD(curdate(),interval -day(curdate())+1 day)
+		                     AND  WORK_END_DATE <= last_day(curdate())
+			            ]]>
+			       </isEqual>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	<!-- 更新 -->
+	<update id="MS_UPDATE_PROJECT" parameterClass="PARA_PROJECT">
+	     <![CDATA[
+	        update QR_PROJECT set UPD_DATE=sysdate(),
+	                                              UPD_USER=#updUser#,
+	                                              PROJECT_NAME=#projectName#,
+	                                              PROJECT_NO=#projectNo#,
+	                                              CUS_ID=#cusId#,
+	                                              CM_ID=#cmId#,
+	                                              PM_ID=#pmId#,
+	                                              PROJECT_TYPE=#projectType#,
+	                                              CONTRACT_ID=#contractId#,
+	                                               CONTRACT_SUM=#contractSum#,
+	                                              SIGN_DATE=if(#signDate#='' ,null,STR_TO_DATE(#signDate# ,'%Y-%m-%d')),
+	                                              PAY_TYPE=#payType#,
+	                                              WORK_END_DATE=if(#workEndDate#='' ,null,STR_TO_DATE(#workEndDate# ,'%Y-%m-%d')),
+	                                              WORK_START_DATE=if(#workStartDate#='' ,null,STR_TO_DATE(#workStartDate# ,'%Y-%m-%d')), 
+	                                              YEAR_PAY=#yearPay#,
+	                                              SERVICE_END_DATE=if(#serviceEndDate#='' ,null,STR_TO_DATE(#serviceEndDate# ,'%Y-%m-%d')), 
+	                                              PAY_DATE=if(#payDate#='' ,null,STR_TO_DATE(#payDate# ,'%Y-%m-%d')), 
+	                                              BUILD_TYPE=#buildType#,
+	                                              JOIN_DATE=if(#joinDate#='' ,null,STR_TO_DATE(#joinDate# ,'%Y-%m-%d')), 
+	                                              STOP_DATE=if(#stopDate#='' ,null,STR_TO_DATE(#stopDate# ,'%Y-%m-%d')),  
+	                                              PROJECT_REMARK=#projectRemark#,
+	                                              pro_stat=#proStat#
+	                                    where PROJECT_ID=#projectId#
+	                                           and    UPD_DATE=STR_TO_DATE(#updDate#,'%Y-%m-%d %H:%i:%s')
+	                                              
+	       ]]>
+	</update>
+    <select id="MS_FIND_PROJECT_BYID"  resultMap="RESULT_PROJECT"   parameterClass="java.lang.Long">
+           <![CDATA[
+                 	SELECT pro.PROJECT_ID,
+				    pro.PROJECT_NO,
+				    pro.PROJECT_NAME,
+				    pro.CUS_ID,
+				    pro.CM_ID,
+				    pro.PM_ID,
+				    pro.PROJECT_TYPE,
+				    pro.CONTRACT_ID,
+				    DATE_FORMAT(pro.SIGN_DATE,'%Y-%m-%d') SIGN_DATE,
+				    pro.CONTRACT_SUM,
+				    pro.PAY_TYPE,
+				    if(pro.WORK_END_DATE is null ,'',DATE_FORMAT(pro.WORK_END_DATE ,'%Y-%m-%d')) WORK_END_DATE ,
+				    if(pro.WORK_START_DATE  is null,'',DATE_FORMAT(pro.WORK_START_DATE,'%Y-%m-%d')) WORK_START_DATE,
+				    pro.YEAR_PAY,
+				    DATE_FORMAT(pro.SERVICE_END_DATE,'%Y-%m-%d') SERVICE_END_DATE,
+				    if(pro.PAY_DATE is null,'',DATE_FORMAT(pro.PAY_DATE,'%Y-%m-%d') )PAY_DATE,
+				    pro.BUILD_TYPE,
+				    if(pro.JOIN_DATE  is null,'',DATE_FORMAT(pro.JOIN_DATE,'%Y-%m-%d') )JOIN_DATE,
+				    DATE_FORMAT(pro.STOP_DATE,'%Y-%m-%d') STOP_DATE,
+				    pro.PROJECT_REMARK,
+				    pro.PRO_STAT,
+				    pro.INS_USER,
+				    pro.UPD_USER,			   
+					DATE_FORMAT(pro.UPD_DATE,'%Y-%m-%d %k:%i:%s') UPD_DATE,
+                    DATE_FORMAT(pro.INS_DATE,'%Y-%m-%d %k:%i:%s') INS_DATE,
+				    cus.CUS_TYPE,
+				    cus.CUS_NAME,
+				    ctype.text CUS_TYPE_DESC,
+				    cus.CUS_SEX CUS_SEX,
+					cus.CUS_TEL1 CUS_TEL,
+					user.USER_FULLNAME CM_NAME,
+				    user.USER_SEX CM_SEX,
+				    user.USER_TEL1 CM_TEL,
+				    usera.USER_FULLNAME PM_NAME,
+				    usera.USER_SEX PM_SEX,
+				    usera.USER_TEL1 PM_TEL
+				FROM
+				    qr_project pro
+				        LEFT JOIN
+				    qr_custom cus ON pro.CUS_ID = cus.CUS_ID  and cus.CUS_STATUS=0 
+				        LEFT JOIN
+				    qr_dict_custom_type ctype ON cus.CUS_TYPE = ctype.id
+				        LEFT JOIN
+				    qr_user user ON pro.CM_ID = user.USER_ID
+				        LEFT JOIN
+				    qr_user usera ON pro.PM_ID = usera.USER_ID
+			WHERE 1=1 and pro.PRO_STATUS=0  
+			                   and  pro.PROJECT_ID = #projectId#
+			                   
+           ]]>
+    </select>
+    <!--删除  -->
+    <update id="MS_DEL_RPOJECT_BYID"      >
+     update qr_project set PRO_STATUS=1,UPD_USER=#updUser#,UPD_DATE=sysdate()  
+     where PROJECT_ID = #projectId#
+      and   UPD_DATE=STR_TO_DATE(#updDate#,'%Y-%m-%d %H:%i:%s')
+    </update>
+    <resultMap id="RESULT_PROJECT_IDNO" class="org.evm.biz.project.entity.ProjectVO">
+		<result property="projectId" column="PROJECT_ID" />
+		<result property="projectNo" column="PROJECT_NO" />
+		<result property="projectName" column="PROJECT_NAME" />
+	</resultMap>
+	<!-- combox用 -->
+    <select id="MS_FIND_ALL_RPOJECT_IDNO"  resultMap="RESULT_PROJECT_IDNO"    >
+           <![CDATA[
+                 	SELECT 
+							    PROJECT_ID, PROJECT_NO, PROJECT_NAME
+							FROM
+							    qr_project
+							WHERE
+							    1 = 1 AND PRO_STATUS = 0
+           ]]>
+    </select>
+    
+    <!--  更新项目时间 -->
+	<update id="MS_UPDATE_UPD_DATE" parameterClass="PARA_PROJECT">
+	     <![CDATA[
+	        update QR_PROJECT set UPD_DATE=sysdate(),
+	                                              UPD_USER=#updUser#
+	                                    where PROJECT_ID=#projectId#
+	                                       and  UPD_DATE=STR_TO_DATE(#updDate#,'%Y-%m-%d %H:%i:%s')
+	       ]]>
+	</update>
+    <!-- APP更新工程开工时间。 -->
+	<update id="MS_UPDATE_WORK_START_DATE" parameterClass="PARA_PROJECT">
+	     <![CDATA[
+	        update QR_PROJECT set UPD_DATE=sysdate(),
+	                                              UPD_USER=#updUser#,
+	                                              WORK_START_DATE=if(#workStartDate#='' ,null,STR_TO_DATE(#workStartDate# ,'%Y-%m-%d'))
+	                                    where PROJECT_ID=#projectId#
+	                                       and  UPD_DATE=STR_TO_DATE(#updDate#,'%Y-%m-%d %H:%i:%s')
+	       ]]>
+	</update>
+	<select id="MS_FIND_PROJECT_BY_PROJECTNO" resultMap="RESULT_PROJECT_PAGE"  parameterClass="PARA_PROJECT">
+		<![CDATA[
+			SELECT  pro.PROJECT_ID,
+				    pro.PROJECT_NO,
+				    pro.PROJECT_NAME,
+					cus.CUS_TYPE,
+					pro.BUILD_TYPE,
+				    cus.CUS_NAME,
+					user.USER_FULLNAME CM_NAME,
+				    usera.USER_FULLNAME PM_NAME,
+					if(pro.WORK_END_DATE is null ,'',DATE_FORMAT(pro.WORK_END_DATE ,'%Y-%m-%d')) WORK_END_DATE,
+					if(pro.SIGN_DATE is null ,'',DATE_FORMAT(pro.SIGN_DATE,'%Y-%m-%d')) SIGN_DATE,
+					pro.PROJECT_REMARK, 
+					DATE_FORMAT(pro.UPD_DATE, '%Y-%m-%d %k:%i:%s') UPD_DATE
+				FROM
+				    qr_project pro
+				        LEFT JOIN
+				    qr_custom cus ON pro.CUS_ID = cus.CUS_ID  and cus.CUS_STATUS=0 
+				        LEFT JOIN
+				    qr_dict_custom_type ctype ON cus.CUS_TYPE = ctype.id
+				        LEFT JOIN
+				    qr_user user ON pro.CM_ID = user.USER_ID
+				        LEFT JOIN
+				    qr_user usera ON pro.PM_ID = usera.USER_ID
+			WHERE 1=1   and pro.PRO_STATUS=0
+			]]>
+			<dynamic>
+			 
+			<isNotEmpty prepend="and" property="projectNo">
+				<![CDATA[ pro.PROJECT_NO = #projectNo#]]>
+			</isNotEmpty>
+			</dynamic>
+	</select>
+</sqlMap>

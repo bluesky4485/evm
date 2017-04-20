@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap 
+    PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+    "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="MST_REL_PROJECT_DEVICE">
+<typeAlias alias="PARA_PROJECT" type="org.evm.biz.project.entity.ProjectVO" />
+    <typeAlias alias="PARA_OREDER" type="org.evm.biz.order.entity.OrderVO" />
+	<typeAlias alias="PARA_REL_PROJECT_DEVICE" type="org.evm.biz.project.entity.RelProjectDeviceVO" />
+	<resultMap id="RESULT_REL_PROJECT_DEVICE" class="org.evm.biz.project.entity.RelProjectDeviceVO">
+	     <result property="pdId" column="PD_ID" />
+		<result property="projectId" column="PROJECT_ID" />
+		<result property="deviceId" column="Device_TYPE_id" />
+		<result property="deviceCnt" column="Device_Cnt" />
+		<result property="deviceName" column="DEVICE_NAME" />
+		<result property="deviceClassType" column="CLASS_TYPE" />
+		<result property="updDate" column="UPD_DATE" />
+	</resultMap>
+	<resultMap id="RESULT_REL_PROJECT_DEVICE_AND_PROPERTY" class="org.evm.biz.project.entity.RelProjectDeviceVO">
+	     <result property="pdId" column="PD_ID" />
+		<result property="projectId" column="PROJECT_ID" />
+		<result property="deviceId" column="DEVICE_TYPE_ID" />
+		<result property="deviceCnt" column="DEVICE_CNT" />
+		<result property="deviceName" column="DEVICE_NAME" />
+		<result property="deviceClassType" column="CLASS_TYPE" />
+		<result property="deviceClassTypeName" column="CLASS_TYPE_TEXT" />
+		<result property="properties" column="DEVICE_TYPE_ID" select="MS_FIND_DEVICE_PROPERTY_DEVICEID" />
+	</resultMap>
+	<!-- 插入 -->
+	<insert id="MS_INSERT_REL_PROJECT_DEVICE" parameterClass="PARA_REL_PROJECT_DEVICE">
+	    <![CDATA[ 
+			INSERT INTO qr_rel_project_device (
+			                             PROJECT_ID,
+			                             Device_TYPE_id,
+			                             Device_Cnt, 
+										 INS_USER,
+										 UPD_USER,
+										 INS_DATE,
+										 UPD_DATE)
+	                              VALUES(
+										    #projectId#,
+										    #deviceId#,
+										    #deviceCnt#,
+											#insUser#,
+											#updUser#,
+											sysdate(),
+											sysdate())
+			]]>
+		<selectKey resultClass="int"  keyProperty="pdId" >    
+             SELECT last_insert_id() as pdId  
+        </selectKey>
+	</insert>
+	<select id="MS_FIND_REL_PROJECT_DEVICE_BY_PROJECT_ID" resultMap="RESULT_REL_PROJECT_DEVICE"  parameterClass="java.lang.Long">
+	          <![CDATA[
+			      select 
+			              rel.PD_ID,
+			             rel.PROJECT_ID,
+						 rel.Device_TYPE_id,
+						 rel.Device_Cnt, 
+						 device.TEXT DEVICE_NAME,
+						 device.CLASS_TYPE,
+						 rel.UPD_DATE
+				 from  qr_rel_project_device rel
+			left join  qr_device_type device
+				  on    rel.Device_TYPE_id=device.ID
+				 where  PROJECT_ID=#projectId#
+              ]]>			  
+	</select>
+	<!--按projectId 批量删除  -->
+	<delete id="MS_DELETE_REL_PROJECT_DEVICE_BY_PROJECT_ID"  parameterClass="java.lang.Long">
+	             <![CDATA[
+				    delete from qr_rel_project_device where PROJECT_ID =#value#
+				 ]]>		
+	</delete>
+	<!--单个删除  -->
+	<delete id="MS_DELETE_REL_PROJECT_DEVICE_BY_PDID"  parameterClass="java.lang.Long">
+	             <![CDATA[
+				    delete from qr_rel_project_device where PD_ID =#value#
+				 ]]>		
+	</delete>
+   <!--更新  -->
+	<update id="MS_UPDATE_REL_PROJECT_DEVICE_BY_PDID"  parameterClass="PARA_REL_PROJECT_DEVICE">
+	             <![CDATA[
+				   update qr_rel_project_device rpd set device_cnt=#deviceCnt#,UPD_DATE=sysdate(),UPD_USER=#updUser#
+				    where PD_ID =#pdId#
+
+				 ]]>		
+	</update>
+
+    <!--查询工程设备及设备属性  -->
+    <select id="MS_FIND_PROJECT_DEVICE_AND_PROPERTY_BY_ORDER" resultMap="RESULT_REL_PROJECT_DEVICE_AND_PROPERTY"  
+               parameterClass="PARA_OREDER">
+        <![CDATA[
+             SELECT 
+				    rpd.PD_ID,
+				    rpd.project_id,
+				    rpd.DEVICE_TYPE_ID,
+				    rpd.DEVICE_CNT,
+				    dt.text DEVICE_NAME,
+				    dt.class_type,
+				    ddt.text CLASS_TYPE_TEXT
+				FROM
+				    qr_order ord
+				        JOIN
+				    qr_project pro ON ord.PROJECT_ID = pro.PROJECT_ID
+				        JOIN
+				    qr_rel_project_device rpd ON pro.PROJECT_ID = rpd.project_id
+				        JOIN
+				    qr_device_type dt ON rpd.Device_TYPE_id = dt.id
+				        JOIN
+				    qr_dict_device_type ddt ON dt.class_type = ddt.id
+				WHERE 1=1 and  ord.order_id=#orderId# 
+        ]]>
+        <dynamic>
+			<isNotEqual prepend=" limit"  compareValue="0"  property="pageSize">
+				<![CDATA[     #startPageNum# ,#pageSize# ]]>
+			</isNotEqual>
+		</dynamic>
+    </select>
+    
+    <!--查询工程设备及设备属性10026  -->
+    <select id="MS_FIND_PROJECT_DEVICE_AND_PROPERTY_BY_PROJECT" resultMap="RESULT_REL_PROJECT_DEVICE_AND_PROPERTY"  
+               parameterClass="PARA_PROJECT">
+        <![CDATA[
+             SELECT 
+				    rpd.PD_ID,
+				    rpd.project_id,
+				    rpd.DEVICE_TYPE_ID,
+				    rpd.DEVICE_CNT,
+				    dt.text DEVICE_NAME,
+				    dt.class_type,
+				    ddt.text CLASS_TYPE_TEXT
+				FROM
+				      qr_project pro  
+				        JOIN
+				    qr_rel_project_device rpd ON pro.PROJECT_ID = rpd.project_id
+				        JOIN
+				    qr_device_type dt ON rpd.Device_TYPE_id = dt.id
+				        JOIN
+				    qr_dict_device_type ddt ON dt.class_type = ddt.id
+				WHERE 1=1 and pro.project_id=#projectId#
+        ]]>
+        <dynamic>
+			<isNotEqual prepend=" limit"  compareValue="0"  property="pageSize">
+				<![CDATA[     #startPageNum# ,#pageSize# ]]>
+			</isNotEqual>
+		</dynamic>
+    </select>
+</sqlMap>

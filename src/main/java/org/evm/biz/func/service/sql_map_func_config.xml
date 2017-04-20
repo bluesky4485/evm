@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap 
+    PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+    "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="MST_FUNC">
+	<typeAlias alias="PARA_FUNC" type="org.evm.biz.func.entity.FuncVO" />
+	<typeAlias alias="PARA_SERVICE" type="org.evm.biz.func.entity.AppServiceVO" />
+	<resultMap id="RESULT_FUNC" class="org.evm.biz.func.entity.FuncVO">
+		<result property="funcId" column="function_id" />
+		<result property="funcName" column="function_name" />
+		<result property="funcRemark" column="function_desc" />
+		<result property="updDate" column="UPD_DATE" />
+	</resultMap>
+	<resultMap id="RESULT_APPSERVICE" class="org.evm.biz.func.entity.AppServiceVO">
+		<result property="systemId" column="SYSTEM_ID" />
+		<result property="serviceId" column="SERVICE_ID" />
+		<result property="functionId" column="FUNCTION_ID" />
+		<result property="serviceDesc" column="SERVICE_DESC" />
+	</resultMap>
+    <!-- 分页查询 -->
+	<select id="MS_SQL_FIND_FUNC_PAGE" resultMap="RESULT_FUNC"
+		parameterClass="PARA_FUNC">
+		<![CDATA[
+			select function_id,function_name,function_desc ,upd_date 
+			from qr_function
+				WHERE 1=1
+			]]>
+		<dynamic>
+			<isNotEmpty prepend="and" property="funcName">
+				<![CDATA[ function_name like '%$funcName$%']]>
+			</isNotEmpty>
+			<isNotEqual prepend=" limit" compareValue="0" property="pageSize">
+				<![CDATA[ #startPageNum# ,#pageSize# ]]>
+			</isNotEqual>
+		</dynamic>
+	</select>
+	<!-- 分页查询 -->
+	<select id="MS_SQL_FIND_FUNC_PAGE_CNT" resultClass="java.lang.Integer"
+		parameterClass="PARA_FUNC">
+		<![CDATA[
+			SELECT 
+				   count(1)
+			from qr_function
+				WHERE 1=1
+			]]>
+		<dynamic>
+			<isNotEmpty prepend="and" property="funcName">
+				<![CDATA[ function_name like '%$funcName$%']]>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	<resultMap id="RESULT_USER_FUNC" class="org.evm.biz.func.entity.FuncVO">
+		<result property="funcId" column="function_id" />
+		<result property="funcName" column="function_name" />
+	</resultMap>
+	<!-- 根据用户名查询权限 -->
+    <select id="MS_SQL_FIND_FUNC_BY_UNAME" parameterClass="PARA_FUNC" resultMap="RESULT_USER_FUNC">
+	    <![CDATA[
+	          SELECT 
+					    func.function_id, function_name
+					FROM
+					    qr_user user
+					        JOIN
+					    qr_rel_user_role rur ON user.USER_ID = rur.user_id
+					        AND user.USER_NAME = #uName#
+					        JOIN
+					    qr_rel_role_func rrf ON rur.role_id = rrf.role_id
+					        JOIN
+					    qr_function func ON rrf.function_id = func.function_id
+					    where user.USER_STATUS=0
+					    and func.function_id=#funcId#
+					GROUP BY user.user_id , rrf.function_id
+		]]>
+	 </select>
+	 <!-- 根据用户ID查询APP权限 -->
+    <select id="MS_SQL_FIND_FUNC_BY_UID_APP" parameterClass="PARA_FUNC" resultMap="RESULT_USER_FUNC">
+	    <![CDATA[
+	           SELECT 
+    func.function_id, function_name
+FROM
+    qr_user user
+        JOIN
+    qr_rel_user_role rur ON user.USER_ID = rur.user_id
+        AND user.USER_ID = #uId#
+        JOIN
+    qr_rel_role_func rrf ON rur.role_id = rrf.role_id
+        JOIN
+    qr_function func ON rrf.function_id = func.function_id
+        JOIN
+    qr_cfg_func_service cfs ON cfs.FUNCTION_ID = func.function_id
+WHERE
+    user.USER_STATUS = 0
+        AND cfs.SERVICE_ID = #serviceId#
+GROUP BY user.user_id , rrf.function_id
+		]]>
+	 </select>
+	 
+	 <!-- 根据权限查询服务ID -->
+	<select id="MS_SQL_FIND_SERVICE_FUNCID" resultMap="RESULT_APPSERVICE"
+		parameterClass="PARA_SERVICE">
+		<![CDATA[
+			SELECT
+					QCFS.SYSTEM_ID,
+					QCFS.SERVICE_ID,
+					QCFS.FUNCTION_ID,
+					QDA.text SERVICE_DESC
+				FROM
+					qr_cfg_func_service QCFS
+				JOIN qr_dict_appservice QDA ON QCFS.SERVICE_ID = QDA.ID
+				WHERE 1=1
+			]]>
+		<dynamic>
+			<isNotEmpty prepend="and" property="functionId">
+				<![CDATA[ QCFS.FUNCTION_ID = #functionId#]]>
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="serviceId">
+				<![CDATA[ QCFS.SERVICE_ID = #serviceId#]]>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+</sqlMap>

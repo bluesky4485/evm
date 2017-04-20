@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap 
+    PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+    "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="MST_FAULTTYPE">
+	<typeAlias alias="PARA_FAULTTYPE" type="org.evm.biz.faulttype.entity.FaultTypeVO" />
+	<resultMap id="RESULT_FAULTTYPE" class="org.evm.biz.faulttype.entity.FaultTypeVO">
+		<result property="faultTypeId" column="faultType_Id" />
+		<result property="faultTypeName" column="faultType_Name" />
+		<result property="faultTypeNo" column="FAULTTYPE_NO" />
+		<result property="insUser" column="INS_USER" />
+		<result property="updUser" column="UPD_USER" />
+		<result property="insDate" column="INS_DATE" />
+		<result property="updDate" column="UPD_DATE" />
+	</resultMap>
+	<select id="MS_FIND__ALL_FAULT" resultMap="RESULT_FAULTTYPE"
+		parameterClass="PARA_FAULTTYPE">
+		<![CDATA[
+		   select faultType_Id,faultType_Name,FAULTTYPE_NO,INS_USER,UPD_USER,
+		   DATE_FORMAT(UPD_DATE,'%Y-%m-%d %k:%i:%s') UPD_DATE,
+           DATE_FORMAT(INS_DATE,'%Y-%m-%d %k:%i:%s') INS_DATE
+		   from QR_FAULTTYPE
+		   where 1=1 
+		]]>
+		<dynamic>
+			<isNotEmpty prepend="and" property="faultTypeName">
+				<![CDATA[ faultType_Name like '%$faultTypeName$%']]>
+			</isNotEmpty>
+		</dynamic>
+		<![CDATA[ order by faultType_Id desc  ]]>
+	</select>
+	<insert id="MS_INSERT_FAULTTYPE" parameterClass="PARA_FAULTTYPE">
+	    <![CDATA[ 
+			INSERT INTO QR_FAULTTYPE (
+			                             faultType_Name,
+			                             FAULTTYPE_NO,
+										 INS_USER,
+										 UPD_USER,
+										 INS_DATE,
+										 UPD_DATE)
+	                              VALUES(
+											#faultTypeName#,
+											#faultTypeNo#,
+											#insUser#,
+											#updUser#,
+											sysdate(),
+											sysdate())
+			]]>
+			<selectKey resultClass="int" keyProperty="faultTypeId" > 
+				SELECT @@IDENTITY AS faultTypeId 
+			</selectKey> 
+	</insert>
+	<delete id="MS_DELETE_FAULTTYPE"  parameterClass="PARA_FAULTTYPE">
+	         <![CDATA[ 
+	              delete from qr_faulttype  where  faultType_Id=#faultTypeId# 
+	         ]]>	       
+	</delete>
+	<update id="MS_UPDATE_FAULTTYPE" parameterClass="PARA_FAULTTYPE">
+	    <![CDATA[
+	        update qr_faulttype
+	              set FAULTTYPE_NAME=#faultTypeName#,
+	                   UPD_DATE=sysdate(),
+	                   UPD_USER=#updUser#
+	       where   faultType_Id=#faultTypeId# 
+	    ]]>
+	</update>
+</sqlMap>

@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap 
+    PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+    "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="MST_APP_ST">
+	<typeAlias alias="PARA_APP_OREDER"  type="org.evm.biz.order.entity.OrderVO" />
+	<resultMap id="RESULT_APP_OREDER" class="org.evm.biz.order.entity.OrderVO">
+		<result property="orderId" column="ORDER_ID" />
+		<result property="orderNo" column="ORDER_NO" />
+		<result property="projectId" column="PROJECT_ID" />
+		<result property="projectNo" column="PROJECT_NO" />
+		<result property="projectName" column="PROJECT_NAME" />
+		<result property="pmName" column="PM_NAME" />
+		<result property="lng" column="lng" />
+		<result property="lat" column="lat" />
+		<result property="workAddress" column="WORK_ADDRESS" />
+		<result property="workStatus" column="WORK_STATUS" />
+		<result property="orderType" column="ORDER_TYPE" />
+		<result property="insDate" column="INS_DATE" />
+		<result property="updDate" column="UPD_DATE" />
+	</resultMap>
+	 <!--  施工中订单数-->
+	<select id="getWorkingnum" resultClass="java.lang.Integer"
+		parameterClass="java.lang.Long">
+		<![CDATA[
+			SELECT
+					COUNT(1)
+				FROM
+					qr_order ord
+				JOIN qr_project pro ON ord.PROJECT_ID = pro.PROJECT_ID
+				AND pro.PRO_STATUS = 0
+				WHERE
+					ord.order_status = 0
+				AND ord.WORK_STATUS = 2
+				AND (
+					#value# = ord.WORK_PM_ID
+					OR #value# = pro.PM_ID
+					OR #value# = ord.STORE_PM_ID
+					OR EXISTS (
+						SELECT
+							user_id
+						FROM
+							qr_rel_project_user qrpu
+						WHERE
+							qrpu.project_id = pro.PROJECT_ID
+						AND qrpu.user_id = #value#
+					)
+				)		
+			]]>
+	</select>
+	<!-- 工程订单总数 -->
+	<select id="getWorkallnum" resultClass="java.lang.Integer"
+		parameterClass="java.lang.Long">
+		<![CDATA[
+			SELECT
+					COUNT(1)
+				FROM
+					qr_order ord
+				JOIN qr_project pro ON ord.PROJECT_ID = pro.PROJECT_ID
+				AND pro.PRO_STATUS = 0
+				WHERE
+					ord.order_status = 0
+				 AND (
+					#value# = ord.WORK_PM_ID
+					OR #value# = pro.PM_ID
+					OR #value# = ord.STORE_PM_ID
+					OR EXISTS (
+						SELECT
+							user_id
+						FROM
+							qr_rel_project_user qrpu
+						WHERE
+							qrpu.project_id = pro.PROJECT_ID
+						AND qrpu.user_id = #value#
+					)
+				)
+			]]>
+	</select>
+	<!--  运维订单总数-->
+	<select id="getRepairallnum" resultClass="java.lang.Integer"
+		parameterClass="java.lang.Long">
+		<![CDATA[
+		SELECT
+				COUNT(1)
+			FROM
+				qr_morder mord
+			JOIN qr_order ord ON ord.order_id = mord.ORDER_ID
+			AND ord.order_status = 0
+			JOIN qr_project pro ON pro.PROJECT_ID = ord.PROJECT_ID
+			AND pro.PRO_STATUS = 0
+			WHERE
+				MORDER_STATUS = 0
+			AND (
+				#value# = mord.MAINTAIN_PM
+				OR #value# = mord.MORDER_PM
+				OR #value# = pro.PM_ID
+				OR EXISTS (
+					SELECT
+						user_id
+					FROM
+						qr_rel_project_user qrpu
+					WHERE
+						qrpu.project_id = pro.PROJECT_ID
+					AND qrpu.user_id = #value#
+				)
+			)
+			]]>
+	</select>
+	<!-- 运维中订单数 -->
+	<select id="getRepairingnum" resultClass="java.lang.Integer"
+		parameterClass="java.lang.Long">
+		<![CDATA[
+			SELECT
+				COUNT(1)
+			FROM
+				qr_morder mord
+			JOIN qr_order ord ON ord.order_id = mord.ORDER_ID
+			AND ord.order_status = 0
+			JOIN qr_project pro ON pro.PROJECT_ID = ord.PROJECT_ID
+			AND pro.PRO_STATUS = 0
+			WHERE
+				MORDER_STATUS = 0
+			AND MAINTAIN_STATUS = 2
+			AND (
+				#value# = mord.MAINTAIN_PM
+				OR #value# = mord.MORDER_PM
+				OR #value# = pro.PM_ID
+				OR EXISTS (
+					SELECT
+						user_id
+					FROM
+						qr_rel_project_user qrpu
+					WHERE
+						qrpu.project_id = pro.PROJECT_ID
+					AND qrpu.user_id = #value#
+				)
+			)
+			]]>
+	</select>
+	<!-- 用户登录查询订单和运维订单 -->
+	<select id="MS_SQL_APP_FIND_ORDER_MORDER_BY_UID"  resultMap="RESULT_APP_OREDER"
+		parameterClass="PARA_APP_OREDER">
+		<![CDATA[
+		SELECT   * FROM
+				    (SELECT
+						ord.ORDER_ID,
+						ord.ORDER_NO,
+						pro.PROJECT_ID,
+						pro.PROJECT_NO,
+						pro.PROJECT_NAME,
+						ord.lat,
+						ord.lng,
+						ord.WORK_ADDRESS,
+						ord.WORK_STATUS,
+						usr.USER_FULLNAME PM_NAME,
+						DATE_FORMAT(ord.INS_DATE,'%Y-%m-%d %k:%i:%s') INS_DATE,
+						DATE_FORMAT(ord.UPD_DATE,'%Y-%m-%d %k:%i:%s') UPD_DATE,
+						'200' order_type
+					FROM
+						qr_order ord
+					JOIN qr_project pro ON ord.project_Id = pro.PROJECT_ID
+					LEFT JOIN qr_user usr ON pro.PM_ID = usr.USER_ID
+					WHERE
+						pro.PRO_STATUS = 0
+					AND ord.order_status = 0
+					AND (
+						#insUser# = ord.WORK_PM_ID
+						OR #insUser# = pro.PM_ID
+						OR #insUser# = ord.STORE_PM_ID
+						OR EXISTS (
+							SELECT
+								*
+							FROM
+								qr_rel_project_user qrpu
+							WHERE
+								qrpu.project_id = pro.PROJECT_ID
+							AND qrpu.user_id = #insUser#
+						)
+					)
+				UNION ALL
+				      SELECT
+				            mord.MORDER_ID ORDER_ID,
+				            mord.MORDER_NO ORDER_NO,
+				            pro.PROJECT_ID,
+				            pro.PROJECT_NO,
+				            pro.PROJECT_NAME,
+				            ord.lat,
+				            ord.lng,
+				            ord.WORK_ADDRESS,
+				            mord.MAINTAIN_STATUS WORK_STATUS,
+				            usr.USER_FULLNAME PM_NAME,
+				            DATE_FORMAT(mord.INS_DATE,'%Y-%m-%d %k:%i:%s') INS_DATE,
+				            DATE_FORMAT(mord.UPD_DATE,'%Y-%m-%d %k:%i:%s') UPD_DATE,
+				            '300' order_type
+				    FROM qr_morder mord
+				    JOIN qr_order ord ON mord.ORDER_ID = ord.order_id
+				    JOIN qr_project pro ON ord.project_Id = pro.PROJECT_ID
+				     
+				    LEFT JOIN qr_user usr ON pro.PM_ID = usr.USER_ID
+				    WHERE
+				        pro.PRO_STATUS = 0
+				            AND  mord.MORDER_STATUS = 0
+				            AND ord.order_status = 0
+				            AND   (
+						#insUser# = mord.MAINTAIN_PM
+						OR #insUser# = mord.MORDER_PM
+                        OR #insUser# = pro.PM_ID
+						OR EXISTS (
+							SELECT * FROM qr_rel_project_user qrpu
+							WHERE qrpu.project_id = pro.PROJECT_ID
+							AND qrpu.user_id = #insUser#
+						)
+					)) tab
+				ORDER BY tab.ins_date DESC
+		]]>
+		<dynamic>
+			<isNotEqual prepend=" limit"  compareValue="0"  property="pageSize">
+					<![CDATA[  #startPageNum# ,#pageSize# ]]>
+			</isNotEqual>
+		</dynamic>
+	</select>
+	<select id="MS_SQL_APP_FIND_ORDER_LOGIN"  resultMap="RESULT_APP_OREDER"
+		parameterClass="PARA_APP_OREDER">
+		<![CDATA[
+		    SELECT 
+				  	ord.ORDER_ID,
+				    ord.ORDER_NO,
+				    pro.PROJECT_ID,
+				    pro.PROJECT_NO,
+				    pro.PROJECT_NAME,
+				    ord.lat,
+				    ord.lng,
+				    ord.WORK_ADDRESS,
+				    ord.WORK_STATUS,
+				    usr.USER_FULLNAME PM_NAME,
+				    DATE_FORMAT(ord.INS_DATE,'%Y-%m-%d %k:%i:%s') INS_DATE,
+				    DATE_FORMAT(ord.UPD_DATE,'%Y-%m-%d %k:%i:%s') UPD_DATE,
+					'200' order_type
+					FROM
+					    qr_order ord
+					        JOIN
+					    qr_project pro ON ord.project_Id = pro.PROJECT_ID
+					        AND pro.PRO_STATUS = 0
+					        LEFT JOIN
+					    qr_user usr ON pro.PM_ID = usr.USER_ID
+					WHERE 1=1
+					   AND ord.order_status = 0
+					   AND (
+								#insUser# = ord.WORK_PM_ID
+								OR #insUser# = pro.PM_ID
+								OR #insUser# = ord.STORE_PM_ID
+								OR EXISTS (
+									SELECT user_id
+									FROM
+										qr_rel_project_user qrpu
+									WHERE
+										qrpu.project_id = pro.PROJECT_ID
+									AND qrpu.user_id = #insUser#
+								)
+							)  
+					    
+		]]>
+		<dynamic>
+			<isNotEqual prepend=" limit"  compareValue="0"  property="pageSize">
+					<![CDATA[  #startPageNum# ,#pageSize# ]]>
+			</isNotEqual>
+		</dynamic>
+	</select>
+	<select id="MS_SQL_APP_FIND_MORDER_LOGIN"  resultMap="RESULT_APP_OREDER"
+		parameterClass="PARA_APP_OREDER">
+		<![CDATA[
+		       SELECT 
+					    mord.MORDER_ID ORDER_ID,
+					    mord.MORDER_NO ORDER_NO,
+					    pro.PROJECT_ID,
+					    pro.PROJECT_NO,
+					    pro.PROJECT_NAME,
+					    ord.lat,
+					    ord.lng,
+					    ord.WORK_ADDRESS,
+					    mord.MAINTAIN_STATUS WORK_STATUS,
+					    usr.USER_FULLNAME PM_NAME,
+					    DATE_FORMAT(mord.INS_DATE,'%Y-%m-%d %k:%i:%s') INS_DATE,
+				       DATE_FORMAT(mord.UPD_DATE,'%Y-%m-%d %k:%i:%s') UPD_DATE,
+					    '300' order_type
+					FROM
+					    qr_morder mord
+					        JOIN
+					    qr_order ord ON mord.ORDER_ID = ord.order_id
+					        AND ord.order_status = 0
+					        JOIN
+					    qr_project pro ON ord.project_Id = pro.PROJECT_ID
+					        AND pro.PRO_STATUS = 0
+					        LEFT JOIN
+					    qr_user usr ON pro.PM_ID = usr.USER_ID
+					WHERE
+					    mord.MORDER_STATUS = 0
+					       AND   (
+									#insUser# = mord.MAINTAIN_PM
+									OR #insUser# = mord.MORDER_PM
+									OR #insUser# = pro.PM_ID
+									OR EXISTS (
+										SELECT user_id FROM qr_rel_project_user qrpu
+										WHERE qrpu.project_id = pro.PROJECT_ID
+										AND qrpu.user_id = #insUser#
+									)
+								)
+		]]>
+		<dynamic>
+			<isNotEqual prepend=" limit"  compareValue="0"  property="pageSize">
+					<![CDATA[  #startPageNum# ,#pageSize# ]]>
+			</isNotEqual>
+		</dynamic>
+	</select>
+	<resultMap id="RESULT_MOREDER_ONE" class="org.evm.biz.morder.entity.MOrderVO">
+		<result property="orderId" column="ORDER_ID" />
+		<result property="morderId" column="MORDER_ID" /> 
+		<result property="morderNo" column="MORDER_NO" /> 
+		<result property="morderPmId" column="MORDER_PM" />
+		<result property="maintainDate" column="MAINTAIN_DATE" />
+		<result property="faultDesc" column="FAULT_DESC" />
+		<result property="appointmentDate" column="APPOINTMENT_DATE" />
+		<result property="planEndDate" column="PLAN_END_DATE" />
+		<result property="mworkerCnt" column="MWORKER_CNT" />
+		<result property="maintainBeginDate" column="MAINTAIN_BEGIN_DATE" />
+		<result property="maintainStatus" column="MAINTAIN_STATUS" />
+		<result property="maintainSpeed" column="MAINTAIN_SPEED" />
+		<result property="faultType" column="FAULT_TYPE" />
+		<result property="maintainPmId" column="MAINTAIN_PM" />
+		<result property="acceptStatus" column="ACCEPT_STATUS" />
+		<result property="acceptecallMan" column="ACCEPTECALL_MAN" />
+		
+		<result property="callbackDate" column="CALLBACK_DATE" />
+		<result property="solution" column="SOLUTION" />
+		<result property="maintainResultdesc" column="MAINTAIN_RESULTDESC" />
+		<result property="maintainRemark" column="MAINTAIN_REMARK" />
+		<result property="userScore" column="USER_SCORE" />
+		<result property="userProposal" column="USER_PROPOSAL" />
+		<result property="lastUpdDate" column="last_UpdDate" />
+		<result property="insUser" column="INS_USER" />
+		<result property="updUser" column="UPD_USER" />
+		<result property="insDate" column="INS_DATE" />
+		<result property="updDate" column="UPD_DATE" />
+		<result property="order" column="ORDER_ID"  select="MS_GET_ORDER_BYID"/>
+		<result property="maintainPmUser" column="MAINTAIN_PM"  select="MS_FIND_USER_BYID"/>
+		<result property="morderPmUser" column="MORDER_PM"  select="MS_FIND_USER_BYID"/>
+	</resultMap>
+	<typeAlias alias="PARA_MOREDER" type="org.evm.biz.morder.entity.MOrderVO" />
+	<select id="MS_SQL_APP_FIND_MORDER_100312" parameterClass="PARA_MOREDER" resultMap="RESULT_MOREDER_ONE" >
+	        <![CDATA[
+									        SELECT 
+					    mord.ORDER_ID,
+					    mord.MORDER_ID,
+					    mord.MORDER_NO,
+					    mord.MORDER_PM,
+					    DATE_FORMAT(mord.MAINTAIN_DATE, '%Y-%m-%d') MAINTAIN_DATE,
+					    mord.FAULT_DESC,
+					    DATE_FORMAT(mord.APPOINTMENT_DATE, '%Y-%m-%d') APPOINTMENT_DATE,
+					    DATE_FORMAT(mord.PLAN_END_DATE, '%Y-%m-%d') PLAN_END_DATE,
+					    mord.MWORKER_CNT,
+					    DATE_FORMAT(mord.MAINTAIN_BEGIN_DATE, '%Y-%m-%d') MAINTAIN_BEGIN_DATE,
+					    mord.MAINTAIN_STATUS,
+					    mord.MAINTAIN_SPEED,
+					    mord.FAULT_TYPE,
+					    mord.MAINTAIN_PM,
+					    mord.ACCEPT_STATUS,
+					    mord.ACCEPTECALL_MAN,
+					    DATE_FORMAT(mord.CALLBACK_DATE, '%Y-%m-%d') CALLBACK_DATE,
+					    mord.SOLUTION,
+					    mord.MAINTAIN_RESULTDESC,
+					    mord.MAINTAIN_REMARK,
+					    mord.USER_SCORE,
+					    mord.USER_PROPOSAL,
+					    DATE_FORMAT(mord.last_UpdDate, '%Y-%m-%d %k:%i:%s') last_UpdDate,
+					    DATE_FORMAT(mord.UPD_DATE, '%Y-%m-%d %k:%i:%s') UPD_DATE,
+					    DATE_FORMAT(mord.INS_DATE, '%Y-%m-%d %H:%i:%S') INS_DATE,
+					    mord.INS_USER,
+					    mord.UPD_USER
+					FROM
+					    qr_morder mord
+					        JOIN
+					    qr_order ord ON mord.ORDER_ID = ord.order_id
+					        AND ord.order_status = '0'
+					        JOIN
+					    qr_project pro ON pro.PROJECT_ID = ord.PROJECT_ID
+					        AND pro.PRO_STATUS = '0'
+					        AND (mord.MORDER_NO = #morderNo# OR ord.ORDER_NO = #morderNo#)
+					ORDER BY mord.INS_DATE DESC
+					LIMIT 1 , 1
+		    ]]>
+	</select>
+</sqlMap>

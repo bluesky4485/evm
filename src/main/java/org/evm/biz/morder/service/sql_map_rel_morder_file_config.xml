@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap 
+    PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+    "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="MST_REL_MORDER_FILE">
+	<typeAlias alias="PARA_MORDER_FILES" type="org.evm.biz.morder.entity.MOrderFileVO" />
+	<resultMap id="RESULT_MORDER_FILES" class="org.evm.biz.morder.entity.MOrderFileVO">
+		<result property="morderId" column="MORDER_ID" />
+		<result property="fileId" column="FILE_ID" />
+		<result property="filePath" column="FILE_PATH" />
+		<result property="fileName" column="FILE_NAME" />
+		<result property="bizType" column="BIZ_TYPE" />
+	</resultMap>
+	<!-- 插入 -->
+	<insert id="MS_INSERT_REL_MOREDER_FILE" parameterClass="PARA_MORDER_FILES">
+	    <![CDATA[ 
+			INSERT INTO qr_rel_morder_file (
+			                             MORDER_ID,
+			                             FILE_PATH,
+			                             FILE_NAME,
+			                             BIZ_TYPE,
+										 INS_USER,
+										 UPD_USER,
+										 INS_DATE,
+										 UPD_DATE)
+	                              VALUES(
+										    #morderId#,
+										    #filePath#,
+										    #fileName#,
+										    #bizType#,
+											#insUser#,
+											#updUser#,
+											sysdate(),
+											sysdate())
+			]]>
+		<selectKey resultClass="long" keyProperty="fileId">
+			SELECT last_insert_id() as fileId ;
+		</selectKey>
+	</insert>
+	<!--按运维订单ID查询所有文件 -->
+	<select id="MS_FILE_MORDER_FILE_BY_MORDER_ID" resultMap="RESULT_MORDER_FILES"
+		parameterClass="java.lang.Long">
+	          <![CDATA[
+			      select  MORDER_ID,
+			              FILE_ID,
+			              FILE_PATH,
+			              FILE_NAME,
+			              BIZ_TYPE
+				 from qr_rel_morder_file
+				 where  MORDER_ID=#morderId#
+              ]]>
+	</select>
+	<!-- 按运维订单ID删除所有文件 -->
+	<delete id="MS_DELETE_MORDER_FILE_BY_MORDER_ID" parameterClass="java.lang.Long">
+	             <![CDATA[
+				    delete from qr_rel_morder_file where MORDER_ID =#value#
+				 ]]>
+	</delete>
+	<!-- 按文件ID删除文件 -->
+	<delete id="MS_DELETE_MORDER_FILE_BY_FILE_ID" parameterClass="PARA_MORDER_FILES">
+	             <![CDATA[
+				    delete from qr_rel_morder_file where FILE_ID =#fileId#
+				 ]]>
+	</delete>
+</sqlMap>

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap 
+    PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+    "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="MST_ROLE">
+	<typeAlias alias="PARA_ROLE" type="org.evm.biz.role.entity.RoleVO" />
+	<typeAlias alias="PARA_ROLE_FUNC" type="org.evm.biz.role.entity.RelRoleFuncVO" />
+	<resultMap id="RESULT_ROLE_FUNC" class="org.evm.biz.func.entity.FuncVO">
+		<result property="funcName" column="function_name" />
+		<result property="funcId" column="function_id" />
+	</resultMap>
+	<resultMap id="RESULT_ROLE" class="org.evm.biz.role.entity.RoleVO">
+		<result property="roleId" column="ROLE_ID" />
+		<result property="roleName" column="ROLE_NAME" />
+		<result property="roleRemark" column="ROLE_REMARK" />
+		<result property="updDate" column="UPD_DATE" />
+		<result property="funcList" column="ROLE_ID"  select ="MS_SQL_FIND_REL_ROLE_FUNC_BY_ROLEID"/>
+	</resultMap>
+ 
+	<select id="MS_SQL_FIND_ROLE_BY_UID" resultMap="RESULT_ROLE"
+		parameterClass="java.lang.Integer">
+		<![CDATA[
+			SELECT 
+				    role.ROLE_ID,
+				    role.ROLE_NAME,
+				    role.ROLE_REMARK,
+					DATE_FORMAT(role.UPD_DATE, '%Y-%m-%d %k:%i:%s') UPD_DATE
+				    
+				FROM
+				    qr_rel_user_role ur
+				        JOIN
+				    qr_role role ON role.role_id = ur.role_id
+				WHERE
+				    ur.user_id = #value#
+			]]>
+	</select>
+	<select id="MS_SQL_FIND_ROLE_BY_ROLEID" resultMap="RESULT_ROLE"
+		parameterClass="java.lang.Integer">
+		<![CDATA[
+			SELECT 
+				    role.ROLE_ID,
+				    role.ROLE_NAME,
+				    role.ROLE_REMARK,
+				    DATE_FORMAT(role.UPD_DATE, '%Y-%m-%d %k:%i:%s') UPD_DATE
+				FROM
+				    qr_role role  
+				WHERE
+				    role.ROLE_ID = #value#
+			]]>
+	</select>
+	<!-- 分页查询 -->
+	<select id="MS_SQL_FIND_ROLE_PAGE" resultMap="RESULT_ROLE"
+		parameterClass="PARA_ROLE">
+		<![CDATA[
+			SELECT 
+				    role.ROLE_ID,
+				    role.ROLE_NAME,
+				    role.ROLE_REMARK,
+				   DATE_FORMAT(role.UPD_DATE, '%Y-%m-%d %k:%i:%s') UPD_DATE
+				FROM
+				    qr_role role 
+				WHERE 1=1 and role_status=0
+			]]>
+		<dynamic>
+			<isNotEmpty prepend="and" property="roleName">
+				<![CDATA[ ROLE_NAME like '%$roleName$%']]>
+			</isNotEmpty>
+			<isNotEqual prepend=" limit" compareValue="0" property="pageSize">
+				<![CDATA[     #startPageNum# ,#pageSize# ]]>
+			</isNotEqual>
+		</dynamic>
+	</select>
+	<!-- 分页查询 -->
+	<select id="MS_SQL_FIND_ROLE_PAGE_CNT" resultClass="java.lang.Integer"
+		parameterClass="PARA_ROLE">
+		<![CDATA[
+			SELECT 
+				   count(1)
+				FROM   qr_role role 
+				WHERE  1=1 and role_status=0
+			]]>
+		<dynamic>
+			<isNotEmpty prepend="and" property="roleName">
+				<![CDATA[ ROLE_NAME like '%$roleName$%']]>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+    <!-- 插入 -->
+     <insert id="MS_SQL_INSERT_ROLE" parameterClass="PARA_ROLE">
+             <![CDATA[
+                       insert into qr_role(role_name,role_remark,upd_date,ins_date,ins_user,upd_user)
+                       values(#roleName#,#roleRemark#,sysdate(),sysdate(),#insUser#,#updUser#)
+             ]]>
+             <selectKey resultClass="int" keyProperty="roleId" > 
+				 SELECT last_insert_id() as roleId  
+			</selectKey>  
+    </insert>
+    <insert id="MS_SQL_INSERT_REL_ROLE_FUNC" parameterClass="PARA_ROLE_FUNC">
+             <![CDATA[
+                       insert into qr_rel_role_func( role_id,function_id,upd_date,ins_date,ins_user,upd_user)
+                       values(#roleId#,#funcId#,sysdate(),sysdate(),#insUser#,#updUser#)
+             ]]>    
+    </insert>
+    <!-- 删除 -->
+    <update id="MS_SQL_DELETE_ROLE" parameterClass="PARA_ROLE">
+        <![CDATA[
+             update qr_role set role_status=1,
+                                          UPD_DATE=sysdate(),
+	                                      UPD_USER=#updUser#
+                               where role_id=#roleId# 
+                               and UPD_DATE=STR_TO_DATE(#updDate#,'%Y-%m-%d %H:%i:%s')
+        ]]>
+    </update>
+    <!-- 更新 -->
+    <update id="MS_SQL_UPDATE_ROLE" parameterClass="PARA_ROLE">
+        <![CDATA[
+             update qr_role set  role_remark=#roleRemark#,
+                                          UPD_DATE=sysdate(),
+	                                      UPD_USER=#updUser#
+                               where role_id=#roleId# 
+                               and UPD_DATE=STR_TO_DATE(#updDate#,'%Y-%m-%d %H:%i:%s')
+        ]]>
+    </update>
+    <!-- 删除权限 -->
+    <delete id="MS_SQL_DELETE_REL_ROLE_FUNC"  parameterClass="java.lang.Integer">
+         <![CDATA[       delete  from qr_rel_role_func where role_id= #value#
+           ]]>
+    </delete>
+    <select id="MS_SQL_FIND_REL_ROLE_FUNC_BY_ROLEID" parameterClass="java.lang.Integer"   resultMap="RESULT_ROLE_FUNC">
+               <![CDATA[       SELECT 
+										    qrrf.function_id, qf.function_name
+										FROM
+										    qr_rel_role_func qrrf
+										        JOIN
+										    qr_function qf ON qrrf.function_id = qf.function_id
+										WHERE
+										    qrrf.role_id = #value#
+                  ]]>
+    </select>
+    <resultMap id="RESULT_ROLE_ONE" class="org.evm.biz.role.entity.RoleVO">
+		<result property="roleName" column="ROLE_NAME" />
+	</resultMap>
+    <select id="MS_SQL_FIND_ROLE_BY_ROLENAME" parameterClass="java.lang.String"   resultMap="RESULT_ROLE_ONE">
+               <![CDATA[       SELECT  ROLE_NAME
+                                        FROM  qr_role   
+			                      	   WHERE  role_status=0
+			                      	   and ROLE_NAME=#value#
+                  ]]>
+    </select>
+     <resultMap id="RESULT_ROLE_IDNAME" class="org.evm.biz.role.entity.RoleVO">
+		<result property="roleName" column="ROLE_NAME" />
+		<result property="roleId" column="ROLE_ID" />
+	</resultMap>
+    <select id="MS_SQL_FIND_ROLE_ALL"    resultMap="RESULT_ROLE_IDNAME">
+               <![CDATA[       SELECT  ROLE_NAME,ROLE_ID
+                                        FROM  qr_role   
+			                      	   WHERE  role_status=0
+                  ]]>
+    </select>
+</sqlMap>

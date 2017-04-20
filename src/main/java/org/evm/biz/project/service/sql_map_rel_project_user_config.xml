@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap 
+    PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+    "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="MST_REL_PROJECT_USER">
+	<typeAlias alias="PARA_REL_PROJECT_RELUSER" type="org.evm.biz.project.entity.RelProjectUserVO" />
+	<resultMap id="RESULT_REL_PROJECT_RELUSER" class="org.evm.biz.project.entity.RelProjectUserVO">
+		<result property="projectId" column="PROJECT_ID" />
+		<result property="userId" column="USER_ID" />
+		<result property="ufullName" column="USER_FULLNAME" />
+		<result property="updDate" column="UPD_DATE" />
+	</resultMap>
+	<!-- 通过项目ID查询 用户-->
+ <select id="MS_FIND_REL_PROJECT_USER_BY_PROJECT_ID" resultMap="RESULT_REL_PROJECT_RELUSER"  parameterClass="java.lang.Long">
+	          <![CDATA[
+			      SELECT   rpu.project_id, rpu.user_id, usr.USER_FULLNAME, rpu.upd_date
+                   FROM  qr_rel_project_user rpu
+                      JOIN qr_user usr ON rpu.user_id = usr.USER_ID and usr.user_status=0
+                        AND rpu.project_id =#projectId#
+              ]]>			  
+	</select>
+	<!--通过项目ID删除用户  -->
+	<delete id="MS_DELETE_REL_PROJECT_RELUSER_BY_PDID"  parameterClass="java.lang.Long">
+	             <![CDATA[
+				    delete from qr_rel_project_user where project_id =#value#
+				 ]]>		
+	</delete>
+    <!--增加项目关联用户  -->
+	<insert id="MS_INSERT_REL_PROJECT_RELUSER"  parameterClass="PARA_REL_PROJECT_RELUSER">
+	             <![CDATA[
+				   insert INTO qr_rel_project_user(project_id,user_id,upd_date) VALUES(#projectId#,#userId#,sysdate())
+				 ]]>		
+	</insert>
+</sqlMap>
