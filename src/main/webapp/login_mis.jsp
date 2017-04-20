@@ -26,7 +26,7 @@
 			</div>
 			<div id="fs-login-glass"></div>
 			<div id="fs-login-content">
-				<!-- 项目管理实验室进度管理平台 gitHub 2017、04、20 1 -->
+				<!-- 项目管理实验室进度管理平台 gitHub 2017、04、20 pass -->
 				<div id="fs-login-title">二维码MIS管理系统</div>
 				<div class="fs-login-input fs-login-input-username">
 					<input name="userName" tabindex="1" class="fs-login-username" type="text" value=""/>
