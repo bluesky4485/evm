@@ -432,7 +432,7 @@ public class EvmWebServiceImpl {
 			file.setFileType(fileType);
 			long res = appOrderService.uploadOrderWorkImg(file);
 			if (res != 0) {
-				entity.setMessage("更新成功");
+				entity.setMessage("更新成功!");
 				entity.setMessageType(MessageType.success.toString());
 			} else {
 				entity.setMessage("更新失败");
