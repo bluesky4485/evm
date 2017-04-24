@@ -18,7 +18,7 @@ public class WebServiceUtil {
 	public static WsEntity decodeWsPara(String para) {
 		WsEntity wsEntity = JSON.parseObject(para, WsEntity.class);
 		Class clazz = null;
-		AbstractEntity paraEntity = JSON.parseObject(wsEntity.getPara(),
+		AbstractEntity paraEntity = (AbstractEntity) JSON.parseObject(wsEntity.getPara(),
 				(Class) ConfigInitService.getClazz(wsEntity.getServiceId()));
 		//TODO:SystemID
 		paraEntity.setSystemId(Integer.parseInt(wsEntity.getSystemId()));
