@@ -222,7 +222,7 @@ BasePage.ValidateTelephone=function (value) {
 	return tel.test(value)
 };
 BasePage.ValidateMobile=function (value) {  
-	var cmccMobile = /^(((13[0-9]{1})|(14[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/; 
+	var cmccMobile = /^(((13[0-9]{1})|(14[0-9]{1})|(15[0-9]{1})|(18[0-9]{1})|(17[0-9]{1}))+\d{8})$/; 
 	return value.length == 11 && cmccMobile.test(value) 
 };
 //中文英文数字下划线

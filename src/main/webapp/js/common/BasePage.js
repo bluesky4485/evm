@@ -236,7 +236,7 @@ var BasePage = BasePage || {};
         },        
         mobileOrTelephone:{//联系电话(手机/电话)
 			validator:function(value){
-			var cmccMobile = /^(((1[0-9]{1}[0-9]{1})|(14[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/;
+			var cmccMobile = /^(((13[0-9]{1})|(14[0-9]{1})|(15[0-9]{1})|(18[0-9]{1})|(17[0-9]{1}))+\d{8})$/;
 			var tel = /^((\(\d{2,3}\))|(\d{3}\-))?(\(0\d{2,3}\)|0\d{2,3}-?)?[1-9]\d{6,7}(\-\d{1,4})?$/;
 			// /^\d{3,4}?\d{7,8}$/;
 			return tel.test(value) || (value.length == 11 && cmccMobile.test(value));
