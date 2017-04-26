@@ -11,7 +11,7 @@ public interface IOrderDbService {
 	/**
 	 * 运维订单的路径
 	 */
-	public final String orderFileDic="\\upload\\file\\";
+	public final String orderFileDic="\\upload\\order\\";
 	// 复合条件查询的订单
 	final String MS_SELECT_ORDER_COND = "MS_SELECT_ORDER_COND";
 	final String MS_SELECT_ORDER_IDNO_COND = "MS_SELECT_ORDER_IDNO_COND";

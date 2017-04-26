@@ -40,16 +40,12 @@ var morderFile={}||morderFile;
 				'onUploadComplete' : function(file, data) {
 					var d = eval('('+data+')');
 					if(d != ''){
-						$("#worKDocIDs").val($("#worKDocIDs").val()+"?"+d.bizData[0].filePath);
-						if(d.bizData.length>0){
-							for(var i=0;i<d.bizData.length;i++){
-								var para="&filePath="+d.bizData[i].filePath+"&fileName="+d.bizData[i].fileName+"&fileSize="+d.bizData[i].fileSize;
-								$("#worKDocIDs").val($("#worKDocIDs").val()+"?"+para);
-								var u="/"+postPath+"/orderController.do?method=download"+para;
-								var content="<a  href='"+u+"' >"+d.bizData[i].fileName+"</a> ";
-								$("#worDocDiv").append(content+"</br>");
-							}
-						}
+						$("#worKDocIDs").val($("#worKDocIDs").val()+"&"+d.bizData[0].filePath);
+						var u="/"+postPath+"/morderController.do?method=download&filePath="+encodeURIComponent(d.bizData[0].filePath)+"&fileName="+d.bizData[0].fileName+"&fileSize="+d.bizData[0].fileSize;
+						var bizType=1;
+						var submitPara=d.bizData[0].filePath+"&"+d.bizData[0].fileName+"&"+bizType;
+						var content="<div><input type=\"hidden\" value='"+submitPara+"'/><a   href='"+u+"' >"+d.bizData[0].fileName+"</a><a onclick=javascript:deleteFileDiv(this)>删除</a></div> ";
+						$("#worDocDiv").append(content);
 					}
 				},
 				'onError' : function(errorType) {
@@ -81,7 +77,7 @@ var morderFile={}||morderFile;
 					var d = eval('('+data+')');
 					if(d != ''){
 						$("#worKDocIDs").val($("#worKDocIDs").val()+"&"+d.bizData[0].filePath);
-						var u="/"+postPath+"/morderController.do?method=download&filePath="+d.bizData[0].filePath+"&fileName="+d.bizData[0].fileName+"&fileSize="+d.bizData[0].fileSize;
+						var u="/"+postPath+"/morderController.do?method=download&filePath="+encodeURIComponent(d.bizData[0].filePath)+"&fileName="+d.bizData[0].fileName+"&fileSize="+d.bizData[0].fileSize;
 						var bizType=1;
 						var submitPara=d.bizData[0].filePath+"&"+d.bizData[0].fileName+"&"+bizType;
 						var content="<div><input type=\"hidden\" value='"+submitPara+"'/><a   href='"+u+"' >"+d.bizData[0].fileName+"</a><a onclick=javascript:deleteFileDiv(this)>删除</a></div> ";

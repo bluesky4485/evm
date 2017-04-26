@@ -29,14 +29,14 @@ $(document).ready(function() {
 			}
 			 
 			//window.onerror = killerrors;
-			window.onresize = function(){
-					BasePage.confirmMessage("您的操作导致页面刷新，系统需要回到首页，是否继续?",function(r){
-				    if (r){
-				    	location.reload(true);
-				    }else{
-				    	return;
-				    }
-				});
-				
-			}
+//			window.onresize = function(){
+//					BasePage.confirmMessage("您的操作导致页面刷新，系统需要回到首页，是否继续?",function(r){
+//				    if (r){
+//				    	location.reload(true);
+//				    }else{
+//				    	return;
+//				    }
+//				});
+//				
+//			}
 });

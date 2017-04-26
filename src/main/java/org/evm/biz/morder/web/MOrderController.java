@@ -214,7 +214,7 @@ public class MOrderController extends AbstractMultiController {
 	public ModelAndView uploadFile(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String morderId = request.getParameter("morderId");
 		SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-DD");
-		logger.debug("上传文件的维修订单号=" + morderId);
+		logger.debug("调试上传文件的维修订单号=" + morderId);
 		if (morderId == null || morderId == "") {
 			morderId = sdf.format(new Date());
 		}
@@ -241,8 +241,9 @@ public class MOrderController extends AbstractMultiController {
 	 */
 	public void download(HttpServletRequest request, HttpServletResponse response) {
 		// Long id = ServletRequestUtils.getLongParameter(request, "id",0);
-		logger.debug("download void");
 		try {
+			logger.debug("调试下载文件功能：download void");
+			
 			String filePath = request.getParameter("filePath");
 			String fileName = request.getParameter("fileName");
 			String fileSize = request.getParameter("fileSize");
@@ -251,37 +252,13 @@ public class MOrderController extends AbstractMultiController {
 			}
 			UploadHelper helper = new UploadHelper(null);
 
-			// CemeteryFile file = cemeteryFileService.load(CemeteryFile.class,
-			// id);
-			URL url = Thread.currentThread().getContextClassLoader()
-					.getResource("../../" + IMOrderDbService.morderFileDic + filePath);
-
-			if (url == null) {
-				PrintWriter out = null;
-				try {
-					response.setCharacterEncoding("GBK");
-					out = response.getWriter();
-					out.print("<script>alert('文件不存在');history.go(-1);</script>");
-				} catch (IOException e) {
-					e.printStackTrace();
-					logger.error("下载文件异常!");
-				} finally {
-					if (out != null) {
-						out.flush();
-						out.close();
-					}
-				}
-				return;
-			}
-			logger.debug("下载路径:" + url.toString());
-			logger.debug("开始下载文件！fileName=" + fileName);
-			logger.debug("Path=" + url.getPath());
 			logger.debug("fileSize=" + fileSize);
 			logger.debug("fileName=" + fileName);
-			logger.debug("response=" + response.toString());
-			String _filePath = URLDecoder.decode(url.getPath(), "utf-8");
+			logger.debug("filePath=" + filePath);
+			response.setCharacterEncoding("GBK");
+			String _filePath = request.getSession().getServletContext().getRealPath("/") + filePath;
 			helper.download(_filePath, fileName, 0L, response);
-			logger.debug("下载文件完成！url" + url.getPath());
+			logger.debug("下载文件完成！url" + _filePath);
 			logger.debug("下载文件完成！fileName" + fileName);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

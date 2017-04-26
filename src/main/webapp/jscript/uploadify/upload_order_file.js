@@ -80,7 +80,7 @@ check.html5 = html5();
 						var d = eval('('+data+')');
 						if(d != ''){
 							$("#worKDocIDs").val($("#worKDocIDs").val()+"&"+d.bizData[0].filePath);
-							var u="/"+postPath+"/orderController.do?method=download&filePath="+d.bizData[0].filePath+"&fileName="+d.bizData[0].fileName+"&fileSize="+d.bizData[0].fileSize;
+							var u="/"+postPath+"/orderController.do?method=download&filePath="+encodeURIComponent(d.bizData[0].filePath)+"&fileName="+d.bizData[0].fileName+"&fileSize="+d.bizData[0].fileSize;
 							var bizType=1;
 							var submitPara=d.bizData[0].filePath+"&"+d.bizData[0].fileName+"&"+bizType;
 							var content="<div><input type=\"hidden\" value='"+submitPara+"'/><a   href='"+u+"' >"+d.bizData[0].fileName+"</a><a onclick=javascript:deleteFileDiv(this)>删除</a></div> ";

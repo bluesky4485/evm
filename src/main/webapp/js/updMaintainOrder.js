@@ -190,7 +190,7 @@ $(document).ready(function() {
 		for(var i=0;i<files.length;i++){
 			var file=files[i];
 			if(file.bizType==1){
-				var u="/evm/morderController.do?method=download&filePath="+file.filePath+"&fileName="+file.fileName;
+				var u=BasePage.urlPre+"/morderController.do?method=download&fileName="+file.fileName+"&filePath="+encodeURIComponent(file.filePath);
 				var bizType=1;
 				var submitPara=file.filePath+"&"+file.fileName+"&"+bizType;
 				var content="<div><input type=\"hidden\" value='"+submitPara+"'/><a   href='"+u+"' >"+file.fileName+"</a><a onclick=javascript:deleteFileDiv(this)>删除</a></div> ";

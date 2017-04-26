@@ -269,13 +269,13 @@ $(document).ready(function() {
 		for(var i=0;i<files.length;i++){
 			var file=files[i];
 			if(file.bizType==1){
-				var u="/evm/orderController.do?method=download&filePath="+file.filePath+"&fileName="+file.fileName;
+				var u=BasePage.urlPre+"/orderController.do?method=download&filePath="+encodeURIComponent(file.filePath)+"&fileName="+file.fileName;
 				var bizType=1;
 				var submitPara=file.filePath+"&"+file.fileName+"&"+bizType;
 				var content="<div><input type=\"hidden\" value='"+submitPara+"'/><a   href='"+u+"' >"+file.fileName+"</a><a onclick=javascript:deleteFileDiv(this)>删除</a></div> ";
 				$("#worDocDiv").append(content);
 			}else if(file.bizType==2){
-				var u="/evm/orderController.do?method=download&filePath="+file.filePath+"&fileName="+file.fileName;
+				var u=BasePage.urlPre+"/orderController.do?method=download&filePath="+encodeURIComponent(file.filePath)+"&fileName="+file.fileName;
 				var bizType=2;
 				var submitPara=file.filePath+"&"+file.fileName+"&"+bizType;
 				var content="<div><input type=\"hidden\" value='"+submitPara+"'/><a   href='"+u+"' >"+file.fileName+"</a><a onclick=javascript:deleteFileDiv(this)>删除</a></div> ";

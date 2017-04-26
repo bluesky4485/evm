@@ -74,7 +74,7 @@ var orderCompleteFile={}||orderCompleteFile;
 				'onUploadSuccess' : function(file, data, response) {
 					var d = eval('('+data+')');
 					if(d != ''){
-						var u="/"+postPath+"/orderController.do?method=download&filePath="+d.bizData[0].filePath+"&fileName="+d.bizData[0].fileName+"&fileSize="+d.bizData[0].fileSize;
+						var u="/"+postPath+"/orderController.do?method=download&filePath="+encodeURIComponent(d.bizData[0].filePath)+"&fileName="+d.bizData[0].fileName+"&fileSize="+d.bizData[0].fileSize;
 						var bizType=2;
 						var submitPara=d.bizData[0].filePath+"&"+d.bizData[0].fileName+"&"+bizType;
 						var content="<div style='padding-top:1px'><input type=\"hidden\" value='"+submitPara+"'/><a   href='"+u+"' >"+d.bizData[0].fileName+"</a><a onclick=javascript:deleteFileDiv(this)>删除</a></div> ";
