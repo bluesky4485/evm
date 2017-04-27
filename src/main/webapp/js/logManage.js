@@ -27,7 +27,6 @@ $(document).ready(function() {
 		if(logContent!=""){
 			para["logContent"] =logContent;
 		}
-		$("#"+logDg).datagrid('loadData', []);
 		BasePage.sendPostRequest(bodyId,pageQueryUrl,para,function(data){
 			if(data.messageType=="error"){
 				BasePage.showInfoMessage(data.message);
@@ -35,6 +34,7 @@ $(document).ready(function() {
 			}else{
 				if(data== null || data.bizData.total ==0){
 					BasePage.showInfoMessage(BasePage.noSearchData);
+					$("#"+logDg).datagrid('loadData', []);
 				}else{
 					$("#"+logDg).datagrid('loadData', data.bizData);
 				}	
