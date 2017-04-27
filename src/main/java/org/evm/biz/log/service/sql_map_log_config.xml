@@ -65,6 +65,9 @@
 			<isNotEmpty prepend="and" property="endDate">
 				<![CDATA[ log.INS_DATE <=STR_TO_DATE(#endDate# ,'%Y-%m-%d')]]>
 			</isNotEmpty>
+		</dynamic>
+		   <![CDATA[   ORDER BY log.INS_DATE DESC  ]]>
+		<dynamic>
 			<isNotEqual prepend=" limit" compareValue="0" property="pageSize">
 				<![CDATA[     #startPageNum# ,#pageSize# ]]>
 			</isNotEqual>
