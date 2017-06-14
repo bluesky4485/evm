@@ -145,7 +145,7 @@ public class MOrderDbServiceImpl extends BaseDBService implements IMOrderDbServi
 		int a = this.update(MS_UPDATE_MAINTAIN_UPDDATE, moder);
 		if (a == 0)
 			throw new SmartDBAccessException("数据已旧，插入文件信息失败！");
-		long res = (long) super.insert(MS_INSERT_REL_MOREDER_FILE, whereCause);
+		long res = (Long) super.insert(MS_INSERT_REL_MOREDER_FILE, whereCause);
 		return res;
 	}
 

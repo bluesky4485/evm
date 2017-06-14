@@ -60,14 +60,10 @@ function signout(){
 			<div class="sidebar-nav navbar-collapse" id="sidebar_1">
 				<ul class="nav in" id="side-menu">
 					<li><a href="pages/index.jsp" class="active" target="center_iframe"><img src="./images/web_icon_01.png" class="nav_img">首页</a></li>
- 		 
-				 
 					<li><a href="pages/customMange.jsp" target="center_iframe"><img src="./images/web_icon_02.png" class="nav_img">客户管理</a></li>
 					<li><a href="pages/projectManage.jsp" target="center_iframe"><img src="./images/web_icon_03.png" class="nav_img">项目管理</a></li>
 					<li><a href="pages/orderManage.jsp" target="center_iframe"><img src="./images/web_icon_04.png" class="nav_img">订单管理</a></li>
 					<li><a href="pages/maintainOrderManage.jsp"	target="center_iframe"><img src="./images/web_icon_05.png" class="nav_img">运维管理</a></li>
-					
-							
 					<li>
 					    <a href="#"><img src="./images/web_icon_06.png" class="nav_img" />统计分析<span class="fa arrow"></span></a>
 						<ul class="nav nav-second-level">

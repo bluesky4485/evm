@@ -249,7 +249,7 @@ public class OrderDbServiceImpl extends BaseDBService implements IOrderDbService
 		int a =this.update(MS_UPDATE_ORDER_UPD_DATE, order);
 		if(a==0)
 			throw new SmartDBAccessException("数据已旧，插入文件信息失败！");
-		long res = (long) this.insert(MS_INSERT_REL_OREDER_FILE, whereCause);
+		long res = (Long) this.insert(MS_INSERT_REL_OREDER_FILE, whereCause);
 		return res;
 	}
 
