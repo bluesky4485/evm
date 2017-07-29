@@ -91,10 +91,10 @@
 					<![CDATA[   qdt.text like '%$deviceTypeName$%']]>
 				</isNotEmpty>
 				<isNotEmpty prepend="AND" property="orderNo">
-					<![CDATA[   qo.order_no  like '%$orderNo$%']]>
+					<![CDATA[    qo.order_no  = #orderNo#]]]>
 				</isNotEmpty>
 				 <isNotEqual prepend="AND" property="deviceTypeClassType" compareValue="0" >
-							<![CDATA[   qdt.CLASS_TYPE  =#deviceTypeClassType#]]>
+							<![CDATA[   qdt.CLASS_TYPE  like '%$deviceTypeClassType$%']]>
 				</isNotEqual>
 			<isNotEqual prepend=" limit"  compareValue="0"  property="pageSize">
 				<![CDATA[     #startPageNum# ,#pageSize# ]]>
@@ -120,10 +120,10 @@
 					<![CDATA[   qdt.text like '%$deviceTypeName$%']]>
 				</isNotEmpty>
 				<isNotEmpty prepend="AND" property="orderNo">
-					<![CDATA[   qo.order_no  like '%$orderNo$%']]>
+					<![CDATA[   qo.order_no  = #orderNo#]]>
 				</isNotEmpty>
 				 <isNotEqual prepend="AND" property="deviceTypeClassType"  compareValue="0" >
-							<![CDATA[   qdt.CLASS_TYPE  =#deviceTypeClassType#]]>
+							<![CDATA[   qdt.CLASS_TYPE  like '%$deviceTypeClassType$%']]>
 				</isNotEqual>
 		</dynamic>
 	 </select>
