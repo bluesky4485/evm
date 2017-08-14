@@ -7,7 +7,8 @@ var QmMap = {} || QmMap;
 	QmMap.placeSearch;
 	QmMap.init = function(containerId) {
 		_Map = new AMap.Map(containerId);
-		_Map.setZoomAndCenter(11, [ 125.3245,43.886841]);
+		//增加地图级别
+		_Map.setZoomAndCenter(18, [ 125.3245,43.886841]);
 		_Map.plugin([ "AMap.ToolBar" ], function() {
 			toolBar = new AMap.ToolBar();
 			_Map.addControl(toolBar);
@@ -24,6 +25,8 @@ var QmMap = {} || QmMap;
 		});
 		_Map.plugin([ "AMap.MarkerClusterer" ], function() {
 			QmMap.Cluster = new AMap.MarkerClusterer(_Map, []);
+			//设置地图中点标记的最大聚合级别
+			QmMap.Cluster.setMaxZoom(11);
 		});
 		AMap.service('AMap.PlaceSearch',function(){//回调函数
 	        //实例化PlaceSearch
