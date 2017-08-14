@@ -27,6 +27,8 @@ var QmMap = {} || QmMap;
 			QmMap.Cluster = new AMap.MarkerClusterer(_Map, []);
 			//设置地图中点标记的最大聚合级别
 			QmMap.Cluster.setMaxZoom(11);
+			//设置单个聚合的最小数量 聚合的最小数量。默认值为2，即小于2个点则不能成为一个聚合
+//			QmMap.Cluster.setMinClusterSize(2);
 		});
 		AMap.service('AMap.PlaceSearch',function(){//回调函数
 	        //实例化PlaceSearch
