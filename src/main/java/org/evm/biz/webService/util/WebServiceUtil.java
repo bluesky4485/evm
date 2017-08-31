@@ -17,14 +17,13 @@ public class WebServiceUtil {
 	 */
 	public static WsEntity decodeWsPara(String para) {
 		WsEntity wsEntity = JSON.parseObject(para, WsEntity.class);
-		Class clazz = null;
-		AbstractEntity paraEntity = (AbstractEntity) JSON.parseObject(wsEntity.getPara(),
-				(Class) ConfigInitService.getClazz(wsEntity.getServiceId()));
-		//TODO:SystemID
+		Class clazz = (Class) ConfigInitService.getClazz(wsEntity.getServiceId());
+		AbstractEntity paraEntity = (AbstractEntity) JSON.parseObject(wsEntity.getPara(), clazz);
+		// TODO:SystemID
 		paraEntity.setSystemId(Integer.parseInt(wsEntity.getSystemId()));
 
 		wsEntity.setParaEntity(paraEntity);
-		//TODO:
+		// TODO:
 		paraEntity.setUpdUser(wsEntity.getUid());
 		paraEntity.setInsUser(wsEntity.getUid());
 		// TODO:分页查询中关于页数的计算

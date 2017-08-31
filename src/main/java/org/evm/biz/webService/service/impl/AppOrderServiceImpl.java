@@ -226,4 +226,10 @@ public class AppOrderServiceImpl implements IAppOrderService {
 		}
 		return imgName;
 	}
+
+	@Override
+	public int updateOrderWorkAddress(OrderVO whereCause) {
+		// TODO Auto-generated method stub
+		return this.orderDbService.updateOrderWorkAddress(whereCause);
+	}
 }

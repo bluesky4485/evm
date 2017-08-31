@@ -56,6 +56,13 @@ public interface IAppOrderService {
 	 * @return
 	 */
 	int updateOrderUserAppraise(OrderVO para);
+	/**
+	 * 修改工程订单的施工位置 310205 参数： orderId 订单ID；workAddress  lng lat施工位置
+	 * @param para
+	 * @return
+	 * @version update by xh 2017年8月29日
+	 */
+	int updateOrderWorkAddress(OrderVO para);
 
 	/**
 	 * 查询某一个工程订单中的设备的属性信息。 100205

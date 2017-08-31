@@ -19,7 +19,7 @@ import org.evm.biz.user.entity.UserVO;
  * @author jerry.x update 2016年10月31日 下午8:06:19
  */
 public class ConfigInitService {
-	
+
 	/**
 	 * 输入参数对象一映射表
 	 */
@@ -36,37 +36,38 @@ public class ConfigInitService {
 		serviceParaClassMap.put("100205", DeviceItemVO.class);
 		serviceParaClassMap.put("100206", DeviceTypeVO.class);
 		serviceParaClassMap.put("100300", MOrderVO.class);
-		
+
 		serviceParaClassMap.put("100302", MOrderVO.class);
 		serviceParaClassMap.put("100303", MOrderVO.class);
 		serviceParaClassMap.put("100312", MOrderVO.class);
-		
-		
-		serviceParaClassMap.put("310305", MOrderVO.class); 
-		serviceParaClassMap.put("330306", MOrderVO.class);  
-		serviceParaClassMap.put("330307", MOrderVO.class);  
-		serviceParaClassMap.put("330308", MOrderVO.class); 
-		serviceParaClassMap.put("330309", MOrderVO.class); 
+
+		serviceParaClassMap.put("310305", MOrderVO.class);
+		serviceParaClassMap.put("330306", MOrderVO.class);
+		serviceParaClassMap.put("330307", MOrderVO.class);
+		serviceParaClassMap.put("330308", MOrderVO.class);
+		serviceParaClassMap.put("330309", MOrderVO.class);
 		serviceParaClassMap.put("330310", MOrderFileVO.class);
 		serviceParaClassMap.put("330311", MOrderFileVO.class);
 		serviceParaClassMap.put("330312", MOrderVO.class);
-		//修改工程订单的评价信息。
+		// 修改工程订单的评价信息。
 		serviceParaClassMap.put("310205", OrderVO.class);
+		// 修改工程訂單的施工位置
+		serviceParaClassMap.put("310206", OrderVO.class);
 		//
 		serviceParaClassMap.put("320206", OrderVO.class);
 		//
 		serviceParaClassMap.put("320207", OrderVO.class);
 		//
-		serviceParaClassMap.put("320208", RelProjectDeviceVO.class); 
-		serviceParaClassMap.put("320209", RelProjectDeviceVO.class);  
-		serviceParaClassMap.put("320210", RelProjectDeviceVO.class); 
-		//增删改设备
-		serviceParaClassMap.put("320212", DeviceItemVO.class);  
-		serviceParaClassMap.put("320213", DeviceItemVO.class);  
-		serviceParaClassMap.put("320214", DeviceItemVO.class); 
-		//上传工程图片
+		serviceParaClassMap.put("320208", RelProjectDeviceVO.class);
+		serviceParaClassMap.put("320209", RelProjectDeviceVO.class);
+		serviceParaClassMap.put("320210", RelProjectDeviceVO.class);
+		// 增删改设备
+		serviceParaClassMap.put("320212", DeviceItemVO.class);
+		serviceParaClassMap.put("320213", DeviceItemVO.class);
+		serviceParaClassMap.put("320214", DeviceItemVO.class);
+		// 上传工程图片
 		serviceParaClassMap.put("320215", OrderFileVO.class);
-		//删除工程图片
+		// 删除工程图片
 		serviceParaClassMap.put("320216", OrderFileVO.class);
 	}
 

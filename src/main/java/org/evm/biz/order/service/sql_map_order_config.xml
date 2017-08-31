@@ -657,4 +657,12 @@ sysdate(),
 	      where order_id=#orderId# and UPD_DATE=STR_TO_DATE(#updDate#,'%Y-%m-%d %H:%i:%s')
 	     ]]>
 	</update>
+	<!--更新施工位置  -->
+	<update id="MS_UPDATE_WORKADDRESS" parameterClass="PARA_OREDER">
+	     <![CDATA[ 
+	      update qr_order set  WORK_ADDRESS=#workAddress#, lat=#lat#,lng=#lng#,
+	                                      UPD_DATE=sysdate(),  UPD_USER=#updUser#
+	      where order_id=#orderId# and UPD_DATE=STR_TO_DATE(#updDate#,'%Y-%m-%d %H:%i:%s')
+	     ]]>
+	</update>
 </sqlMap>

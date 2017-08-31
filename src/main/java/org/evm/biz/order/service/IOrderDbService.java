@@ -27,6 +27,7 @@ public interface IOrderDbService {
 	final String MS_UPDATE_USERAPRRISE="MS_UPDATE_USERAPRRISE";
 	final String MS_UPDATE_WORKPROGRESS="MS_UPDATE_WORKPROGRESS";
 	final String MS_UPDATE_WORKBEGINDATE="MS_UPDATE_WORKBEGINDATE";
+	final String MS_UPDATE_WORKADDRESS="MS_UPDATE_WORKADDRESS";
 	final String MS_UPDATE_ORDER_UPD_DATE="MS_UPDATE_ORDER_UPD_DATE";
 	//-----------------------device---------------------------------------------------------------------------------------
 	final String  MS_INSERT_REL_ORDER_DEVICE="MS_INSERT_REL_ORDER_DEVICE";
@@ -44,6 +45,7 @@ public interface IOrderDbService {
 	//--------------------index ------------------------------------------------------------------------------------------
 	final String MS_SELECT_ORDER_INDEX="MS_SELECT_ORDER_INDEX";
 	final String MS_SELECT_ORDER_INDEX_ST="MS_SELECT_ORDER_INDEX_ST";
+	
 	
 	/**
 	 * 
@@ -136,6 +138,14 @@ public interface IOrderDbService {
 	 * @return
 	 */
 	int updateOrderUserAppraise(OrderVO whereCause);
+	
+	/**
+	 * 更新施工位置
+	 * @param whereCause
+	 * @return
+	 * @version update by xh 2017年8月29日
+	 */
+	int updateOrderWorkAddress(OrderVO whereCause);
 	/**
 	 * 根据订单编号查询订单 
 	 * update by jerry.x 2017年02月06日

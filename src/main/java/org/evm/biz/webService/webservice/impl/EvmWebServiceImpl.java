@@ -213,7 +213,19 @@ public class EvmWebServiceImpl {
 				entity.setMessageType(MessageType.error.toString());
 			}
 			recordLog(para, entity, "修改工程订单的评价信息", BizOptType.update, FunctionMap.APP_UPD_ORDER_USERAPPRISE);
-		} else if (entity.getServiceId().equals("100300")) {
+		} else if (entity.getServiceId().equals("310206")) {
+			// 修改某一工程订单的施工位置
+			OrderVO whereCause = (OrderVO) (entity.getParaEntity());
+			int res = appOrderService.updateOrderWorkAddress(whereCause);
+			if (res != 0) {
+				entity.setMessage("更新成功");
+				entity.setMessageType(MessageType.success.toString());
+			} else {
+				entity.setMessage("更新失败");
+				entity.setMessageType(MessageType.error.toString());
+			}
+			recordLog(para, entity, "修改工程订单的施工位置", BizOptType.update, FunctionMap.APP_UPD_ORDER_USERAPPRISE);
+		}else if (entity.getServiceId().equals("100300")) {
 			// 查询全部维修/维护订单信息。
 			MOrderVO whereCause = (MOrderVO) (entity.getParaEntity());
 			List<MOrderVO> list = appMorderService.findAllMorderList(whereCause);

@@ -240,14 +240,14 @@ public class OrderDbServiceImpl extends BaseDBService implements IOrderDbService
 	@Override
 	public long insertOrderFile(OrderFileVO whereCause) {
 		// TODO Auto-generated method stub
-		OrderVO order=new OrderVO();
+		OrderVO order = new OrderVO();
 		order.setOrderId(whereCause.getOrderId());
 		order.setUpdDate(whereCause.getUpdDate());
 		order.setInsUser(whereCause.getInsUser());
 		order.setUpdUser(whereCause.getUpdUser());
-		
-		int a =this.update(MS_UPDATE_ORDER_UPD_DATE, order);
-		if(a==0)
+
+		int a = this.update(MS_UPDATE_ORDER_UPD_DATE, order);
+		if (a == 0)
 			throw new SmartDBAccessException("数据已旧，插入文件信息失败！");
 		long res = (Long) this.insert(MS_INSERT_REL_OREDER_FILE, whereCause);
 		return res;
@@ -265,6 +265,12 @@ public class OrderDbServiceImpl extends BaseDBService implements IOrderDbService
 			throw new SmartDBAccessException("数据已旧，删除文件信息失败！");
 		int res = (int) super.delete(MS_DELETE_ORDER_FILE_BY_FILE_ID, whereCause);
 		return res;
+	}
+
+	@Override
+	public int updateOrderWorkAddress(OrderVO whereCause) {
+		// TODO Auto-generated method stub
+		return super.update(MS_UPDATE_WORKADDRESS, whereCause);
 	}
 
 }
