@@ -1,5 +1,8 @@
 package org.test.custom.service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.evm.biz.user.entity.UserVO;
 import org.evm.biz.webService.entity.WsEntity;
 
@@ -12,6 +15,9 @@ public class JsonTest {
 		float b = 3f;
 		float aa = a  / b;
 		System.out.println(aa + "");
+		SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd");
+		String rootDir = sdf.format(new Date());
+		System.out.println(rootDir);
 	}
 
 	public static void main1(String[] args) {

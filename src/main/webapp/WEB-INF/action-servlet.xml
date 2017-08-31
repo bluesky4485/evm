@@ -9,8 +9,8 @@
 		http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-3.2.xsd
 		  http://www.springframework.org/schema/aop           http://www.springframework.org/schema/aop/spring-aop.xsd">
 	<!--置扫描controller -->
- 
- 
+
+
 	<aop:aspectj-autoproxy proxy-target-class="true" />
 	<bean class="org.evm.biz.log.aop.SpringControllerAop">
 	</bean>
@@ -67,9 +67,16 @@
 				<prop key="/pageDatastController.do">pageDatastController</prop>
 				<prop key="/staticsController.do">staticsController</prop>
 				<prop key="/databaseManagerController.do">databaseManagerController</prop>
+				<prop key="/fileController.do">fileController</prop>
 			</props>
 		</property>
 
+	</bean>
+	<!-- -->
+	<bean id="fileController" class="org.evm.core.web.FileController">
+		<property name="methodNameResolver">
+			<ref bean="paraMethodResolver" />
+		</property>
 	</bean>
 	<!--用户登录 -->
 	<bean id="loginController" class="org.evm.biz.user.web.LoginController">
@@ -176,5 +183,5 @@
 			<ref bean="paraMethodResolver" />
 		</property>
 		<property name="comboPooledDataSource" ref="dataSource" />
-	</bean> 
+	</bean>
 </beans>
