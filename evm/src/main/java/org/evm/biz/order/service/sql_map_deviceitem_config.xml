@@ -91,7 +91,7 @@
 					<![CDATA[   qdt.text like '%$deviceTypeName$%']]>
 				</isNotEmpty>
 				<isNotEmpty prepend="AND" property="orderNo">
-					<![CDATA[    qo.order_no  = #orderNo#]]]>
+					<![CDATA[    qo.order_no  = #orderNo#]]>
 				</isNotEmpty>
 				 <isNotEqual prepend="AND" property="deviceTypeClassType" compareValue="0" >
 							<![CDATA[   qdt.CLASS_TYPE  like '%$deviceTypeClassType$%']]>
