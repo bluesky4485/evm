@@ -88,7 +88,7 @@
 	     ]]>
 	       <dynamic>
 				<isNotEmpty prepend="AND" property="deviceTypeName">
-					<![CDATA[   qdt.text like '%$deviceTypeName$%']]>
+					<![CDATA[   qdt.text like '%$deviceTypeName$%' ]]>
 				</isNotEmpty>
 				<isNotEmpty prepend="AND" property="orderNo">
 					<![CDATA[    qo.order_no  = #orderNo#]]>
