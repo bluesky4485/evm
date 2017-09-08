@@ -1,0 +1,65 @@
+设备数据导入后
+--更新导入设备的时间和插入用户信息
+update qr_deviceitem set ins_date=SYSDATE(),upd_date=SYSDATE(),ins_user=1,upd_user=1 where order_id>40
+
+--更新工程对应的设备数
+insert qr_rel_project_device(project_id,Device_TYPE_id,Device_Cnt,ins_date,
+	upd_date,
+	ins_user,
+	upd_user)
+SELECT
+	11,
+	device_type_id,
+	count(1),
+	SYSDATE(),
+	SYSDATE(),
+	1,
+	1
+FROM
+	qr_deviceitem
+WHERE
+	order_id IN (
+		SELECT
+			order_id
+		FROM
+			qr_order
+		WHERE
+			PROJECT_ID = 11
+	)
+GROUP BY
+	device_type_id
+--更新订单对应的设备数
+INSERT INTO qr_rel_order_device (
+	order_id,
+	device_id,
+	store_cnt,
+	plan_cnt,
+	work_cnt,
+	ins_date,
+	upd_date,
+	ins_user,
+	upd_user
+) SELECT
+	order_id,
+	device_type_id,
+	count(1),
+	count(1),
+	count(1),
+	SYSDATE(),
+	SYSDATE(),
+	1,
+	1
+FROM
+	qr_deviceitem
+WHERE
+	order_id IN (
+		SELECT
+			order_id
+		FROM
+			qr_order
+		WHERE
+			PROJECT_ID = 12
+	)
+GROUP BY
+	order_id,
+	device_type_id
