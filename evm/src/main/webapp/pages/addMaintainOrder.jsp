@@ -131,7 +131,7 @@
 			<table >
 			  <tr>
 			     <td style="padding-left:10px">订单编号<span class="redStar">*</span></td>
-			     <td><input id="orderId" class="easyui-combobox"  data-options=" panelHeight:'120px',valueField:'orderId',textField:'orderNo',editable:false" style="width:200px;height:42px"></td>
+			     <td><input id="orderId" class="easyui-combobox"  data-options=" panelHeight:'120px',valueField:'orderId',textField:'orderNo',editable:true" style="width:200px;height:42px"></td>
 			     <td>运维编号<span class="redStar">*</span></td>
 			     <td><input id="maintainNo" value="<%=builder.BuildMOrderNo()%>"   disabled="disabled"  class="easyui-textbox"  style="width:200px;height:42px"></td>
 			     <td><div style="float:left;padding-left:30px">运维订单录入员：<%=session.getAttribute("LOGIN_NAME") %> </div>
