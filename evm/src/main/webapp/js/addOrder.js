@@ -70,8 +70,8 @@ $(document).ready(function() {
 	        })
 	        QmMap.Map.on('click',function(e){
 	            marker.setPosition(e.lnglat);
-	            $("#lat").val(e.lnglat.lat);
-	            $("#lng").val(e.lnglat.lng);
+	            $("#lat").textbox("setValue",e.lnglat.lat);
+	            $("#lng").textbox("setValue",e.lnglat.lng);
 	            geocoder.getAddress(e.lnglat,function(status,result){
 	              if(status=='complete'){
 	            	  $("#workAddress").textbox("setValue", result.regeocode.formattedAddress);
@@ -290,8 +290,8 @@ $(document).ready(function() {
 		para["workCnt"]=workCnt;
 		//施工地点
 		para["workAddress"]=$("#workAddress").textbox("getValue");
-		para["lng"]=$("#lng").val();
-		para["lat"]=$("#lat").val();
+		para["lng"]=$("#lng").textbox("getValue");
+		para["lat"]=$("#lat").textbox("getValue");
 		//施工单位
 		para["workCompany"]=$("#workCompany").textbox("getValue");
 		//单位资质情况

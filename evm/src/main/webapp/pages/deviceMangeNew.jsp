@@ -146,13 +146,13 @@
 		<div id="hidden">
 		   <input type="hidden" value="" id="hidden_add_deviceTypeId"/>
 		   <input type="hidden" value="" id="hidden_add_orderId"/>
-		   <input type="hidden" value="" id="hidden_add_lat" value="0"/>
-		   <input type="hidden" value="" id="hidden_add_lng" value="0"/>
+		   <!-- <input type="hidden" value="" id="hidden_add_lat" value="0"/>
+		   <input type="hidden" value="" id="hidden_add_lng" value="0"/> -->
 		</div>
 		 <div  class="easyui-layout" style="width:100%;height:100%">
 		      <div data-options="region:'west',split:false" style="width:40%" >
 		         <table style="padding-top:20px;padding-left:10px">
-		             <tr style="height:40px">
+		              <tr style="height:40px">
                            <td>订单编号:</td>
                            <td colspan="3"><span id="add_orderNo"></span></td>
                        <tr>
@@ -167,6 +167,14 @@
                            <td>设备地址:</td>
                            <td><input id="add_deviceItemAddr"  type="text"   class="easyui-textbox"  multiline="true"  style="height:60px;width:150px;" /><a id="addMap" href="#" class="easyui-linkbutton">地图</a></td>
                          </tr>
+                         <tr>
+                           <td>维度:</td>
+                           <td><input id="hidden_add_lat"  type="text"   class="easyui-textbox"   style="height:30px;width:150px;" value="0" /></td>
+	                     </tr>
+	                     <tr>
+	                       <td>维度:</td>
+	                       <td><input id="hidden_add_lng"  type="text"   class="easyui-textbox"   style="height:30px;width:150px;" value="0" /></td>
+	                     </tr>
                     </table>
 		      </div>
 		      <div data-options="region:'center',split:false" style="width:60%" >
@@ -206,8 +214,8 @@
 		style="width: 700px; height: 500px;">
 		<div id="hidden">
 		   <input type="hidden" value="" id="hidden_updDate"/>
-		   <input type="hidden" value="" id="hidden_upd_lat" value="0"/>
-		   <input type="hidden" value="" id="hidden_upd_lng" value="0"/>
+		   <!-- <input type="hidden" value="" id="hidden_upd_lat" value="0"/>
+		   <input type="hidden" value="" id="hidden_upd_lng" value="0"/> -->
 		</div>
 		 <div  class="easyui-layout" style="width:100%;height:100%">
 		      <div data-options="region:'west',split:false" style="width:40%" >
@@ -236,6 +244,14 @@
                            <td>设备地址:</td>
                            <td><input id="upd_deviceItemAddr"  type="text"   class="easyui-textbox"  multiline="true" style="height:60px;width:150px;" /><a id="updMap" href="#" class="easyui-linkbutton">地图</a></td>
                          </tr>
+                          <tr>
+                           <td>维度:</td>
+                           <td><input id="hidden_upd_lat"  type="text"   class="easyui-textbox"   style="height:30px;width:150px;" value="0" /></td>
+	                     </tr>
+	                     <tr>
+	                       <td>维度:</td>
+	                       <td><input id="hidden_upd_lng"  type="text"   class="easyui-textbox"   style="height:30px;width:150px;" value="0" /></td>
+	                     </tr>
                     </table>
 		      </div>
 		      <div data-options="region:'center',split:false" style="width:60%" >

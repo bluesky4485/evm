@@ -51,8 +51,8 @@ $(document).ready(function() {
 	});
 	$("#workCusMap").click(function(){
 		QmMap.Map.clearMap();
-		var lng=$("#lng").val();
-		var lat =$("#lat").val();
+		var lng=$("#lng").textbox("getValue");
+		var lat =$("#lat").textbox("getValue");
 		if(lat==0||lat==undefined){
         	lat=43.886841;
         }
@@ -76,8 +76,8 @@ $(document).ready(function() {
 	        })
 	        QmMap.Map.on('click',function(e){
 	            marker.setPosition(e.lnglat);
-	            $("#lat").val(e.lnglat.lat);
-	            $("#lng").val(e.lnglat.lng);
+	            $("#lat").textbox("setValue",e.lnglat.lat);
+	            $("#lng").textbox("setValue",e.lnglat.lng);
 	            geocoder.getAddress(e.lnglat,function(status,result){
 	              if(status=='complete'){
 	            	  $("#workAddress").textbox("setValue", result.regeocode.formattedAddress);
@@ -201,8 +201,8 @@ $(document).ready(function() {
 		//施工地点
 		$("#workAddress").textbox("setValue", orderObj["workAddress"]);
 		//
-		$("#lng").val(orderObj["lng"]);
-		$("#lat").val(orderObj["lat"]);
+		$("#lng").textbox("setValue",orderObj["lng"]);
+		$("#lat").textbox("setValue",orderObj["lat"]);
 		//施工单位
 		$("#workCompany").textbox("setValue", orderObj["workCompany"]);
 		//单位资质情况

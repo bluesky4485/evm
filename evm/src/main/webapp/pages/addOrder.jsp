@@ -136,8 +136,8 @@
 			         <input type="hidden" id="workPmId" name="workPmId" value="0" /><!--  施工负责人ID-->
 			         <input type="hidden" id="storePmId" name="storePmId"value="0"  /><!--出库联系人 -->
 			         <input type="hidden" id="checkerId" name="checkerId"  value="0" /><!--内检人员 -->
-			         <input type="hidden" id="lat" name="lat"  value="0" /><!--lat -->
-			         <input type="hidden" id="lng" name="lng"  value="0" /><!--lng -->
+			         <!-- <input type="hidden" id="lat" name="lat"  value="0" /> 
+			         <input type="hidden" id="lng" name="lng"  value="0" />  -->
 		</div>
 		<div id="projectEdit" style="background-color: #f3f3f3">
 			<table >
@@ -259,7 +259,7 @@
                                     <a id="archivesCemeteryFile" href="javascript:void(0)" class="easyui-linkbutton"  style="width:80px;height: 30px;" >上传图纸</a>
                                </div>
                              </td>
-                           <td rowspan="7">
+                           <td rowspan="8">
                                   <input type="hidden" id="worKDocIDs"  value="" />
                                  <div id=worDocDiv></div>
                                  </td>
@@ -274,7 +274,13 @@
                          <tr>
                            <td>施工地点</td>
                            <td colspan="3"><input id="workAddress"type="text" class="easyui-textbox" style="width: 300px"/><a id="workCusMap" href="#" class="easyui-linkbutton">地图</a></td>
-                            <td  rowspan="5">                         
+                           <td  rowspan="6">                         
+                         </tr>
+                         <tr>
+                           <td>经度</td>
+                           <td><input id="lng"    type="text" class="easyui-textbox" value="0" /></td>
+                           <td>纬度</td>
+                           <td><input id="lat"    type="text" class="easyui-textbox" value="0" /></td>
                          </tr>
                          <tr>
                            <td>施工单位</td>

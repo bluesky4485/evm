@@ -70,16 +70,16 @@ $(document).ready(function() {
 		            marker.setPosition(e.lnglat);
 		            var openType=$("#openType").val();
 		            if(openType=="addMap"){
-		            	$("#hidden_add_lat").val(e.lnglat.lat);
-			            $("#hidden_add_lng").val(e.lnglat.lng);
+		            	$("#hidden_add_lat").textbox("setValue",e.lnglat.lat);
+			            $("#hidden_add_lng").textbox("setValue",e.lnglat.lng);
 			            geocoder.getAddress(e.lnglat,function(status,result){
 			              if(status=='complete'){
 			            	  $("#add_deviceItemAddr").textbox("setValue", result.regeocode.formattedAddress);
 			              }
 			            });
 		            }else{
-		            	$("#hidden_upd_lat").val(e.lnglat.lat);
-			            $("#hidden_upd_lng").val(e.lnglat.lng);
+		            	$("#hidden_upd_lat").textbox("setValue",e.lnglat.lat);
+			            $("#hidden_upd_lng").textbox("setValue",e.lnglat.lng);
 			            geocoder.getAddress(e.lnglat,function(status,result){
 			              if(status=='complete'){
 			            	  $("#upd_deviceItemAddr").textbox("setValue", result.regeocode.formattedAddress);
@@ -219,8 +219,8 @@ $(document).ready(function() {
 	      	  BasePage.showInfoMessage("设备地址长度不合法！");
 	      	  return ;
 	        }
-	        var lat=$("#hidden_add_lat").val();
-            var lng=$("#hidden_add_lng").val();
+	        var lat=$("#hidden_add_lat").textbox("getValue");
+            var lng=$("#hidden_add_lng").textbox("getValue");
 	        var  rows=$('#deviceItemPropertyTable').datagrid('getRows');
 	        var para={};
 	        para["orderId"]=orderid;
@@ -375,8 +375,8 @@ $(document).ready(function() {
 			$("#upd_deviceItemAddr").textbox("setValue",deviceItemAddr);
 			var row = $("#orderDg").datagrid('getSelected');
 			$("#upd_orderNo").text(row['orderNo']);
-			$("#hidden_upd_lat").val(updObj["lat"]);
-			$("#hidden_upd_lng").val(updObj["lng"]);
+			$("#hidden_upd_lat").textbox("setValue",updObj["lat"]);
+			$("#hidden_upd_lng").textbox("setValue",updObj["lng"]);
 		}
 		//upd-window-cancel
 		$("#updItem_window_cancel").click(function(){
@@ -397,8 +397,8 @@ $(document).ready(function() {
 	      	  BasePage.showInfoMessage("设备地址长度不合法！");
 	      	  return ;
 	        }
-	        var lat=$("#hidden_upd_lat").val();
-            var lng=$("#hidden_upd_lng").val();
+	        var lat=$("#hidden_upd_lat").textbox("getValue");
+            var lng=$("#hidden_upd_lng").textbox("getValue");
 		    para["deviceItemUid"]=deviceItemUid;
 		    para["deviceItemAddr"]=deviceItemAddr;
 		    para["lat"]=lat;

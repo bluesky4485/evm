@@ -8,7 +8,7 @@ var QmMap = {} || QmMap;
 	QmMap.init = function(containerId) {
 		_Map = new AMap.Map(containerId);
 		//增加地图级别
-		_Map.setZoomAndCenter(18, [ 125.3245,43.886841]);
+		_Map.setZoomAndCenter(11, [ 125.3245,43.886841]);
 		_Map.plugin([ "AMap.ToolBar" ], function() {
 			toolBar = new AMap.ToolBar();
 			_Map.addControl(toolBar);
