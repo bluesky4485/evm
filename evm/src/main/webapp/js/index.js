@@ -138,34 +138,44 @@
 	}
 	function createOrderCusInfoContent(data){
 		var info = [];
-		var cmName=data.project.custom.cname;
-		if(cmName==undefined){
-			cmName="";
-		}
-		var cmSex="";
-		if(cmSex==undefined){
-			cmSex=data.project.custom.csex;
-		}
-		var cmTel=data.project.custom.ctel1;
-		if(cmTel==undefined){
-			cmTel="";
-		}
-		var substation="";
-		var policestation="";
-		if(data.project.custom!=undefined){
-			if(data.project.custom.substation!=undefined){
-				substation=data.project.custom.substation;
+		var custom=data.project.custom;
+		if(custom==null){
+			info.push("客户名称：");
+			info.push("客户性别：");
+			info.push("客户电话：");
+			info.push("所属分局：");
+			info.push("所属派出所：");
+			return info.join("<br/>");
+		}else{
+			var cmName=data.project.custom.cname;
+			if(cmName==undefined){
+				cmName="";
 			}
-			if(data.project.custom.policestation!=undefined){
-				policestation=data.project.custom.policestation;
+			var cmSex="";
+			if(cmSex==undefined){
+				cmSex=data.project.custom.csex;
 			}
+			var cmTel=data.project.custom.ctel1;
+			if(cmTel==undefined){
+				cmTel="";
+			}
+			var substation="";
+			var policestation="";
+			if(data.project.custom!=undefined){
+				if(data.project.custom.substation!=undefined){
+					substation=data.project.custom.substation;
+				}
+				if(data.project.custom.policestation!=undefined){
+					policestation=data.project.custom.policestation;
+				}
+			}
+			info.push("客户名称："+cmName);
+			info.push("客户性别："+BasePage.Sexformater(cmSex));
+			info.push("客户电话："+cmTel);
+			info.push("所属分局："+substation);
+			info.push("所属派出所："+policestation);
+			return info.join("<br/>");
 		}
-		info.push("客户名称："+cmName);
-		info.push("客户性别："+BasePage.Sexformater(cmSex));
-		info.push("客户电话："+cmTel);
-		info.push("所属分局："+substation);
-		info.push("所属派出所："+policestation);
-		return info.join("<br/>");
 	}
  
 	function createTab(title1,tilte2,content1,content2) {
