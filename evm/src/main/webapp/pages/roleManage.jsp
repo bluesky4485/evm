@@ -42,15 +42,17 @@
 		<div id="toolbar" class="toolbar">
 			<!-- 删除-->
 			<div id="delRole">
+			   <a href="#" title="删除">
 				<img onclick=""
 					src="<%=request.getContextPath()%>/images/web_button_del.png"
 					onMouseOver="this.src='<%=request.getContextPath()%>/images/web_button_del_on.png'"
 					onMouseOut="this.src='<%=request.getContextPath()%>/images/web_button_del.png'" />
+			   </a>
 			</div>
 
 			<!-- 新增-->
 			<div>
-				<a id="addRoleBtn"
+				<a id="addRoleBtn"   title="新增">
 					href="<%=request.getContextPath()%>/pages/addRole.jsp"> <img
 					onclick=""
 					src="<%=request.getContextPath()%>/images/web_button_add.png"
@@ -59,7 +61,7 @@
 				</a>
 			</div>
 			<div id="updRole">
-				<a id="updRoleHref" htrg="#">
+				<a id="updRoleHref" htrg="#" title="修改">
 				       <img onclick=""  src="<%=request.getContextPath()%>/images/web_button_edit.png"  onMouseOver="this.src='<%=request.getContextPath()%>/images/web_button_edit_on.png'" onMouseOut="this.src='<%=request.getContextPath()%>/images/web_button_edit.png'"/>
 				</a>
 			</div>

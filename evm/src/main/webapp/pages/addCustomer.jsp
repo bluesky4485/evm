@@ -101,12 +101,12 @@
 			 </table>
 		<div id="toolbar" class="toolbar">
 		    <div id="goHist">
-		        <a href="#" >
+		        <a href="#" title="返回">
                       <img onclick="javascript:history.back();"  src="<%=request.getContextPath()%>/images/web_button_back.png"  onMouseOver="this.src='<%=request.getContextPath()%>/images/web_button_back_on.png'" onMouseOut="this.src='<%=request.getContextPath()%>/images/web_button_back.png'"/>
                  </a>
 			 </div>
 			<div id="saveCustom">
-				<a id="saveCustomHref" href="#"> 
+				<a id="saveCustomHref" href="#" title="保存"> 
 				 <img onclick=""  src="<%=request.getContextPath()%>/images/web_button_tj.png"  onMouseOver="this.src='<%=request.getContextPath()%>/images/web_button_tj_on.png'" onMouseOut="this.src='<%=request.getContextPath()%>/images/web_button_tj.png'"/>
 				</a>
 			</div>

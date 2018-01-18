@@ -110,19 +110,19 @@
 		<div id="toolbar" class="toolbar">
 		<!-- 返回 -->
 		      <div  id="goHist">
-			          <a href="#" >
+			          <a href="#" title="返回" >
 	                      <img onclick="javascript:history.back();"  src="<%=request.getContextPath()%>/images/web_button_back.png"  onMouseOver="this.src='<%=request.getContextPath()%>/images/web_button_back_on.png'" onMouseOut="this.src='<%=request.getContextPath()%>/images/web_button_back.png'"/>
 	                 </a>
 		      </div>
 			<!--  保存新增 -->
 			<div id="saveOrderBtn">
-				<a href="#">  
+				<a href="#" title="新增">  
 				 <img onclick=""  src="<%=request.getContextPath()%>/images/web_button_tj.png"  onMouseOver="this.src='<%=request.getContextPath()%>/images/web_button_tj_on.png'" onMouseOut="this.src='<%=request.getContextPath()%>/images/web_button_tj.png'"/>
 				</a>
 			</div>
 			<!--打印 -->
 			<div id="printOrderBtn">
-			  <a href="#" > 
+			  <a href="#" title="打印"> 
 				 <img  onclick=""  src="<%=request.getContextPath()%>/images/web_button_print.png"  onMouseOver="this.src='<%=request.getContextPath()%>/images/web_button_print_on.png'" onMouseOut="this.src='<%=request.getContextPath()%>/images/web_button_print.png'"/>
 				</a>
 			</div>

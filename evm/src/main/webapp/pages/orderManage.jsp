@@ -107,23 +107,27 @@
 			 <div id="toolbar" class="toolbar">
 			    <!-- 删除-->
 			    <div  id="delOrder">
+			       <a href="#" title="删除" >
 					      <img onclick=""  src="<%=request.getContextPath()%>/images/web_button_del.png"  onMouseOver="this.src='<%=request.getContextPath()%>/images/web_button_del_on.png'" onMouseOut="this.src='<%=request.getContextPath()%>/images/web_button_del.png'"/>
+				   </a>
 				</div>
 				<!-- 新增-->
 			    <div>
-				     <a id="addOrderBtn" href="<%=request.getContextPath()%>/pages/addOrder.jsp">
+				     <a id="addOrderBtn" href="<%=request.getContextPath()%>/pages/addOrder.jsp" title="新增">
 						    <img onclick=""  src="<%=request.getContextPath()%>/images/web_button_add.png"  onMouseOver="this.src='<%=request.getContextPath()%>/images/web_button_add_on.png'" onMouseOut="this.src='<%=request.getContextPath()%>/images/web_button_add.png'"/>
 					 </a>
 				</div>
 				<!-- 修改-->
 			   <div  id="updOrder"  >
-					 <a  id="updOrderHref"href="#">
+					 <a  id="updOrderHref"href="#" title=修改">
 					       <img  onclick=""  src="<%=request.getContextPath()%>/images/web_button_edit.png"  onMouseOver="this.src='<%=request.getContextPath()%>/images/web_button_edit_on.png'" onMouseOut="this.src='<%=request.getContextPath()%>/images/web_button_edit.png'"/>
 					 </a>  
 				</div>
 				<!-- 批量创建订单-->
 			   <div  id="batchAddOrder" style="width:75px" >
+			       <a href="#" title="批量创建" >
 					 <img onclick=""  src="<%=request.getContextPath()%>/images/web_button_plzj.png"  onMouseOver="this.src='<%=request.getContextPath()%>/images/web_button_plzj_on.png'" onMouseOut="this.src='<%=request.getContextPath()%>/images/web_button_plzj.png'"/>
+				   </a>
 				</div>
 				<div  id="desc" style="float:left;;background-color:#060192;color:white;font-size:18px;width:180px;height:20px;padding-left:30px;padding-top:10px">订单管理</div>
 			 </div>

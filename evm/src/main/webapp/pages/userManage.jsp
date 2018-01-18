@@ -41,17 +41,19 @@
 			 <div id="toolbar" class="toolbar">
 				 <!-- 删除-->
 			    <div  id="delUser">
+			        <a href="#" title="删除">
 					    <img onclick=""  src="<%=request.getContextPath()%>/images/web_button_del.png"  onMouseOver="this.src='<%=request.getContextPath()%>/images/web_button_del_on.png'" onMouseOut="this.src='<%=request.getContextPath()%>/images/web_button_del.png'"/>
+				    </a>
 				</div>
 							   
 				<!-- 新增-->
 			    <div>
-				     <a id="addUserBtn" href="<%=request.getContextPath()%>/pages/addUser.jsp">
+				     <a title="新增" id="addUserBtn" href="<%=request.getContextPath()%>/pages/addUser.jsp">
 				      <img onclick=""  src="<%=request.getContextPath()%>/images/web_button_add.png"  onMouseOver="this.src='<%=request.getContextPath()%>/images/web_button_add_on.png'" onMouseOut="this.src='<%=request.getContextPath()%>/images/web_button_add.png'"/>
 					 </a>
 				</div>
 				 <div id="updUser">
-					 <a id="updUserHref" htrg="#">
+					 <a id="updUserHref" htrg="#" title="修改">
 					        <img onclick=""  src="<%=request.getContextPath()%>/images/web_button_edit.png"  onMouseOver="this.src='<%=request.getContextPath()%>/images/web_button_edit_on.png'" onMouseOut="this.src='<%=request.getContextPath()%>/images/web_button_edit.png'"/>
 					 </a>  
 				</div>
