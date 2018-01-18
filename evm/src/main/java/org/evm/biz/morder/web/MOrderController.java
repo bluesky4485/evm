@@ -1,10 +1,6 @@
 package org.evm.biz.morder.web;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.URL;
-import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,10 +12,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.evm.biz.morder.entity.MOrderFileVO;
 import org.evm.biz.morder.entity.MOrderVO;
 import org.evm.biz.morder.service.IMOrderDbService;
-import org.evm.biz.order.service.IOrderDbService;
 import org.evm.core.consts.MessageType;
 import org.evm.core.entity.PageResult;
 import org.evm.core.exception.SmartFunctionException;
+import org.evm.core.util.ExcelUtil;
 import org.evm.core.util.UploadHelper;
 import org.evm.core.web.AbstractMultiController;
 import org.springframework.web.multipart.MultipartFile;
@@ -202,7 +198,21 @@ public class MOrderController extends AbstractMultiController {
 		mv.addObject("updObj", whereCause);
 		return mv;
 	}
-
+	/**
+	 * 
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 * @version update by jerry 2018年1月10日
+	 */
+	public ModelAndView gotoCreatePage(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		ModelAndView mv = new ModelAndView("addMaintainOrder");
+		MOrderVO whereCause = new MOrderVO();
+		bindObject(request, whereCause);
+		mv.addObject("updObj", whereCause);
+		return mv;
+	}
 	/**
 	 * 上传文件最大10m
 	 * 
@@ -278,6 +288,56 @@ public class MOrderController extends AbstractMultiController {
 
 	public String getFileServerPath(String morderId) {
 		return getServletContext().getRealPath("/") + IMOrderDbService.morderFileDic + "//" + morderId + "//";
+	}
+	@Override
+	protected void doExcelWrite(ExcelUtil util, HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		String exportMethod = request.getParameter("exportMethod");
+		ajaxExcelExport(util, request);
+	}
+	public void ajaxExcelExport(ExcelUtil util, HttpServletRequest request) throws Exception {
+		MOrderVO whereCause = new MOrderVO();
+		bindObject(request, whereCause);
+		List<MOrderVO> pageResult = morderDbService.findAllMorderForExport(whereCause);
+
+		String[] header = new String[] { "项目编号", "项目名称", "订单编号", "维修订单编号", "运维经理", "派修时间", "故障描述","预约时间", "计划完成时间", "维修人数", "维修开始日期",
+				"维修状态", "维修进度", "故障类别", "维修负责人", "验收状态", "验收回访人", "解决方案", "维修结果描述", "备注", "用户评分","用户评价", "最后一次进度更新时间",
+				"创建人", "创建日期", "修改人", "修改日期" };
+		util.createHeader(header);
+		for (int i = 0; i < pageResult.size(); i++) {
+			MOrderVO po = pageResult.get(i);
+			util.setValue(i + 1, 0, po.getProjectNo()==null?"": po.getProjectNo());
+			util.setValue(i + 1, 1, po.getProjectName()==null?"":po.getProjectName());
+			util.setValue(i + 1, 2, po.getOrderNo()==null?"":po.getOrderNo());
+			util.setValue(i + 1, 3, po.getMorderNo()==null?"":po.getMorderNo());
+			util.setValue(i + 1, 4, po.getPmName()==null?"":po.getPmName());
+			//
+			util.setValue(i + 1, 5, po.getMaintainDate()==null?"":po.getMaintainDate());
+			util.setValue(i + 1, 6, po.getFaultDesc()==null?"":po.getFaultDesc());
+			//
+			util.setValue(i + 1, 7, po.getAppointmentDate()==null?"":po.getAppointmentDate());
+			util.setValue(i + 1, 8, po.getPlanEndDate()==null?"":po.getPlanEndDate());
+			util.setValue(i + 1, 9, po.getMworkerCnt()==null?"":po.getMworkerCnt());
+			util.setValue(i + 1, 10, po.getMaintainBeginDate()==null?"":po.getMaintainBeginDate());
+			util.setValue(i + 1, 11, po.getMaintainStatusDesc()==null?"":po.getMaintainStatusDesc());
+			util.setValue(i + 1, 12, po.getMaintainSpeed()==null?"":po.getMaintainSpeed());
+			util.setValue(i + 1, 13, po.getFaultTypeDesc()==null?"":po.getFaultTypeDesc());
+			util.setValue(i + 1, 14, po.getMaintainPmName()==null?"":po.getMaintainPmName());
+			
+			util.setValue(i + 1, 15, po.getAcceptStatusDesc()==null?"":po.getAcceptStatusDesc());
+
+			util.setValue(i + 1, 16, po.getAcceptecallMan()==null?"":po.getAcceptecallMan());
+			util.setValue(i + 1, 17, po.getSolution()==null?"":po.getSolution());
+			util.setValue(i + 1, 18, po.getMaintainResultdesc()==null?"":po.getMaintainResultdesc());
+			util.setValue(i + 1, 19, po.getMaintainRemark()==null?"":po.getMaintainRemark());
+			util.setValue(i + 1, 20, po.getUserScore()==null?"":po.getUserScore());
+			util.setValue(i + 1, 21, po.getUserProposal()==null?"":po.getUserProposal());
+			util.setValue(i + 1, 22, po.getLastUpdDate()==null?"":po.getLastUpdDate());
+			util.setValue(i + 1, 23, po.getInsUser()==null?"":po.getInsUser());
+			util.setValue(i + 1, 24, po.getInsDate()==null?"":po.getInsDate());
+			util.setValue(i + 1, 25, po.getUpdUser()==null?"":po.getUpdUser());
+			util.setValue(i + 1, 26, po.getUpdDate()==null?"":po.getUpdDate());
+		}
 	}
 
 }

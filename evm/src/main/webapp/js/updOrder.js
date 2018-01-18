@@ -246,6 +246,8 @@ $(document).ready(function() {
 		$("#userAppraise").textbox("setValue", orderObj["userAppraise"]);
 		//备注
 		$("#workRemark").textbox("setValue", orderObj["workRemark"]);
+		//汇聚箱号
+		$("#convergeBoxNo").textbox("setValue",orderObj["convergeBoxNo"]);
 		var deviceList=orderObj["deviceList"];
 		var deviceRows=[];
 		var lineDeviceRows=[];
@@ -398,7 +400,9 @@ $(document).ready(function() {
 		var para={};
 		para["orderId"]=$("#orderId").val();
 		para["updDate"]=$("#hidden_updDate").val();
-		
+		//汇聚箱号
+		para["convergeBoxNo"]=$("#convergeBoxNo").textbox("getValue");
+		//
 		para["workPmId"]=$("#projectid").val("getValue");
 		//施工负责人
 		para["workPmId"]=$("#workPmId").val();

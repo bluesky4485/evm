@@ -111,7 +111,7 @@
 		var info=createTab("订单信息","客户信息",content1,content2);
 		var inforWindow = new AMap.InfoWindow({
 			content : info,
-			size : new AMap.Size(280, 180),
+			size : new AMap.Size(280, 200),
 			offset : new AMap.Pixel(0, -30)
 			});
 		inforWindow.open(QmMap.Map, e.target.getPosition());
@@ -134,8 +134,13 @@
 		info.push("施工进度："+data.workProgress);
 		info.push("施工单位："+workCompany);
 		info.push("施工人数："+data.workCnt);
+		var viewOrder="<a style='padding:5px 0px 0px 60px;font-size:16px;' id='viewOrderBtn' href='"+BasePage.urlPre+"/orderController.do?method=gotoUpdatePage&orderId="+data.orderId+"' >详细信息</a>";
+		var addMOrder="<a style='padding:5px 0px 0px 30px;font-size:16px;' id='addMOrderBtn' href='"+BasePage.urlPre+"/morderController.do?method=gotoCreatePage&orderId="+data.orderId+"' >创建维修</a>";
+		var div="<div float='left'>"+viewOrder+addMOrder+"</div>"
+		info.push(viewOrder+addMOrder);
 		return info.join("<br/>");
 	}
+	 
 	function createOrderCusInfoContent(data){
 		var info = [];
 		var custom=data.project.custom;
@@ -174,6 +179,8 @@
 			info.push("客户电话："+cmTel);
 			info.push("所属分局："+substation);
 			info.push("所属派出所："+policestation);
+			
+			info.push("<a style='padding:225px 0px 0px 90px;font-size:16px;' id='viewOrderBtn'href='"+BasePage.urlPre+"/customController.do?method=gotoUpdatePage&cno="+data.project.custom.cno+"' >详细信息</a>");
 			return info.join("<br/>");
 		}
 	}

@@ -23,7 +23,8 @@
 <script type="text/javascript" src="<%=request.getContextPath()%>/js/common/logout.js"></script> 
 <script type="text/javascript" src="<%=request.getContextPath()%>/js/util/BizPageSt.js"></script> 
 </head>
-<body id="morderManageBody" class="easyui-layout"  > 
+<body id="morderManageBody" class="easyui-layout"  >
+<form id="exportForm" method="post"> 
 	 <div data-options="region:'north', border:true" style="height: 171px;">
 	          <table id="top" style="width: 100%; height: 50px; border: #F3F3F3; background-color: #FCFCFC">
 				<tr style="padding-top: 5px">
@@ -99,23 +100,35 @@
 			 <div id="toolbar" class="toolbar">
 			    <!-- 删除-->
 			    <div  id="delMOrder">
-			           <a id="deleteMOrderHref" href="#">
+			           <a id="deleteMOrderHref" href="#" title="删除">
 					   
 					    <img onclick=""  src="<%=request.getContextPath()%>/images/web_button_del.png"  onMouseOver="this.src='<%=request.getContextPath()%>/images/web_button_del_on.png'" onMouseOut="this.src='<%=request.getContextPath()%>/images/web_button_del.png'"/>
 					   </a>
 				</div>
 				<!-- 新增-->
 			    <div>
-				     <a id="addMOrderHref" href="<%=request.getContextPath()%>/pages/addMaintainOrder.jsp">
+				     <a id="addMOrderHref" href="<%=request.getContextPath()%>/pages/addMaintainOrder.jsp" title="新增">
 				       
 						    <img onclick=""  src="<%=request.getContextPath()%>/images/web_button_add.png"  onMouseOver="this.src='<%=request.getContextPath()%>/images/web_button_add_on.png'" onMouseOut="this.src='<%=request.getContextPath()%>/images/web_button_add.png'"/>
 					 </a>
 				</div>
 				<!-- 修改-->
-			   <div  id="updMOrder">
-					 <a id="updMOrderHref" href="#">
-					        <img onclick=""  src="<%=request.getContextPath()%>/images/web_button_edit.png"  onMouseOver="this.src='<%=request.getContextPath()%>/images/web_button_edit_on.png'" onMouseOut="this.src='<%=request.getContextPath()%>/images/web_button_edit.png'"/>
+			    <div  id="updMOrder">
+					 <a id="updMOrderHref" href="#" title="修改">
+					     <img onclick=""  src="<%=request.getContextPath()%>/images/web_button_edit.png"  onMouseOver="this.src='<%=request.getContextPath()%>/images/web_button_edit_on.png'" onMouseOut="this.src='<%=request.getContextPath()%>/images/web_button_edit.png'"/>
 					 </a>  
+				</div>
+				<!-- 导出-->
+			   <div  id="exportMorder">
+			      <a href="#" title="导出">
+					  <img onclick=""  src="<%=request.getContextPath()%>/images/web_button_export.png"  onMouseOver="this.src='<%=request.getContextPath()%>/images/web_button_export_on.png'" onMouseOut="this.src='<%=request.getContextPath()%>/images/web_button_export.png'"/>
+				  </a>
+				</div>
+				<!-- 导入-->
+			   <div  id="importMorder">
+			     <a href="#" title="导入">
+					    <img onclick=""  src="<%=request.getContextPath()%>/images/web_button_import.png"  onMouseOver="this.src='<%=request.getContextPath()%>/images/web_button_import_on.png'" onMouseOut="this.src='<%=request.getContextPath()%>/images/web_button_export.png'"/>
+				 </a>
 				</div>
 				<div  id="desc" style="float:left;;background-color:#060192;color:white;font-size:18px;width:180px;height:20px;padding-left:30px;padding-top:10px">运维订单管理</div>
 			 </div>
@@ -125,14 +138,26 @@
 	 </div>
 	
 	<div data-options="region:'center',split:false"  >
+	    <!--查询条件  -->
+	    <div>
+	       <table>
+	          <tr>
+	            <td>订单编号</td>
+	            <td><input id="orderNo"  class="easyui-textbox"  style="width:200px;height:42px"></td>
+	            <td>摄像机编号/IP</td>
+	            <td><input id="convergeBoxNo"  class="easyui-textbox"  style="width:200px;height:42px"></td>
+	            <td> <a  id='mquery' href="#" class="easyui-linkbutton c4" style="width:100px">查询</a></td>
+	          </tr>
+	       </table>
+	    </div>
 		<div style="height:100%">
 			<table id="mOrderDg"  class="easyui-datagrid" style="width:auto;height:auto"  
 			data-options="singleSelect:true,collapsible:false,fit:true,pagination:true,rownumbers:true,pageSize:12,pageList:[12,30,50],checkbox:true">
 			<thead>
 				<tr>
 				    <th data-options="field:'ck',checkbox:true,width:50"></th>
-				    <th data-options="field:'projectName',width:80,align:'center'">项目名称</th>
-					<th data-options="field:'orderNo',width:150,align:'center'">订单编号</th>
+				    <th data-options="field:'projectName',width:80,align:'center',formatter:formatProject">项目名称</th>
+					<th data-options="field:'orderNo',width:150,align:'center',formatter:formatOrder">订单编号</th>
 					<th data-options="field:'morderNo',width:150,align:'center'">运维编号</th>
 					<th data-options="field:'cusName',width:80,align:'center'">客户名称</th>
 					<th data-options="field:'pmName',width:120,align:'center'">项目经理</th>
@@ -145,5 +170,6 @@
 		   </table>
 	   </div>
 	</div>
+	</form>
 </body>
 </html>

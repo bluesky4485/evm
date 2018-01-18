@@ -4,22 +4,22 @@
     "http://www.ibatis.com/dtd/sql-map-2.dtd">
 <sqlMap namespace="MST_MORDER">
 	<typeAlias alias="PARA_MOREDER" type="org.evm.biz.morder.entity.MOrderVO" />
-	<resultMap id="RESULT_MOREDER" class="org.evm.biz.morder.entity.MOrderVO" >
-	    <result property="projectId" column="PROJECT_ID" />
-	    <result property="projectNo" column="PROJECT_NO" />
-	    <result property="workAddress" column="WORK_ADDRESS" />
-	    <result property="lng" column="lng" />
-	    <result property="lat" column="lat" />
-	    <result property="projectName" column="PROJECT_NAME" />
+	<resultMap id="RESULT_MOREDER" class="org.evm.biz.morder.entity.MOrderVO">
+		<result property="projectId" column="PROJECT_ID" />
+		<result property="projectNo" column="PROJECT_NO" />
+		<result property="workAddress" column="WORK_ADDRESS" />
+		<result property="lng" column="lng" />
+		<result property="lat" column="lat" />
+		<result property="projectName" column="PROJECT_NAME" />
 		<result property="orderId" column="ORDER_ID" />
 		<result property="orderNo" column="ORDER_NO" />
 		<result property="morderId" column="MORDER_ID" />
 		<result property="morderNo" column="MORDER_NO" />
 		<result property="cusName" column="CUS_NAME" />
 		<result property="pmName" column="PM_NAME" />
-		 <result property="maintainPmName" column="MAINTTAN_NAME" />
-		 <result property="maintainStatus" column="MAINTAIN_STATUS" />
-		  <result property="faultDesc" column="fault_Desc" />
+		<result property="maintainPmName" column="MAINTTAN_NAME" />
+		<result property="maintainStatus" column="MAINTAIN_STATUS" />
+		<result property="faultDesc" column="fault_Desc" />
 	</resultMap>
     <select id="MS_FIND_MORDER_PAGE" resultMap="RESULT_MOREDER"  parameterClass="PARA_MOREDER">
 		<![CDATA[
@@ -95,6 +95,23 @@
 			<isNotEqual prepend="and"  compareValue="0"  property="orderId">
 				<![CDATA[ morder.ORDER_ID =#orderId#]]>
 			</isNotEqual>
+			<!-- 订单编号过滤 -->
+			<isNotEmpty prepend="and" property="orderNo">
+			    <![CDATA[ bizorder.ORDER_NO LIKE '%$orderNo$%']]>
+			</isNotEmpty>
+			<!-- 订单中的设备唯一ID过滤 -->
+			<isNotEmpty prepend="and" property="convergeBoxNo">
+			     EXISTS (
+					SELECT
+						item.deviceitem_uid
+					FROM
+						qr_deviceitem item
+					WHERE
+						item.order_id = bizorder.ORDER_ID
+					  AND item.deviceitem_uid LIKE '%$convergeBoxNo$%'
+				)
+			</isNotEmpty>
+			
 			</dynamic>
 			<![CDATA[ order by morder.MORDER_ID  Desc]]>
 			<dynamic>
@@ -162,8 +179,181 @@
 			<isNotEqual prepend="and"  compareValue="0"  property="orderId">
 				<![CDATA[ morder.ORDER_ID =#orderId#]]>
 			</isNotEqual>
+			<!-- 订单编号过滤 -->
+			<isNotEmpty prepend="and" property="orderNo">
+			    <![CDATA[ bizorder.ORDER_NO  LIKE  '%$orderNo$%']]>
+			</isNotEmpty>
+			<!-- 订单中的设备唯一ID过滤 -->
+			<isNotEmpty prepend="and" property="convergeBoxNo">
+			     EXISTS (
+					SELECT
+						item.deviceitem_uid
+					FROM
+						qr_deviceitem item
+					WHERE
+						item.order_id = bizorder.ORDER_ID
+					  AND item.deviceitem_uid LIKE '%$convergeBoxNo$%'
+				)
+			</isNotEmpty>
 	   </dynamic>
 	</select>
+	<resultMap id="RESULT_MOREDER_EXPORT" class="org.evm.biz.morder.entity.MOrderVO">
+	    <result property="projectNo" column="PROJECT_NO" />
+	    <result property="projectName" column="PROJECT_NAME" />
+		<result property="orderNo" column="ORDER_NO" />
+		<result property="morderId" column="MORDER_ID" /> 
+		<result property="morderNo" column="MORDER_NO" /> 
+		<result property="morderPmId" column="MORDER_PM" />
+		<result property="pmName" column="MORDER_PM_NAME" />
+		<result property="maintainDate" column="MAINTAIN_DATE" />
+		<result property="faultDesc" column="FAULT_DESC" />
+		<result property="appointmentDate" column="APPOINTMENT_DATE" />
+		<result property="planEndDate" column="PLAN_END_DATE" />
+		<result property="mworkerCnt" column="MWORKER_CNT" />
+		<result property="maintainBeginDate" column="MAINTAIN_BEGIN_DATE" />
+		<result property="maintainStatus" column="MAINTAIN_STATUS" /> 
+	    <result property="maintainStatusDesc" column="maintain_status_desc" />
+		<result property="maintainSpeed" column="MAINTAIN_SPEED" />
+		<result property="faultType" column="FAULT_TYPE" />
+		<result property="faultTypeDesc" column="fault_type_desc" />
+		<result property="maintainPmId" column="MAINTAIN_PM" />
+		<result property="maintainPmName" column="MAINTAIN_PM_NAME" />
+		<result property="acceptStatus" column="ACCEPT_STATUS" />
+		<result property="acceptStatusDesc" column="ACCEPT_STATUS_DESC" />
+		<result property="acceptecallMan" column="ACCEPTECALL_MAN" />
+		
+		<result property="callbackDate" column="CALLBACK_DATE" />
+		<result property="solution" column="SOLUTION" />
+		<result property="maintainResultdesc" column="MAINTAIN_RESULTDESC" />
+		<result property="maintainRemark" column="MAINTAIN_REMARK" />
+		<result property="userScore" column="USER_SCORE" />
+		<result property="userProposal" column="USER_PROPOSAL" />
+		<result property="lastUpdDate" column="last_UpdDate" />
+		<result property="insUser" column="INS_USER" />
+		<result property="updUser" column="UPD_USER" />
+		<result property="insDate" column="INS_DATE" />
+		<result property="updDate" column="UPD_DATE" />
+	</resultMap>
+	<select id="MS_FIND_MORDER_EXCEL_EXPORT" resultMap="RESULT_MOREDER_EXPORT"  parameterClass="PARA_MOREDER">
+		<![CDATA[
+			SELECT 
+					    pro.PROJECT_NO,
+					    pro.PROJECT_NAME,
+					    ord.ORDER_NO,
+					    mord.MORDER_ID,
+					    mord.MORDER_NO,
+					    mord.MORDER_PM,
+					    pmuser.USER_FULLNAME MORDER_PM_name,
+					    DATE_FORMAT(mord.MAINTAIN_DATE, '%Y-%m-%d') MAINTAIN_DATE,
+					    mord.FAULT_DESC,
+					    DATE_FORMAT(mord.APPOINTMENT_DATE, '%Y-%m-%d') APPOINTMENT_DATE,
+					    DATE_FORMAT(mord.PLAN_END_DATE, '%Y-%m-%d') PLAN_END_DATE,
+					    mord.MWORKER_CNT,
+					    DATE_FORMAT(mord.MAINTAIN_BEGIN_DATE, '%Y-%m-%d') MAINTAIN_BEGIN_DATE,
+					    mord.MAINTAIN_STATUS,
+					    ms.text maintain_status_desc,
+					    mord.MAINTAIN_SPEED,
+					    mord.FAULT_TYPE,
+					    ft.FAULTTYPE_NAME fault_type_desc,
+					    mord.MAINTAIN_PM,
+					    pmuser.USER_FULLNAME MAINTAIN_PM_NAME,
+					    mord.ACCEPT_STATUS,
+					    astust.text ACCEPT_STATUS_DESC,
+					    mord.ACCEPTECALL_MAN,
+					    mord.CALLBACK_DATE,
+					    mord.SOLUTION,
+					    mord.MAINTAIN_RESULTDESC,
+					    mord.MAINTAIN_REMARK,
+					    mord.USER_SCORE,
+					    mord.USER_PROPOSAL,
+					    DATE_FORMAT(mord.LAST_UPDDATE, '%Y-%m-%d %k:%i:%s') LAST_UPDDATE,
+					    DATE_FORMAT(mord.UPD_DATE, '%Y-%m-%d %k:%i:%s') UPD_DATE,
+					    DATE_FORMAT(mord.INS_DATE, '%Y-%m-%d %k:%i:%s') INS_DATE,
+					    insusr.USER_FULLNAME INS_USER,
+					    updusr.USER_FULLNAME UPD_USER
+					FROM
+					    qr_morder mord
+					        JOIN
+					    qr_order ord ON mord.ORDER_ID = ord.order_id and ord.order_status=0
+					        JOIN
+					    qr_project pro ON ord.PROJECT_ID = pro.PROJECT_ID and pro.pro_status=0
+					        LEFT JOIN
+					    qr_user pmorderuser ON mord.MAINTAIN_PM = pmorderuser.USER_ID
+					        LEFT JOIN
+					    qr_dict_maintainstatus ms ON mord.maintain_status = ms.id
+					        LEFT JOIN
+					    qr_faulttype ft ON FAULT_TYPE = ft.FAULTTYPE_ID
+					        LEFT JOIN
+					    qr_user pmuser ON mord.MAINTAIN_PM = pmuser.USER_ID
+					        LEFT JOIN
+					    qr_dict_acceptstatus astust ON mord.ACCEPT_STATUS = astust.id
+					       
+					        LEFT JOIN
+					    qr_user updusr ON mord.INS_USER = updusr.USER_ID
+					        LEFT JOIN
+					    qr_user insusr ON mord.INS_USER = insusr.USER_ID
+				 where mord.MORDER_STATUS = 0
+			]]>
+		<dynamic>
+		   <isLessThan property="systemId" compareValue="400"  >
+			             AND   (
+							#insUser# = mord.MAINTAIN_PM
+							OR #insUser# = mord.MORDER_PM
+							OR #insUser# = project.PM_ID
+							OR EXISTS (
+								SELECT * FROM qr_rel_project_user qrpu
+								WHERE qrpu.project_id = project.PROJECT_ID
+								AND qrpu.user_id = #insUser#
+							)
+						)
+		   </isLessThan>
+		   <isNotEmpty property="queryStat"  prepend="and" >
+					       <isEqual property="queryStat" compareValue="1"  >
+					          <![CDATA[ 
+					                  mord.MAINTAIN_STATUS=0
+					          ]]>
+					       </isEqual>
+					       <isEqual property="queryStat" compareValue="2"  >
+					            <![CDATA[
+					                 mord.MAINTAIN_STATUS=3
+					             ]]>
+					       </isEqual>
+					       <isEqual property="queryStat" compareValue="3"  >
+					            <![CDATA[ 
+					               (MAINTAIN_STATUS=1 OR MAINTAIN_STATUS=2)
+					            ]]>
+					       </isEqual>
+		   </isNotEmpty>
+		   <isNotEmpty prepend="and" property="strLike">
+				<![CDATA[ (mord.MORDER_NO LIKE '%$strLike$%' or pro.PROJECT_NO LIKE '%$strLike$%'  or pmuser.USER_FULLNAME LIKE '%$strLike$%' ) ]]>
+			</isNotEmpty>
+		   <isNotEmpty prepend="and" property="morderNo">
+				<![CDATA[ mord.MORDER_NO LIKE '%$morderNo$%' ]]>
+			</isNotEmpty>
+			<isNotEqual prepend="and"  compareValue="0"  property="orderId">
+				<![CDATA[ mord.ORDER_ID =#orderId#]]>
+			</isNotEqual>
+			<!-- 订单编号过滤 -->
+			<isNotEmpty prepend="and" property="orderNo">
+			    <![CDATA[ ord.ORDER_NO LIKE '%$orderNo$%']]>
+			</isNotEmpty>
+			<!-- 订单中的设备唯一ID过滤 -->
+			<isNotEmpty prepend="and" property="convergeBoxNo">
+			     EXISTS (
+					SELECT
+						item.deviceitem_uid
+					FROM
+						qr_deviceitem item
+					WHERE
+						item.order_id = ord.ORDER_ID
+					  AND item.deviceitem_uid LIKE '%$convergeBoxNo$%'
+				)
+			</isNotEmpty>
+			
+			</dynamic>
+	</select>
+	
+	<!-- 信息录入 -->
 	<insert id="MS_INSERT_MORDER"  parameterClass="PARA_MOREDER">
 	   <![CDATA[
 	       insert into qr_morder(ORDER_ID,
@@ -269,39 +459,39 @@
 	</update>
 	
 	<resultMap id="RESULT_MOREDER_ONE" class="org.evm.biz.morder.entity.MOrderVO">
-	<result property="orderId" column="ORDER_ID" />
-	<result property="morderId" column="MORDER_ID" /> 
-	<result property="morderNo" column="MORDER_NO" /> 
-	<result property="morderPmId" column="MORDER_PM" />
-	<result property="maintainDate" column="MAINTAIN_DATE" />
-	<result property="faultDesc" column="FAULT_DESC" />
-	<result property="appointmentDate" column="APPOINTMENT_DATE" />
-	<result property="planEndDate" column="PLAN_END_DATE" />
-	<result property="mworkerCnt" column="MWORKER_CNT" />
-	<result property="maintainBeginDate" column="MAINTAIN_BEGIN_DATE" />
-	<result property="maintainStatus" column="MAINTAIN_STATUS" />
-	<result property="maintainSpeed" column="MAINTAIN_SPEED" />
-	<result property="faultType" column="FAULT_TYPE" />
-	<result property="maintainPmId" column="MAINTAIN_PM" />
-	<result property="acceptStatus" column="ACCEPT_STATUS" />
-	<result property="acceptecallMan" column="ACCEPTECALL_MAN" />
-	
-	<result property="callbackDate" column="CALLBACK_DATE" />
-	<result property="solution" column="SOLUTION" />
-	<result property="maintainResultdesc" column="MAINTAIN_RESULTDESC" />
-	<result property="maintainRemark" column="MAINTAIN_REMARK" />
-	<result property="userScore" column="USER_SCORE" />
-	<result property="userProposal" column="USER_PROPOSAL" />
-	<result property="lastUpdDate" column="last_UpdDate" />
-	<result property="insUser" column="INS_USER" />
-	<result property="updUser" column="UPD_USER" />
-	<result property="insDate" column="INS_DATE" />
-	<result property="updDate" column="UPD_DATE" />
-	<result property="order" column="ORDER_ID"  select="MS_GET_ORDER_BYID"/>
-	<result property="maintainPmUser" column="MAINTAIN_PM"  select="MS_FIND_USER_BYID"/>
-	<result property="morderPmUser" column="MORDER_PM"  select="MS_FIND_USER_BYID"/>
-	<result property="morderFileList" column="MORDER_ID"  select="MS_FILE_MORDER_FILE_BY_MORDER_ID"/>
-</resultMap>
+		<result property="orderId" column="ORDER_ID" />
+		<result property="morderId" column="MORDER_ID" /> 
+		<result property="morderNo" column="MORDER_NO" /> 
+		<result property="morderPmId" column="MORDER_PM" />
+		<result property="maintainDate" column="MAINTAIN_DATE" />
+		<result property="faultDesc" column="FAULT_DESC" />
+		<result property="appointmentDate" column="APPOINTMENT_DATE" />
+		<result property="planEndDate" column="PLAN_END_DATE" />
+		<result property="mworkerCnt" column="MWORKER_CNT" />
+		<result property="maintainBeginDate" column="MAINTAIN_BEGIN_DATE" />
+		<result property="maintainStatus" column="MAINTAIN_STATUS" />
+		<result property="maintainSpeed" column="MAINTAIN_SPEED" />
+		<result property="faultType" column="FAULT_TYPE" />
+		<result property="maintainPmId" column="MAINTAIN_PM" />
+		<result property="acceptStatus" column="ACCEPT_STATUS" />
+		<result property="acceptecallMan" column="ACCEPTECALL_MAN" />
+		
+		<result property="callbackDate" column="CALLBACK_DATE" />
+		<result property="solution" column="SOLUTION" />
+		<result property="maintainResultdesc" column="MAINTAIN_RESULTDESC" />
+		<result property="maintainRemark" column="MAINTAIN_REMARK" />
+		<result property="userScore" column="USER_SCORE" />
+		<result property="userProposal" column="USER_PROPOSAL" />
+		<result property="lastUpdDate" column="last_UpdDate" />
+		<result property="insUser" column="INS_USER" />
+		<result property="updUser" column="UPD_USER" />
+		<result property="insDate" column="INS_DATE" />
+		<result property="updDate" column="UPD_DATE" />
+		<result property="order" column="ORDER_ID"  select="MS_GET_ORDER_BYID"/>
+		<result property="maintainPmUser" column="MAINTAIN_PM"  select="MS_FIND_USER_BYID"/>
+		<result property="morderPmUser" column="MORDER_PM"  select="MS_FIND_USER_BYID"/>
+		<result property="morderFileList" column="MORDER_ID"  select="MS_FILE_MORDER_FILE_BY_MORDER_ID"/>
+	</resultMap>
 	<select id="MS_GET_MORDER_BYID" parameterClass="PARA_MOREDER" resultMap="RESULT_MOREDER_ONE" >
 	        <![CDATA[
 									        select ORDER_ID,

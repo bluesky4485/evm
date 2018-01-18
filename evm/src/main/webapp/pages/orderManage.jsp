@@ -138,7 +138,7 @@
 			<thead>
 				<tr>
 				    <th data-options="field:'ck',checkbox:true,width:50"></th>
-					<th data-options="field:'projectName',width:100,align:'center'">项目名称</th>
+					<th data-options="field:'projectName',width:100,align:'center',formatter:formatProject">项目名称</th>
 					<th data-options="field:'orderNo',width:150,align:'center'">订单编号 </th>
 					<th data-options="field:'cusName',width:80,align:'center'">客户</th>
 					<th data-options="field:'workAddress',width:260,align:'left'">施工地点</th>

@@ -17,6 +17,10 @@ public class MOrderVO extends AbstractEntity {
 	 */
 	private static final long serialVersionUID = 1L;
 	/**
+	 * 汇聚箱编号 add 2018/01/10
+	 */
+	private String convergeBoxNo;
+	/**
 	 * 订单ID
 	 */
 	private long orderId;
@@ -196,6 +200,14 @@ public class MOrderVO extends AbstractEntity {
 	 * App需要所有故障类型(100302 和 100312 放到这两个接口里增加【维修的故障类】)
 	 */
 	private List<FaultTypeVO> faultTypeVOList;
+
+	public String getConvergeBoxNo() {
+		return convergeBoxNo;
+	}
+
+	public void setConvergeBoxNo(String convergeBoxNo) {
+		this.convergeBoxNo = convergeBoxNo;
+	}
 
 	public List<FaultTypeVO> getFaultTypeVOList() {
 		return faultTypeVOList;

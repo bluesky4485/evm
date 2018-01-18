@@ -169,4 +169,10 @@ public class MOrderDbServiceImpl extends BaseDBService implements IMOrderDbServi
 		return this.update(MS_UPDATE_WORDERCNT, whereCause);
 	}
 
+	@Override
+	public List<MOrderVO> findAllMorderForExport(MOrderVO whereCause) {
+		// TODO Auto-generated method stub
+		return this.find(MS_FIND_MORDER_EXCEL_EXPORT, whereCause);
+	}
+
 }

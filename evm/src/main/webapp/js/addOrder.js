@@ -280,6 +280,8 @@ $(document).ready(function() {
 		para["orderNo"]=$("#orderNo").textbox("getValue");
 		para["projectId"]=$("#projectid").combobox("getValue");
 		para["workPmId"]=$("#projectid").val("getValue");
+		//汇聚箱号
+		para["convergeBoxNo"]=$("#convergeBoxNo").textbox("getValue");
 		//施工负责人
 		para["workPmId"]=$("#workPmId").val();
 		//施工人数

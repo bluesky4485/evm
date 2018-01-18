@@ -204,4 +204,9 @@ function formatOper(val,row,index){
 //	 optStr=optStr+"<a href='javascript:void(0)' onclick=\"editOrder()\" >编辑</a>"
     return optStr;  
 } 
+
+function formatProject(val,row,index){
+	var viewproject="<a href='"+BasePage.urlPre+"/projectController.do?method=gotoUpdatePage&projectId="+row.projectId+"' >"+val+"</a>";
+	return  viewproject;
+}
  

@@ -8,24 +8,24 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<script type="text/javascript" src="./../jquery-easyui-1.5/jquery.min.js"></script>
-<script type="text/javascript" src="./../jquery-easyui-1.5/jquery.easyui.min.js"></script>
-<script type="text/javascript" src="./../jquery-easyui-1.5/locale/easyui-lang-zh_CN.js"></script>
-<link rel="stylesheet" type="text/css" href="./../jquery-easyui-1.5/themes/gray/easyui.css">
-<link rel="stylesheet" type="text/css" href="./../jquery-easyui-1.5/themes/icon.css">
+<script type="text/javascript" src="<%=request.getContextPath()%>/jquery-easyui-1.5/jquery.min.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/jquery-easyui-1.5/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/jquery-easyui-1.5/locale/easyui-lang-zh_CN.js"></script>
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/jquery-easyui-1.5/themes/gray/easyui.css">
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/jquery-easyui-1.5/themes/icon.css">
 <!--自定义文件-->
 <script src="http://webapi.amap.com/maps?v=1.3&key=e4a4a2fd139f9535810830feefddf38f&&plugin=AMap.OverView,AMap.ToolBar"></script>
 
-<link rel="stylesheet" type="text/css" href="./../css/style.css">
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/style.css">
 <script type="text/javascript" src="<%=request.getContextPath()%>/js/common/jquery.showLoading.js"></script>
-<script type="text/javascript" src="./../js/common/BasePage.js"></script>
-<script type="text/javascript" src="./../js/common/BaseMap.js"></script>
-<script type="text/javascript" src="./../js/common/Util.js"></script>
-<script type="text/javascript" src="./../js/util/faultTypeUtil.js"></script>
-<script type="text/javascript" src="./../js/util/orderUtil.js"></script>
-<script type="text/javascript" src="./../js/util/morderUtil.js"></script>
-<script type="text/javascript" src="./../js/util/userUtil.js"></script>
-<script type="text/javascript" src="./../js/addMaintainOrder.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/js/common/BasePage.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/js/common/BaseMap.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/js/common/Util.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/js/util/faultTypeUtil.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/js/util/orderUtil.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/js/util/morderUtil.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/js/util/userUtil.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/js/addMaintainOrder.js"></script>
   <script type="text/javascript" src="<%=request.getContextPath()%>/js/util/BizPageSt.js"></script>
  
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/jquery-easyui-1.5/themes/color.css"/>
@@ -52,7 +52,7 @@
 				<tr>
 				  <td class="redTd_class">
 					 <div  class="td_img_div_class">
-						 <img src="./../images/web_icon_09.png" />
+						 <img src="<%=request.getContextPath()%>/images/web_icon_09.png" />
 					 </div>
 					 <div> 
 						  <div class="td_digit_div_class">
@@ -65,7 +65,7 @@
 				  </td>
 				  <td  class="yellowTd_class"> 
 					   <div  class="td_img_div_class">
-						 <img src="./../images/web_icon_10.png" />
+						 <img src="<%=request.getContextPath()%>/images/web_icon_10.png" />
 					 </div>
 					 <div> 
 						  <div class="td_digit_div_class">
@@ -78,7 +78,7 @@
 				  </td>
 				  <td  class="blueTd_class">
 					   <div  class="td_img_div_class">
-						 <img src="./../images/web_icon_11.png" />
+						 <img src="<%=request.getContextPath()%>/images/web_icon_11.png" />
 					 </div>
 					 <div> 
 						  <div class="td_digit_div_class">
@@ -91,7 +91,7 @@
 				  </td>		   
 				  <td  class="purpleTd_class">
 					 <div  class="td_img_div_class">
-						 <img src="./../images/web_icon_12.png" />
+						 <img src="<%=request.getContextPath()%>/images/web_icon_12.png" />
 					 </div>
 					 <div> 
 						  <div class="td_digit_div_class">
@@ -106,13 +106,13 @@
 			 </table>
 		<div id="toolbar" class="toolbar">
 		        <div id="goHist">
-			          <a href="#" >
+			          <a href="#" title="上一页">
 	                      <img onclick="javascript:history.back();"  src="<%=request.getContextPath()%>/images/web_button_back.png"  onMouseOver="this.src='<%=request.getContextPath()%>/images/web_button_back_on.png'" onMouseOut="this.src='<%=request.getContextPath()%>/images/web_button_back.png'"/>
 	                 </a>
 				 </div>
 			<!--  保存新增 -->
 			<div id="saveMorderBtn">
-				<a href="#"> 
+				<a href="#" title="保存" > 
 				 <img onclick=""  src="<%=request.getContextPath()%>/images/web_button_tj.png"  onMouseOver="this.src='<%=request.getContextPath()%>/images/web_button_tj_on.png'" onMouseOut="this.src='<%=request.getContextPath()%>/images/web_button_tj.png'"/>
 				</a>
 			</div>
@@ -126,6 +126,8 @@
 			         <!-- 客户地址-->
 		             <input type="hidden" id="lat" name="lat"  value="0" /><!--lat -->
 			         <input type="hidden" id="lng" name="lng"  value="0" /><!--lng -->
+			         <!--首页带来得订单ID  -->
+			         <input type="hidden" id="hiden_orderId"   value="<c:out value='${updObj.orderId}'/>" />
 		</div>
 		<div id="orderEdit" style="background-color: #f3f3f3">
 			<table >

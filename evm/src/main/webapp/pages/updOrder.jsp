@@ -238,6 +238,20 @@
                  <table class="input_table">
                  <% UserVO currenUser=(UserVO)session.getAttribute("LOGIN_INFO");%>
                          <tr>
+                           <td>汇聚箱编号</td>
+                           <td colspan="3"><input id="convergeBoxNo"  style=" width:100%;"  type="text" class="easyui-textbox" /></td>
+                            <td rowspan="2"style="width:100px">
+                               <div>施工图纸</div>
+                               <div>
+                               <input type="button" id="archivesCemeteryFile" name="archivesCemeteryFile" class="button-z" value="上传" />
+                               </div>
+                           </td>
+                           <td rowspan="9">
+                                <input type="hidden" id="worKDocIDs"  value="" />
+                                 <div style="padding-top:1px" id=worDocDiv></div>
+                            </td>
+                         </tr>
+                         <tr>
                            <td>施工负责人</td>
                            <td><input id="workManager" type="text"  class="easyui-searchbox"  style="width:100%"  data-options="prompt:'搜索施工负责人',editable:false"  
                                  <% if(currenUser!=null&&!currenUser.hasDispatchWorkPm()){%>
@@ -252,16 +266,8 @@
                                      <%    }%>
                            />
                            </td>
-                           <td rowspan="2"style="width:100px">
-                               <div>施工图纸</div>
-                               <div>
-                               <input type="button" id="archivesCemeteryFile" name="archivesCemeteryFile" class="button-z" value="上传" />
-                               </div>
-                           </td>
-                           <td rowspan="8">
-                                <input type="hidden" id="worKDocIDs"  value="" />
-                                 <div style="padding-top:1px" id=worDocDiv></div>
-                           </td>
+                           <td  rowspan="7"> 
+                           
                          </tr>
                         
                          <tr>
@@ -273,7 +279,6 @@
                          <tr>
                            <td>施工地点</td>
                            <td colspan="3"><input id="workAddress"type="text" class="easyui-textbox" style="width: 300px"/><a id="workCusMap" href="#" class="easyui-linkbutton">地图</a></td>
-                            <td  rowspan="6">                         
                          </tr>
                          <tr>
                            <td>经度</td>

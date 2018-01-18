@@ -15,6 +15,7 @@ public interface IMOrderDbService {
 	final String MS_UPDATE_MORDER = "MS_UPDATE_MORDER";
 	final String MS_DELETE_MORDER = "MS_DELETE_MORDER";
 	final String MS_GET_MORDER_BYID = "MS_GET_MORDER_BYID";
+	final String MS_FIND_MORDER_EXCEL_EXPORT = "MS_FIND_MORDER_EXCEL_EXPORT";
 	// -------APP-----------------------------------------------------------------------------------------------------
 	final String MS_UPDATE_USERPROPOSAL = "MS_UPDATE_USERPROPOSAL";
 	final String MS_UPDATE_MAINTAIN_BEGIN_DATE = "MS_UPDATE_MAINTAIN_BEGIN_DATE";
@@ -156,4 +157,11 @@ public interface IMOrderDbService {
 	 * @return
 	 */
 	int updateMorderWorkerCnt(MOrderVO whereCause);
+	/**
+	 * excel导出的查询
+	 * @param whereCause
+	 * @return
+	 * @version update by x 2018年1月18日
+	 */
+	List<MOrderVO> findAllMorderForExport(MOrderVO whereCause);
 }

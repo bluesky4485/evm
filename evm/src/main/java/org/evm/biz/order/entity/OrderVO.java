@@ -15,6 +15,10 @@ public class OrderVO extends AbstractEntity {
 	 */
 	private static final long serialVersionUID = 1L;
 	/**
+	 * 汇聚箱编号 add 2018/01/10
+	 */
+	private String convergeBoxNo;
+	/**
 	 * 订单ID
 	 */
 	private long orderId;
@@ -196,6 +200,14 @@ public class OrderVO extends AbstractEntity {
 	 * 
 	 */
 	private String completeImgContent;
+
+	public String getConvergeBoxNo() {
+		return convergeBoxNo;
+	}
+
+	public void setConvergeBoxNo(String convergeBoxNo) {
+		this.convergeBoxNo = convergeBoxNo;
+	}
 
 	public String getOrderType() {
 		return orderType;

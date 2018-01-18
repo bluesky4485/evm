@@ -1,15 +1,23 @@
 var OrderUtil={}||OrderUtil;
 (function(){
 	//
-	OrderUtil.BindOrderIdComoboxControl=function(formId,ctrId,callback){
+	OrderUtil.BindOrderIdComoboxControl=function(formId,ctrId,callback,defaultValue){
 		var orderArr = [];
 		BasePage.sendPostRequest(formId,'/orderController.do?method=ajaxFindOrderIdNo',{},function(data){
 			$('#'+ctrId).combobox('loadData',orderArr.concat(data.bizData));
-			 
+			if(defaultValue!=""){
+				$('#'+ctrId).combobox("setValue",defaultValue);
+			}
 			callback;
 		});
 	};
 	OrderUtil.submitValidate=function(){
+		//汇聚箱号
+		var convergeBoxNo=$("#convergeBoxNo").textbox("getValue");
+		if(convergeBoxNo!=""&&convergeBoxNo.length>100){
+			  BasePage.showInfoMessage("您输入的汇聚箱号信息超长！");
+			  return false;
+		}
 		//施工地点
 		var workAddress =$("#workAddress").textbox("getValue");
 		 if(workAddress!=""&&workAddress.length>100){

@@ -7,7 +7,13 @@ $(document).ready(function() {
 	//维修状态
 	BasePage.BindMaintainStatusControl("maintainStatus");
 	//绑定订单
-	OrderUtil.BindOrderIdComoboxControl("addMorderBody","orderId");
+	OrderUtil.BindOrderIdComoboxControl("addMorderBody","orderId",function(){
+		//首页直接调到创建页面
+		var hiddenOrderId=$("#hiden_orderId").val();
+		if(hiddenOrderId!=""){
+			$("#orderId").combobox("setValue",hiddenOrderId);
+		}
+	},$("#hiden_orderId").val());
 	//故障类别
 	FaultTypeUtil.BindFaultTypeComoboxControl("addMorderBody","faultType");
 	BizPageSt.BindQueryAllMOrderStResult(bodyId,"aallNoDoMorderCnt","anoCallBackMorderCnt","adoingMorderCnt","aproblemMorderCnt");

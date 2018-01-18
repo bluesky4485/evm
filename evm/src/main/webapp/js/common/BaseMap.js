@@ -6,37 +6,42 @@ var QmMap = {} || QmMap;
 	QmMap.Cluster;
 	QmMap.placeSearch;
 	QmMap.init = function(containerId) {
-		_Map = new AMap.Map(containerId);
-		//增加地图级别
-		_Map.setZoomAndCenter(11, [ 125.3245,43.886841]);
-		_Map.plugin([ "AMap.ToolBar" ], function() {
-			toolBar = new AMap.ToolBar();
-			_Map.addControl(toolBar);
-		});
-		_Map.plugin([ "AMap.OverView" ], function() {
-			overView = new AMap.OverView();
-			_Map.addControl(overView);
-		});
-		AMap.service([ "AMap.Geocoder" ], function() {
-			QmMap.MGeocoder = new AMap.Geocoder({
-			radius : 1000,
-			extensions : "all"
+		try{
+			_Map = new AMap.Map(containerId);
+			//增加地图级别
+			_Map.setZoomAndCenter(11, [ 125.3245,43.886841]);
+			_Map.plugin([ "AMap.ToolBar" ], function() {
+				toolBar = new AMap.ToolBar();
+				_Map.addControl(toolBar);
 			});
-		});
-		_Map.plugin([ "AMap.MarkerClusterer" ], function() {
-			QmMap.Cluster = new AMap.MarkerClusterer(_Map, []);
-			//设置地图中点标记的最大聚合级别
-			QmMap.Cluster.setMaxZoom(11);
-			//设置单个聚合的最小数量 聚合的最小数量。默认值为2，即小于2个点则不能成为一个聚合
-//			QmMap.Cluster.setMinClusterSize(2);
-		});
-		AMap.service('AMap.PlaceSearch',function(){//回调函数
-	        //实例化PlaceSearch
-			QmMap.placeSearch= new AMap.PlaceSearch();
-	        //TODO: 使用placeSearch对象调用关键字搜索的功能
-	    })
-		QmMap.Map=_Map;
-		return _Map;
+			_Map.plugin([ "AMap.OverView" ], function() {
+				overView = new AMap.OverView();
+				_Map.addControl(overView);
+			});
+			AMap.service([ "AMap.Geocoder" ], function() {
+				QmMap.MGeocoder = new AMap.Geocoder({
+				radius : 1000,
+				extensions : "all"
+				});
+			});
+			_Map.plugin([ "AMap.MarkerClusterer" ], function() {
+				QmMap.Cluster = new AMap.MarkerClusterer(_Map, []);
+				//设置地图中点标记的最大聚合级别
+				QmMap.Cluster.setMaxZoom(11);
+				//设置单个聚合的最小数量 聚合的最小数量。默认值为2，即小于2个点则不能成为一个聚合
+	//			QmMap.Cluster.setMinClusterSize(2);
+			});
+			AMap.service('AMap.PlaceSearch',function(){//回调函数
+		        //实例化PlaceSearch
+				QmMap.placeSearch= new AMap.PlaceSearch();
+		        //TODO: 使用placeSearch对象调用关键字搜索的功能
+		    })
+			QmMap.Map=_Map;
+			return _Map;
+	   }catch(err){
+		   alert("你的机器不能访问公网，导致地图加载失败！请联系网络管理员！");
+		   return  null;
+	   }
 	};
 	QmMap.clearMap = function() {
 		Map.clearMap();

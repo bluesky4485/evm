@@ -238,6 +238,20 @@
               <div title="施工信息" style="padding:10px">
                   <% UserVO currenUser=(UserVO)session.getAttribute("LOGIN_INFO");%>
                  <table class="input_table">
+                          <tr>
+                           <td>汇聚箱编号</td>
+                           <td colspan="3"><input id="convergeBoxNo"  style=" width:100%;"  type="text" class="easyui-textbox" /></td>
+                           <td rowspan="2"style="width:100px">
+                               <div>施工图纸</div>
+                               <div>
+                                    <a id="archivesCemeteryFile" href="javascript:void(0)" class="easyui-linkbutton"  style="width:80px;height: 30px;" >上传图纸</a>
+                               </div>
+                             </td>
+                           <td rowspan="9">
+                                  <input type="hidden" id="worKDocIDs"  value="" />
+                                 <div id=worDocDiv></div>
+                            </td>
+                         </tr>
                          <tr>
                            <td>施工负责人</td>
                            <td><input id="workManager"  type="text" class="easyui-searchbox"    style="width:100%" data-options="editable:false"
@@ -253,16 +267,7 @@
                                      <%    }%>
                              />
                             </td>
-                           <td rowspan="2"style="width:100px">
-                               <div>施工图纸</div>
-                               <div>
-                                    <a id="archivesCemeteryFile" href="javascript:void(0)" class="easyui-linkbutton"  style="width:80px;height: 30px;" >上传图纸</a>
-                               </div>
-                             </td>
-                           <td rowspan="8">
-                                  <input type="hidden" id="worKDocIDs"  value="" />
-                                 <div id=worDocDiv></div>
-                                 </td>
+                           
                          </tr>
                         
                          <tr>
@@ -270,11 +275,12 @@
                            <td><input id="workManageTel1" disabled="disabled"  type="text" class="easyui-textbox" /></td>
                            <td>施工负责人<br/>电话2</td>
                            <td><input id="workManageTel2"  disabled="disabled" type="text" class="easyui-textbox" /></td>
+                            <td  rowspan="7"> 
                          </tr>
                          <tr>
                            <td>施工地点</td>
                            <td colspan="3"><input id="workAddress"type="text" class="easyui-textbox" style="width: 300px"/><a id="workCusMap" href="#" class="easyui-linkbutton">地图</a></td>
-                           <td  rowspan="6">                         
+                                                  
                          </tr>
                          <tr>
                            <td>经度</td>

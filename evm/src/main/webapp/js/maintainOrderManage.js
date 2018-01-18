@@ -32,6 +32,9 @@ $(document).ready(function() {
 	function init(){
 		searchMorder();
 	} 
+	$("#mquery").click(function(){
+		searchMorder();
+	});
 	BizPageSt.BindQueryAllMOrderStResult(bodyId,"allNoDoMorderCnt","noCallBackMorderCnt","doingMorderCnt","problemMorderCnt");
 	function searchMorder(){
 		var para = {};
@@ -43,6 +46,14 @@ $(document).ready(function() {
 		var morderNo= $('#morderNoPara').searchbox("getValue");
 		if(morderNo!=""){
 			para["morderNo"] = morderNo;
+		}
+		var orderNo= $('#orderNo').textbox("getValue");
+		if(orderNo!=""){
+			para["orderNo"] = orderNo;
+		}
+		var convergeBoxNo= $('#convergeBoxNo').textbox("getValue");
+		if(convergeBoxNo!=""){
+			para["convergeBoxNo"] = convergeBoxNo;
 		}
 		var queryStat=$.trim($('#queryStat').val());
 		para["queryStat"] = queryStat;
@@ -101,13 +112,37 @@ $(document).ready(function() {
 		}
 	});
 	 $('#morderNoPara').searchbox({
-		    searcher:function(value,name){
-		    	BasePage.initTablePager("mOrderDg");
-		    	$('#queryStat').val("");
-		    	searchMorder();
-		    },
-		    prompt:'运维订单编号'
-		});
+	    searcher:function(value,name){
+	    	BasePage.initTablePager("mOrderDg");
+	    	$('#queryStat').val("");
+	    	searchMorder();
+	    },
+	    prompt:'运维订单编号'
+	});
+	 $("#exportMorder").click(function(){
+			excelExport();
+	});
+	function excelExport(){
+		var exprotUrl="/morderController.do?method=ajaxExcelExport";
+		var para = {};
+		var morderNo= $('#morderNoPara').searchbox("getValue");
+		if(morderNo!=""){
+			exprotUrl+="&morderNo="+morderNo;
+		}
+		var orderNo= $('#orderNo').textbox("getValue");
+		if(orderNo!=""){
+			exprotUrl+="&orderNo="+orderNo;
+		}
+		var convergeBoxNo= $('#convergeBoxNo').textbox("getValue");
+		if(convergeBoxNo!=""){
+			exprotUrl+="&convergeBoxNo="+convergeBoxNo;
+		}
+		var queryStat=$.trim($('#queryStat').val());
+		if(queryStat!=""){
+			exprotUrl+="&queryStat="+queryStat;
+		}
+		BasePage.FormSubmit("exportForm",exprotUrl,null,null,'form');
+	};
 });
 //操作列
 function formatOper(val,row,index){  
@@ -120,4 +155,12 @@ function formatOper(val,row,index){
 } 
 function dispatcherClick(val,row,index){
 	alert("指派项目经理？");
+}
+function formatProject(val,row,index){
+	var viewproject="<a href='"+BasePage.urlPre+"/projectController.do?method=gotoUpdatePage&projectId="+row.projectId+"' >"+val+"</a>";
+	return  viewproject;
+}
+function formatOrder(val,row,index){
+	var viewproject="<a href='"+BasePage.urlPre+"/orderController.do?method=gotoUpdatePage&orderId="+row.orderId+"' >"+val+"</a>";
+	return  viewproject;
 }

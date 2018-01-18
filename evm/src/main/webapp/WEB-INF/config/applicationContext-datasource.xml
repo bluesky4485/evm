@@ -9,9 +9,9 @@
 		<!-- <property name="driverClass" value="com.mysql.cj.jdbc.Driver" /> -->
 
 		  <property name="jdbcUrl"
-			value="jdbc:mysql://10.44.26.19:3306/evm?serverTimezone=UTC&amp;useUnicode=true&amp;characterEncoding=utf-8&amp;autoReconnect=true&amp;failOverReadOnly=false&amp;useSSL=false" />
+			value="jdbc:mysql://127.0.0.1:3306/evm?serverTimezone=UTC&amp;useUnicode=true&amp;characterEncoding=utf-8&amp;autoReconnect=true&amp;failOverReadOnly=false&amp;useSSL=false" />
 		<property name="user" value="root" />
-		<property name="password" value="Qmgps2008@123" />  
+		<property name="password" value="sa123456" />  
 		 <!--  <property name="jdbcUrl" value="jdbc:mysql://10.44.30.97:3306/evm?serverTimezone=UTC&amp;useUnicode=true&amp;characterEncoding=utf-8&amp;autoReconnect=true&amp;failOverReadOnly=false&amp;useSSL=false" 
 			/> <property name="user" value="root" /> <property name="password" value="123" 
 			/>  --> 

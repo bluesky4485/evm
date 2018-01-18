@@ -224,6 +224,7 @@
 					USER_RATING=#userRating#,
 					USER_APPRAISE=#userAppraise#,
 					WORK_REMARK=#workRemark#,
+					CONVERGEBOX_NO=#convergeBoxNo#,
 					UPD_DATE=sysdate(),
 					UPD_USER=#updUser#
 					where  order_id=#orderId# 
@@ -260,6 +261,7 @@ CHECK_DATE,
 USER_RATING,
 USER_APPRAISE,
 WORK_REMARK,
+CONVERGEBOX_NO,
 UPD_DATE,
 INS_DATE,
 INS_USER,
@@ -292,6 +294,7 @@ if(#checkDate#='' ,null,STR_TO_DATE(#checkDate# ,'%Y-%m-%d')),
 #userRating#,
 #userAppraise#,
 #workRemark#,
+#convergeBoxNo#,
 sysdate(),
 sysdate(),
 #insUser#,
@@ -330,6 +333,7 @@ sysdate(),
 		<result property="userRating" column="USER_RATING" />
 		<result property="userAppraise" column="USER_APPRAISE" />
 		<result property="workRemark" column="WORK_REMARK" />
+		<result property="convergeBoxNo" column="CONVERGEBOX_NO" />
 		
 		<result property="project"  column="PROJECT_ID" select="MS_FIND_PROJECT_BYID" />
 		<result property="workPm"  column="WORK_PM_ID" select="MS_FIND_USER_BYID" />
@@ -347,7 +351,7 @@ sysdate(),
    <select id="MS_GET_ORDER_BYID"  resultMap="RESULT_OREDER_ID"   parameterClass="java.lang.Long">
 		    <![CDATA[
 		        select  ORDER_ID,
-		                  ORDER_NO,
+		                ORDER_NO,
 						PROJECT_ID,
 						WORK_PM_ID,
 						WORK_CNT,
@@ -373,6 +377,7 @@ sysdate(),
 						USER_RATING,
 						USER_APPRAISE,
 						WORK_REMARK,
+						CONVERGEBOX_NO,
 						DATE_FORMAT(UPD_DATE,'%Y-%m-%d %k:%i:%s') UPD_DATE,
                         DATE_FORMAT(INS_DATE,'%Y-%m-%d %k:%i:%s') INS_DATE,
 						INS_USER,
@@ -410,6 +415,7 @@ sysdate(),
 						USER_RATING,
 						USER_APPRAISE,
 						WORK_REMARK,
+						CONVERGEBOX_NO,
 						DATE_FORMAT(UPD_DATE,'%Y-%m-%d %k:%i:%s') UPD_DATE,
                         DATE_FORMAT(INS_DATE,'%Y-%m-%d %k:%i:%s') INS_DATE,
 						INS_USER,
