@@ -24,7 +24,7 @@
 <script type="text/javascript" src="<%=request.getContextPath()%>/js/util/projectUtil.js"></script>
 </head>
 <body id="morderStaticsBody" class="easyui-layout"  > 
-	 <div data-options="region:'north', border:true" style="height: 140px;">
+	 <div data-options="region:'north', border:true" style="height: 200px;">
 	 <table id="top" style="width: 100%; height: 50px; border: #F3F3F3; background-color: #FCFCFC">
 			<tr style="padding-top: 5px">
 				<td align="center"
@@ -43,16 +43,54 @@
 	    <div id="toolbar" class="toolbar">
 				<!-- 导出-->
 			   <div  id="exportMorder">
+			        <a href="#" title="导出">
 			          <img onclick=""  src="<%=request.getContextPath()%>/images/web_button_export.png"  onMouseOver="this.src='<%=request.getContextPath()%>/images/web_button_export_on.png'" onMouseOut="this.src='<%=request.getContextPath()%>/images/web_button_export.png'"/>
+				    </a>
 				</div>
 				<div  id="desc" style="float:left;;background-color:#060192;color:white;font-size:18px;width:180px;height:20px;padding-left:30px;padding-top:10px">维修订单信息统计</div>
 		</div>
 		<div id="para_div" style ="padding-top:8px;padding-left:10px">
 		 	<form id="exportForm" method="post">
-		         		项目名称:<input id="projectid" class="easyui-combobox"  data-options=" panelHeight:'120',valueField:'projectId',textField:'projectName'" style="width:120px;height:28px"/>
-		                维修状态:<input  id="maintainStatus"   class="easyui-combobox" data-options=" panelHeight:'100',valueField:'id',textField:'text'" style="width:120px;height:28px"/>
-		                故障类别:<input id="faultType" type="text" class="easyui-combobox" data-options=" panelHeight:'100',valueField:'faultTypeId',textField:'faultTypeName'" style="width:120px;height:28px"/>
-		                <a id="doSearch" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'" style="width:80px">查询</a>
+		 	  <table>
+		 	     <tr>
+		 	        <td>项目名称</td>
+		 	        <td><input id="projectid"  class="easyui-combobox"  data-options=" panelHeight:'120',valueField:'projectId',textField:'projectName'" style="width:120px;height:28px"/></td>
+		 	        <td>维修状态</td>
+		 	        <td><input  id="maintainStatus"  style="width:120px" class="easyui-combobox" data-options=" panelHeight:'100',valueField:'id',textField:'text'" style="width:120px;height:28px"/></td>
+		 	        <td>派修时间</td>
+		 	        <td><input id="maintainStartDate" type="text" style="width:120px" class="easyui-datebox" data-options="editable:false" />
+		 	            <input id="maintainEndDate" type="text" style="width:120px"class="easyui-datebox" data-options="editable:false" />
+		 	        </td>
+		 	        </tr>
+		 	     <tr>
+		 	        <td>故障类别</td>
+		 	        <td><input id="faultType" type="text" style="width:120px"class="easyui-combobox" data-options=" panelHeight:'100',valueField:'faultTypeId',textField:'faultTypeName'" style="width:120px;height:28px"/></td>
+		 	        <td>验收状态</td>
+		 	        <td><input  id="acceptStatus"   type="text" style="width:120px" class="easyui-combobox" data-options=" panelHeight:'auto',valueField:'id',textField:'text'"/></td>
+		 	        <td>完成时间</td>
+		 	        <td><input id="completeStartDate" type="text" style="width:120px"class="easyui-datebox" data-options="editable:false" />
+		 	            <input id="completeEndDate" type="text" style="width:120px" class="easyui-datebox" data-options="editable:false" />
+		 	        </td>
+		 	       </tr>
+		 	     <tr>
+		 	        <td>维修负责人</td>
+		 	        <td><input id="maintainPmName"   style="width:120px"  type="text" class="easyui-textbox" /></td>
+		 	        <td>客户名称</td>
+		 	        <td><input id="cusName"   style="width:120px"   type="text" class="easyui-textbox" /></td>
+		 	        <td>维修时长</td>
+		 	        <td>
+		 	           <input id="opt" type="text" style="width:120px"class="easyui-combobox" data-options=" panelHeight:'auto',valueField:'id',textField:'text'"/>
+		 	           <input id="maintianDuration"  style="width:120px"  class="easyui-numberbox" value="0" data-options="min:0,max:10000" />
+		 	            <a id="doSearch" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'" style="width:80px">查询</a>
+		 	        </td>
+		 	     </tr>
+		 	     
+		 	  </table>
+		                
+		                
+		                
+		                         
+		               
 		    </form>
 		</div>
 	 </div>

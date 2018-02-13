@@ -126,8 +126,8 @@
 				</div>
 				<!-- 导入-->
 			   <div  id="importMorder">
-			     <a href="#" title="导入">
-					    <img onclick=""  src="<%=request.getContextPath()%>/images/web_button_import.png"  onMouseOver="this.src='<%=request.getContextPath()%>/images/web_button_import_on.png'" onMouseOut="this.src='<%=request.getContextPath()%>/images/web_button_export.png'"/>
+			     <a href="#" title="导入" onclick="importDialog();">
+					    <img onclick=""  src="<%=request.getContextPath()%>/images/web_button_import.png"  onMouseOver="this.src='<%=request.getContextPath()%>/images/web_button_import_on.png'" onMouseOut="this.src='<%=request.getContextPath()%>/images/web_button_import.png'"/>
 				 </a>
 				</div>
 				<div  id="desc" style="float:left;;background-color:#060192;color:white;font-size:18px;width:180px;height:20px;padding-left:30px;padding-top:10px">运维订单管理</div>
@@ -171,5 +171,6 @@
 	   </div>
 	</div>
 	</form>
+	 
 </body>
 </html>

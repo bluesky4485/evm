@@ -171,7 +171,7 @@
 					        JOIN
 					    qr_project pro ON ord.PROJECT_ID = pro.PROJECT_ID and pro.pro_status=0
 					        LEFT JOIN
-					    qr_user pmorderuser ON mord.MAINTAIN_PM = pmorderuser.USER_ID
+					    qr_custom custom ON pro.CUS_ID = custom.CUS_ID
 					        LEFT JOIN
 					    qr_dict_maintainstatus ms ON mord.maintain_status = ms.id
 					        LEFT JOIN
@@ -197,6 +197,53 @@
 		     <isNotEqual property="maintainStatus" compareValue="-1" prepend="and">
 		           <![CDATA[  mord.MAINTAIN_STATUS =#maintainStatus# ]]>
 		    </isNotEqual>
+		    <!--派修时间  -->
+		    <isNotEmpty prepend="and" property="maintainStartDate">
+		           <![CDATA[  mord.MAINTAIN_DATE >=STR_TO_DATE(#maintainStartDate#,'%Y-%m-%d') ]]>
+		    </isNotEmpty>
+		    <isNotEmpty prepend="and" property="maintainEndDate">
+		           <![CDATA[  mord.MAINTAIN_DATE <=STR_TO_DATE(#maintainEndDate#,'%Y-%m-%d') ]]>
+		    </isNotEmpty>
+		    <!--完成时间  -->
+		    <isNotEmpty prepend="and" property="completeStartDate">
+		           <![CDATA[  mord.UPD_DATE >=STR_TO_DATE(#completeStartDate#,'%Y-%m-%d') 
+		                AND   mord.MAINTAIN_SPEED=100
+		           ]]>
+		    </isNotEmpty>
+		    <isNotEmpty prepend="and" property="completeEndDate">
+		           <![CDATA[  mord.UPD_DATE <=STR_TO_DATE(#completeEndDate#,'%Y-%m-%d') 
+		              AND   mord.MAINTAIN_SPEED=100
+		           ]]>
+		    </isNotEmpty>
+		    <!-- 验收状态 -->
+		    <!-- <isNotEqual property="acceptStatus" compareValue="-1" prepend="and">
+		           <![CDATA[  mord.ACCEPT_STATUS =#acceptStatus# ]]>
+		    </isNotEqual> -->
+		    <!-- 维修负责人 -->
+		    <isNotEmpty prepend="and" property="maintainPmName">
+		           <![CDATA[ pmuser.USER_NAME like '%$maintainPmName$%' ]]>
+		    </isNotEmpty>  
+		    <!-- 客户名称 -->
+		    <isNotEmpty prepend="and" property="cusName">
+		           <![CDATA[ custom.CUS_NAME like '%$cusName$%' ]]>
+		    </isNotEmpty>
+		    <!-- 维修时长 -->
+		    <isNotEmpty  property="maintianDuration">
+		        <isNotEqual  property="optType" compareValue="-1"  >
+			         <isEqual prepend="and" property="optType" compareValue="1"  >
+			           <![CDATA[ datediff(mord.UPD_DATE,mord.MAINTAIN_BEGIN_DATE) = #maintianDuration#]]>
+			        </isEqual>
+			        <isEqual prepend="and" property="optType" compareValue="2"  >
+			           <![CDATA[ datediff(mord.UPD_DATE,mord.MAINTAIN_BEGIN_DATE) < #maintianDuration#]]>
+			        </isEqual>
+			        <isEqual prepend="and" property="optType" compareValue="3"  >
+			           <![CDATA[ datediff(mord.UPD_DATE,mord.MAINTAIN_BEGIN_DATE) > #maintianDuration#]]>
+			        </isEqual>
+		           <![CDATA[  
+		              AND   mord.MAINTAIN_SPEED=100
+		           ]]>
+		         </isNotEqual>
+		    </isNotEmpty>
 		</dynamic>
 	</select>
 	
@@ -240,6 +287,8 @@
 		<result property="userRating" column="USER_RATING" />
 		<result property="userAppraise" column="USER_APPRAISE" />
 		<result property="workRemark" column="WORK_REMARK" />
+		
+		<result property="convergeBoxNo" column="CONVERGEBOX_NO" />
 		<result property="insUser" column="INS_USER" />
 		<result property="updUser" column="UPD_USER" />
 		<result property="insDate" column="INS_DATE" />
@@ -281,6 +330,7 @@
 					    ord.USER_RATING,
 					    ord.USER_APPRAISE,
 					    ord.WORK_REMARK,
+					    ord.CONVERGEBOX_NO,
 					    DATE_FORMAT(ord.UPD_DATE, '%Y-%m-%d %k:%i:%s') UPD_DATE,
 					    DATE_FORMAT(ord.INS_DATE, '%Y-%m-%d %k:%i:%s') INS_DATE,
 					    insusr.USER_FULLNAME INS_USER,
@@ -312,8 +362,17 @@
 			 <isNotEqual property="projectId" compareValue="-1" prepend="and">
 		           <![CDATA[  pro.PROJECT_ID =#projectId# ]]>
 		    </isNotEqual>
-		     <isNotEqual property="workStatus" compareValue="-1" prepend="and">
+		    <isNotEqual property="workStatus" compareValue="-1" prepend="and">
 		           <![CDATA[  ord.WORK_STATUS=#workStatus# ]]>
+		    </isNotEqual>
+		    <isNotEmpty prepend="and" property="convergeBoxNo">
+				<![CDATA[  ord.CONVERGEBOX_NO like '%$convergeBoxNo$%']]>
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="orderNo">
+				<![CDATA[  ord.ORDER_NO like '%$orderNo$%']]>
+			</isNotEmpty>
+			<isNotEqual property="workType" compareValue="-1" prepend="and">
+		           <![CDATA[  ord.WORK_TYPE=#workType# ]]>
 		    </isNotEqual>
 		</dynamic>
 	</select>

@@ -339,5 +339,14 @@ public class MOrderController extends AbstractMultiController {
 			util.setValue(i + 1, 26, po.getUpdDate()==null?"":po.getUpdDate());
 		}
 	}
-
+	/**
+	 * 
+	 * @param request
+	 * @param response
+	 * @return
+	 * @version update by xh 2018年2月12日
+	 */
+	public ModelAndView fileUploadPage(HttpServletRequest request, HttpServletResponse response) {
+		return new ModelAndView("fileUpload");
+	}
 }

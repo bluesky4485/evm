@@ -45,15 +45,19 @@
 			 <div id="toolbar" class="toolbar">
 			    <!-- 删除-->
 			    <div  id="delDeviceBtn">
+			       <a href="#" title="删除">
 					    <img onclick=""  src="<%=request.getContextPath()%>/images/web_button_del.png"  onMouseOver="this.src='<%=request.getContextPath()%>/images/web_button_del_on.png'" onMouseOut="this.src='<%=request.getContextPath()%>/images/web_button_del.png'"/>
+				   </a>
 				</div>
 				<!-- 新增-->
 			    <div id="addDeviceBtn">
+			      <a href="#" title="新增">
 						    <img onclick=""  src="<%=request.getContextPath()%>/images/web_button_add.png"  onMouseOver="this.src='<%=request.getContextPath()%>/images/web_button_add_on.png'" onMouseOut="this.src='<%=request.getContextPath()%>/images/web_button_add.png'"/> 
+				 </a>
 				</div>
 				<!-- 修改-->
 			   <div  id="updDeviceItemBtn">
-					 <a id="updDeviceHref" href="#">
+					 <a id="updDeviceHref" href="#" title="修改">
 					     	 <img onclick=""  src="<%=request.getContextPath()%>/images/web_button_edit.png"  onMouseOver="this.src='<%=request.getContextPath()%>/images/web_button_edit_on.png'" onMouseOut="this.src='<%=request.getContextPath()%>/images/web_button_edit.png'"/>
 					 </a>  
 				</div>

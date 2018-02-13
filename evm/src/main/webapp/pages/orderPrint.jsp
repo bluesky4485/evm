@@ -19,9 +19,13 @@
 <script type="text/javascript" src="<%=request.getContextPath()%>/js/common/BasePage.js"></script>
 <script type="text/javascript" src="<%=request.getContextPath()%>/js/common/Util.js"></script>
 <script type="text/javascript" src="<%=request.getContextPath()%>/js/common/logout.js"></script> 
-<script type="text/javascript" src="<%=request.getContextPath()%>/js/orderStatics.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/js/orderPrint.js"></script>
 <script type="text/javascript" src="<%=request.getContextPath()%>/js/util/faultTypeUtil.js"></script>
 <script type="text/javascript" src="<%=request.getContextPath()%>/js/util/projectUtil.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/jscript/qrcode.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/js/common/jquery.jqprint-0.3.js"></script>
+<%-- <script type="text/javascript" src="<%=request.getContextPath()%>/js/common/jquery.PrintArea.js"></script> --%>
+<script type="text/javascript" src="<%=request.getContextPath()%>/js/common/jquery-migrate-1.2.1.min.js"></script>
 </head>
 <body id="orderStaticsBody" class="easyui-layout"  > 
 	 <div data-options="region:'north', border:true" style="height: 140px;">
@@ -41,19 +45,32 @@
 			</tr>
 		</table>
 	    <div id="toolbar" class="toolbar">
-				<!-- 导出-->
-			   <div  id="exportOrder">
-			       <a href="#" title="导出">
-			            <img onclick=""  src="<%=request.getContextPath()%>/images/web_button_export.png"  onMouseOver="this.src='<%=request.getContextPath()%>/images/web_button_export_on.png'" onMouseOut="this.src='<%=request.getContextPath()%>/images/web_button_export.png'"/>
-				   </a>
-				</div>
-				<div  id="desc" style="float:left;;background-color:#060192;color:white;font-size:18px;width:180px;height:20px;padding-left:30px;padding-top:10px">订单信息统计</div>
+			<!-- 导出-->
+			<div id="exportOrder">
+				<a href="#" title="导出"> <img onclick=""
+					src="<%=request.getContextPath()%>/images/web_button_export.png"
+					onMouseOver="this.src='<%=request.getContextPath()%>/images/web_button_export_on.png'"
+					onMouseOut="this.src='<%=request.getContextPath()%>/images/web_button_export.png'" />
+				</a>
+			</div>
+			<!-- 打印 -->
+			<div id="printOrderBtn">
+				<a href="#" title="打印"> <img onclick=""
+					src="<%=request.getContextPath()%>/images/web_button_print.png"
+					onMouseOver="this.src='<%=request.getContextPath()%>/images/web_button_print_on.png'"
+					onMouseOut="this.src='<%=request.getContextPath()%>/images/web_button_print.png'" />
+				</a>
+			</div>
+			<div  id="desc" style="float:left;;background-color:#060192;color:white;font-size:18px;width:180px;height:20px;padding-left:30px;padding-top:10px">订单打印</div>
 		</div>
 		<div id="para_div" style ="padding-top:8px;padding-left:10px">
 		 	<form id="exportForm" method="post">
-		         		项目名称:<input id="projectid" class="easyui-combobox"  data-options=" panelHeight:'120',valueField:'projectId',textField:'projectName'" style="width:120px;height:28px"/>
-		                施工状态:<input  id="workStatus"   class="easyui-combobox" data-options=" panelHeight:'100',valueField:'id',textField:'text'" style="width:120px;height:28px"/>
-		                <a id="doSearch" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'" style="width:80px">查询</a>
+         		项目名称:<input id="projectid" class="easyui-combobox"  data-options=" panelHeight:'120',valueField:'projectId',textField:'projectName'" style="width:120px;height:28px"/>
+                                  订单编号<input id="oNo"  type="text"   class="easyui-textbox"  style="height:30px;width:150px;" />
+                                  汇聚箱编号：<input id="convergeBoxNo"  type="text"   class="easyui-textbox"  style="height:30px;width:150px;" />                  
+                                  施工类型：<input id="workType"  type="text"  class="easyui-combobox"  data-options=" panelHeight:'auto',valueField:'id',textField:'text',editable:false"style="width:120px;height:28px"/>                  
+                                  施工状态:<input  id="workStatus"   class="easyui-combobox" data-options=" panelHeight:'100',valueField:'id',textField:'text'" style="width:120px;height:28px"/>
+                <a id="doSearch" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'" style="width:80px">查询</a>
 		    </form>
 		</div>
 	 </div>
@@ -69,6 +86,10 @@
 					<th data-options="field:'orderNo',width:100,align:'center',sortable:true">订单编号</th>
 					<th data-options="field:'convergeBoxNo',width:100,align:'center',sortable:true">汇聚箱编号</th>
 					
+					
+					<th data-options="field:'workStatus',width:100,align:'center' ,hidden:true"> 施工状态</th>
+					<th data-options="field:'workStatusDesc',width:100,align:'center' ,sortable:true"> 施工状态</th>
+					
 					<th data-options="field:'workPmId',width:100,align:'center' ,hidden:true">施工负责人ID</th>
 					<th data-options="field:'workPmName',width:100,align:'center',sortable:true">施工负责人</th>
 					
@@ -78,8 +99,7 @@
 					<th data-options="field:'workCompany',width:100,align:'center',sortable:true">施工单位</th>
 					<th data-options="field:'workCompanyQualified',width:100,align:'center' ,sortable:true"> 单位资质情况</th>
 					
-					<th data-options="field:'workType',width:100,align:'center',hidden:true">施工类型</th>
-					<th data-options="field:'workTypeDesc',width:100,align:'center' ,sortable:true">施工类型</th>
+					
 					
 					<th data-options="field:'workDays',width:100,align:'center' ,sortable:true"> 施工天数</th>
 					<th data-options="field:'planBeginDate',width:100,align:'center' ,sortable:true">计划施工时间</th>
@@ -89,8 +109,7 @@
 					<th data-options="field:'storePmName',width:100,align:'center' ,sortable:true">出库联系人</th>
 					
 					<th data-options="field:'planOutstoreDate',width:100,align:'center' ,sortable:true"> 计划出库时间</th>
-					<th data-options="field:'workStatus',width:100,align:'center' ,hidden:true"> 施工状态</th>
-					<th data-options="field:'workStatusDesc',width:100,align:'center' ,sortable:true"> 施工状态</th>
+					
 					
 					<th data-options="field:'workBeginDate',width:100,align:'center' ,sortable:true">实际施工时间</th>
 					<th data-options="field:'workEndDate',width:100,align:'center',sortable:true">实际施工完成时间</th>
@@ -118,6 +137,14 @@
 			</thead>
 		   </table>
 	   </div>
-	</div>
+	   </div>
+	   <!--批量打印的订单  -->
+			<div id="batch_print_hidden">
+		    <table>
+		       <tr>
+		          
+		       </tr>
+		    </table> 
+		</div>
 </body>
 </html>

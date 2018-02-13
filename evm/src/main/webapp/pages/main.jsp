@@ -80,6 +80,7 @@ function signout(){
 							<li><a href="./pages/faultTypeMange.jsp"  target="center_iframe">故障类型表</a></li>
 							<li><a href="./pages/deviceMange.jsp"  target="center_iframe">设备属性表</a></li>
 							<li><a href="./pages/deviceMangeNew.jsp"  target="center_iframe">设备信息管理</a></li>
+							<li><a href="./pages/orderPrint.jsp"  target="center_iframe">订单打印</a></li>
 						</ul> 
 					 
 					</li>
@@ -93,7 +94,7 @@ function signout(){
 	<div data-options="region:'center'">
 		 
 		<iframe id="center_iframe" name="center_iframe" height='600px'
-			width='1024px' src='pages/index.jsp' width="100%" frameborder='0'
+			width='1024px' src='pages/orderPrint.jsp' width="100%" frameborder='0'
 			marginheight='0' marginwidth='0' scrolling='no'> </iframe>
           <form id="logOutForm" action="<%=request.getContextPath()%>/loginController.do?method=signOut" method="post">
 		         <input name='userName' type="hidden" value='${LOGIN_INFO.uname}' />

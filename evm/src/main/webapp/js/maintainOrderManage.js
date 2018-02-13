@@ -119,7 +119,8 @@ $(document).ready(function() {
 	    },
 	    prompt:'运维订单编号'
 	});
-	 $("#exportMorder").click(function(){
+	 //导出
+	$("#exportMorder").click(function(){
 			excelExport();
 	});
 	function excelExport(){
@@ -143,6 +144,15 @@ $(document).ready(function() {
 		}
 		BasePage.FormSubmit("exportForm",exprotUrl,null,null,'form');
 	};
+	//导入
+	$("#importMorder").click(function(){
+		importMorder();
+    });
+	
+	function importMorder(){
+//		exportDialog
+//		var fileName= $('#uploadExcel').filebox('getValue');
+	}
 });
 //操作列
 function formatOper(val,row,index){  
@@ -164,3 +174,19 @@ function formatOrder(val,row,index){
 	var viewproject="<a href='"+BasePage.urlPre+"/orderController.do?method=gotoUpdatePage&orderId="+row.orderId+"' >"+val+"</a>";
 	return  viewproject;
 }
+importDialog = function(options) {
+    var opts = $.extend({
+        title: '导入Excel',
+        width: 400,
+        height: 180,
+        modal: true,
+        onClose: function() {
+            $(this).dialog('destroy');
+        }
+    }, options);
+    opts.modal = true;
+    opts.content = '<iframe id="exportFrame" src="'
+            
+            + '"/orderController.do?method=fileUploadPage" allowTransparency="true" scrolling="auto" width="100%" height="98%" frameBorder="0" name=""></iframe>';
+    return $('<div id="exportDialog"/>').dialog(opts);
+};

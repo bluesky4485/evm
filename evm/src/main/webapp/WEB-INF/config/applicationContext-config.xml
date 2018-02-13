@@ -9,12 +9,12 @@
 			<value>classpath:evm.properties</value>
 		</property>
 	</bean>
-	<bean id="gmampconf_sys" class="org.evm.biz.sys.SystemConfig">
+	<bean id="sysconfig" class="org.evm.biz.sys.SystemConfig">
 		<property name="serverName" value="${serverName}"></property>
 		<property name="loginPage" value="${loginPage}"></property>
 		<property name="mainPage" value="${mainPage}"></property>
 		<property name="systemId" value="${systemId}"></property>
-		
+
 		<property name="dbName" value="${backUpdbName}"></property>
 		<property name="dbIp" value="${dbIp}"></property>
 		<property name="dbPort" value="${dbPort}"></property>

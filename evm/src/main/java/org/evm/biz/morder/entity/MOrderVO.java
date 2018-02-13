@@ -200,6 +200,49 @@ public class MOrderVO extends AbstractEntity {
 	 * App需要所有故障类型(100302 和 100312 放到这两个接口里增加【维修的故障类】)
 	 */
 	private List<FaultTypeVO> faultTypeVOList;
+	/**
+	 * 统计过滤条件：派休开始时间
+	 */
+	private String maintainStartDate;
+	/**
+	 * 统计过滤条件：派休结束时间
+	 */
+	private String maintainEndDate;
+	/**
+	 * 统计过滤条件：完成开始时间
+	 */
+	private String completeStartDate;
+	/**
+	 * 统计过滤条件：完成结束时间
+	 */
+	private String completeEndDate;
+	/**
+	 * 统计过滤条件：维修时长
+	 */
+	private String maintianDuration;
+	/**
+	 * 统计过滤条件：>=
+	 */
+	private String optType;
+	
+	
+	
+
+	public String getOptType() {
+		return optType;
+	}
+
+	public void setOptType(String optType) {
+		this.optType = optType;
+	}
+
+	public String getMaintianDuration() {
+		return maintianDuration;
+	}
+
+	public void setMaintianDuration(String maintianDuration) {
+		this.maintianDuration = maintianDuration;
+	}
 
 	public String getConvergeBoxNo() {
 		return convergeBoxNo;
@@ -579,6 +622,38 @@ public class MOrderVO extends AbstractEntity {
 
 	public void setFileStrs(String fileStrs) {
 		this.fileStrs = fileStrs;
+	}
+
+	public String getMaintainStartDate() {
+		return maintainStartDate;
+	}
+
+	public void setMaintainStartDate(String maintainStartDate) {
+		this.maintainStartDate = maintainStartDate;
+	}
+
+	public String getMaintainEndDate() {
+		return maintainEndDate;
+	}
+
+	public void setMaintainEndDate(String maintainEndDate) {
+		this.maintainEndDate = maintainEndDate;
+	}
+
+	public String getCompleteStartDate() {
+		return completeStartDate;
+	}
+
+	public void setCompleteStartDate(String completeStartDate) {
+		this.completeStartDate = completeStartDate;
+	}
+
+	public String getCompleteEndDate() {
+		return completeEndDate;
+	}
+
+	public void setCompleteEndDate(String completeEndDate) {
+		this.completeEndDate = completeEndDate;
 	}
 
 	@Override

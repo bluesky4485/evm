@@ -37,6 +37,39 @@ $(document).ready(function() {
 		para["projectId"]=projectid;
 		para["maintainStatus"]=maintainStatus;
 		para["faultType"]=faultType;
+		var maintainStartDate=$("#maintainStartDate").datebox("getValue");
+		var maintainEndDate=$("#maintainEndDate").datebox("getValue");
+		
+		if((maintainStartDate!=""&&maintainEndDate!="")||(maintainStartDate==""&&maintainEndDate=="")){
+			para["maintainStartDate"]=maintainStartDate;
+			para["maintainEndDate"]=maintainEndDate;
+		}else{
+			alert("派修时间需要输入完整的时间范围！");
+		}
+		
+		var completeStartDate=$("#completeStartDate").datebox("getValue");
+		var completeEndDate=$("#completeEndDate").datebox("getValue");
+		
+		if((completeStartDate!=""&&completeEndDate!="")||(completeStartDate==""&&completeEndDate=="")){
+			para["completeStartDate"]=completeStartDate;
+			para["completeEndDate"]=completeEndDate;
+		}else{
+			alert("完成时间需要输入完整的时间范围！");
+		}
+		var acceptStatus=$("#acceptStatus").combobox("getValue");
+		if(acceptStatus==""){
+			acceptStatus=-1;
+		} 
+		para["acceptStatus"]=acceptStatus;
+		var maintainPmName=$("#maintainPmName").textbox("getValue");
+		para["maintainPmName"]=maintainPmName;
+		var cusName=$("#cusName").textbox("getValue");
+		para["cusName"]=cusName;
+		var opt=$("#opt").combobox("getValue");
+		para["optType"]=opt;
+		var maintianDuration=$("#maintianDuration").numberbox("getValue");
+		para["maintianDuration"]=maintianDuration;
+		
 		BasePage.sendPostRequest(bodyId,queryUrl,para,function(data){	
 			if(data== null){
 				BasePage.showInfoMessage(BasePage.noSearchData);
@@ -69,4 +102,9 @@ $(document).ready(function() {
 		exprotUrl+="&projectId="+projectid+"&maintainStatus="+maintainStatus+"&faultType="+faultType;
 		BasePage.FormSubmit("exportForm",exprotUrl,null,null,'form');
 	};
+	//绑定操作符
+	BasePage.BindOptTypeControl("opt");
+	//验收状态
+	BasePage.BindAccepStatusControl("acceptStatus");
+	
 });

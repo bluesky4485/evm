@@ -43,8 +43,9 @@
 	    <div id="toolbar" class="toolbar">
 				<!-- 导出-->
 			   <div  id="exportMorder">
+			        <a href="#" title="导出">
 					                <img onclick=""  src="<%=request.getContextPath()%>/images/web_button_export.png"  onMouseOver="this.src='<%=request.getContextPath()%>/images/web_button_export_on.png'" onMouseOut="this.src='<%=request.getContextPath()%>/images/web_button_export.png'"/>
-		
+		</a>
 				</div>
 				<div  id="desc" style="float:left;;background-color:#060192;color:white;font-size:18px;width:180px;height:20px;padding-left:30px;padding-top:10px">设备信息统计</div>
 		</div>

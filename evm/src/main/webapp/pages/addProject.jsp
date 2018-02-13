@@ -118,7 +118,7 @@
 			<div  id="desc" style="float:left;;background-color:#060192;color:white;font-size:18px;width:180px;height:20px;padding-left:30px;padding-top:10px">创建项目</div>
 		</div>
 		<div id="hidden_div">
-			        <input type="hidden" id="cusId" name="cusId" />
+			         <input type="hidden" id="cusId" name="cusId" />
 			         <input type="hidden" id="pmId" name="pmId" />
 			         <input type="hidden" id="cmId" name="cmId" />
 			</div>

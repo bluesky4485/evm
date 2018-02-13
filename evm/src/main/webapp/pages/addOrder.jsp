@@ -126,7 +126,7 @@
 				</a>
 			</div>
 			<div id="printOrderBtn">
-			  <a href="#"> 
+			  <a href="#" title="打印"> 
 				 <img  onclick=""  src="<%=request.getContextPath()%>/images/web_button_print.png"  onMouseOver="this.src='<%=request.getContextPath()%>/images/web_button_print_on.png'" onMouseOut="this.src='<%=request.getContextPath()%>/images/web_button_print.png'"/>
 				</a>
 			</div>

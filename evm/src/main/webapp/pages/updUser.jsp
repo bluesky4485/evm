@@ -40,7 +40,7 @@
 		<div id="toolbar" class="toolbar">
 		<!-- 返回 -->
 		      <div  id="goHist">
-			          <a href="#" >
+			          <a href="#" title="返回">
 	                      <img onclick="javascript:history.back();"  src="<%=request.getContextPath()%>/images/web_button_back.png"  onMouseOver="this.src='<%=request.getContextPath()%>/images/web_button_back_on.png'" onMouseOut="this.src='<%=request.getContextPath()%>/images/web_button_back.png'"/>
 	                 </a>
 		      </div>

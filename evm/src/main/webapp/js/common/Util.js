@@ -195,6 +195,11 @@ BasePage.ProjectStat=[{id:1,text:"维护期内",selected:true},{id:2,text:"维�
 BasePage.BindProjectStatControl=function(ctrId){
 	$('#'+ctrId).combobox('loadData',BasePage.ProjectStat);
 };
+//操作符>=<
+BasePage.OptType=[{id:'-1',text:"全部",selected:true},{id:'1',text:"等于"},{id:'2',text:"小于"},{id:'3',text:"大于"}];
+BasePage.BindOptTypeControl=function(ctrId){
+	$('#'+ctrId).combobox('loadData',BasePage.OptType);
+};
 //校验身份证号
 BasePage.ValidateIdCard=function(card)  
 {  

@@ -161,7 +161,8 @@
 			</tr>
 			<tr>
 				<td>客户电话2</td>
-				<td><input id="ctel2"  disabled="disabled"  type="text" class="easyui-textbox" /></td>
+				<td>
+</td>
 				<td>预约时间</td>
 				<td><input id="appointmentDate" type="text" class="easyui-datebox" data-options="editable:false" /></td>
 			    
