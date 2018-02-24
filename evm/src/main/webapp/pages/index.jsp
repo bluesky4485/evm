@@ -124,9 +124,9 @@
 		   </tr>
 		   <tr>
 		     <td>
-		        <img onclick="indexPage.pan(1)" style="width:20px;height:20px" src="<%=request.getContextPath()%>/images/order_success.png"/>已完成订单:<span id="successOrder">0</span>
-		        <img onclick="indexPage.pan(2)" style="width:20px;height:20px" src="<%=request.getContextPath()%>/images/order_working.png"/>安装中订单:<span id="workingOrder">0</span>
-		        <img onclick="indexPage.pan(3)" style="width:20px;height:20px" src="<%=request.getContextPath()%>/images/order_maintian.png"/>维修中订单:<span id="maintianOrder">0</span>
+		        <a href="#" title="已完成"><img onclick="indexPage.pan(1)" style="width:20px;height:20px" src="<%=request.getContextPath()%>/images/order_success.png"/></a>已完成订单:<span id="successOrder">0</span>
+		        <a href="#" title="安装中"><img onclick="indexPage.pan(2)" style="width:20px;height:20px" src="<%=request.getContextPath()%>/images/order_working.png"/></a>安装中订单:<span id="workingOrder">0</span>
+		        <a href="#" title="维修中"><img onclick="indexPage.pan(3)" style="width:20px;height:20px" src="<%=request.getContextPath()%>/images/order_maintian.png"/></a>维修中订单:<span id="maintianOrder">0</span>
 		     </td>
 		   </tr>
 		   </table>

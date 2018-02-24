@@ -94,7 +94,7 @@ function signout(){
 	<div data-options="region:'center'">
 		 
 		<iframe id="center_iframe" name="center_iframe" height='600px'
-			width='1024px' src='pages/orderPrint.jsp' width="100%" frameborder='0'
+			width='1024px' src='pages/index.jsp' width="100%" frameborder='0'
 			marginheight='0' marginwidth='0' scrolling='no'> </iframe>
           <form id="logOutForm" action="<%=request.getContextPath()%>/loginController.do?method=signOut" method="post">
 		         <input name='userName' type="hidden" value='${LOGIN_INFO.uname}' />

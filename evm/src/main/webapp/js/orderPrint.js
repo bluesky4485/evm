@@ -67,7 +67,7 @@ $(document).ready(function() {
 		 if(workStatus==""){
 			 workStatus=-1;
 		 } 
-		exprotUrl+="&projectId="+projectid+"&workStatus="+workStatus+"&workType"+workType;
+		exprotUrl+="&projectId="+projectid+"&workStatus="+workStatus+"&workType="+workType;
 		if(convergeBoxNo!=""){
 			exprotUrl+="&convergeBoxNo"+convergeBoxNo;
 		}
