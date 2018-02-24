@@ -69,10 +69,10 @@ $(document).ready(function() {
 		 } 
 		exprotUrl+="&projectId="+projectid+"&workStatus="+workStatus+"&workType="+workType;
 		if(convergeBoxNo!=""){
-			exprotUrl+="&convergeBoxNo"+convergeBoxNo;
+			exprotUrl+="&convergeBoxNo="+convergeBoxNo;
 		}
 		if(orderNo!=""){
-			exprotUrl+="&orderNo"+orderNo;
+			exprotUrl+="&orderNo="+orderNo;
 		}
 		BasePage.FormSubmit("exportForm",exprotUrl,null,null,'form');
 	};

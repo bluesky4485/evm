@@ -371,9 +371,11 @@
 			<isNotEmpty prepend="and" property="orderNo">
 				<![CDATA[  ord.ORDER_NO like '%$orderNo$%']]>
 			</isNotEmpty>
-			<isNotEqual property="workType" compareValue="-1" prepend="and">
-		           <![CDATA[  ord.WORK_TYPE=#workType# ]]>
-		    </isNotEqual>
+			<isNotEmpty   property="workType">
+				<isNotEqual property="workType" compareValue="-1" prepend="and">
+			           <![CDATA[  ord.WORK_TYPE=#workType# ]]>
+			    </isNotEqual>
+			</isNotEmpty>
 		</dynamic>
 	</select>
 	<resultMap id="RESULT_DEVICEITEM_ST" class="org.evm.biz.order.entity.DeviceItemVO">
