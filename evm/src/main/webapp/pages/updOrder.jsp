@@ -21,7 +21,8 @@
 <script type="text/javascript" src="<%=request.getContextPath()%>/js/common/Util.js"></script>
 <script type="text/javascript" src="<%=request.getContextPath()%>/js/updOrder.js"></script>
 <script src="http://webapi.amap.com/maps?v=1.3&key=e4a4a2fd139f9535810830feefddf38f&&plugin=AMap.OverView,AMap.ToolBar"></script>
-<script type="text/javascript" src="<%=request.getContextPath()%>/jscript/qrcode.js"></script>
+<%-- <script type="text/javascript" src="<%=request.getContextPath()%>/jscript/qrcode.js"></script> --%>
+<script type="text/javascript" src="<%=request.getContextPath()%>/jscript/jquery.qrcode.min.js"></script>
  <script type="text/javascript" src="<%=request.getContextPath()%>/js/util/orderDeviceUtil.js"></script>
  <script type="text/javascript" src="<%=request.getContextPath()%>/js/util/orderUtil.js"></script>
  <script type="text/javascript" src="<%=request.getContextPath()%>/jscript/uploadify/jquery.uploadify.min.js"></script>
@@ -587,7 +588,9 @@
 		style="width: 500px; height: 500px;">
 		<div   id="mapContainer"style="width: 100%; height: 100%"></div>
 	</div>
-       <form id="gotoManageForm" action="<%=request.getContextPath()%>/orderController.do?method=returnManagePage"  id="isform" method="post">
-		</form>
+    <form id="gotoManageForm" action="<%=request.getContextPath()%>/orderController.do?method=returnManagePage"  id="isform" method="post">
+    </form>
+	<div id="print_hidden" style='width:70mm;height:50mm;'>
+	</div>
 </body>
 </html>

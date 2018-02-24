@@ -25,7 +25,7 @@
 <script type="text/javascript" src="<%=request.getContextPath()%>/js/util/BizPageSt.js"></script>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/jquery-easyui-1.5/themes/color.css"/>
 <script type="text/javascript" src="<%=request.getContextPath()%>/js/common/logout.js"></script>
-<script type="text/javascript" src="<%=request.getContextPath()%>/jscript/qrcode.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/jscript/jquery.qrcode.min.js"></script>
 <script type="text/javascript" src="<%=request.getContextPath()%>/js/common/jquery.jqprint-0.3.js"></script>
 <%-- <script type="text/javascript" src="<%=request.getContextPath()%>/js/common/jquery.PrintArea.js"></script> --%>
 <script type="text/javascript" src="<%=request.getContextPath()%>/js/common/jquery-migrate-1.2.1.min.js"></script>

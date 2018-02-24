@@ -178,9 +178,19 @@ $(document).ready(function() {
 	   }
 	   for(var i=1;i<=cnt;i++){
 		   var orderNo=orderPre+i;
-		   $("#batch_print_hidden").append("<div style='width:70mm;height:50mm' id='"+orderNo+"'></div>")
-		   createEvm(orderNo ,orderNo,150,150);
-		   
+		   var content="<div style='width:70mm;height:50mm;' id='div_"+orderNo+"'>";
+		   content+="<div  style='width:60mm;height:40mm;' id='"+orderNo+"'></div>";
+		   content+="<div ><span>订单编号:"+orderNo+"</span></div>";
+		   content+="</div>";
+		   $("#batch_print_hidden").append(content);
+		   var qrcode = $('#'+orderNo).qrcode({  
+			    text: orderNo,  
+			    width: 150,  
+			    height: 150  
+			}).hide(); 
+		   var canvas = $("#"+orderNo+" canvas");
+		   var img = canvas[0].toDataURL("image/png");
+		   $('#div_'+orderNo).html("<img style='width:150px;height:150px' src='" + img + "'/><div ><span>订单编号:"+orderNo+"</span></div><div ><span>箱号:</span></div>");
 	   }
 	   $("#batch_print_hidden").jqprint({debug: true,operaSupport: true});
      });

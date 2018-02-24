@@ -440,16 +440,44 @@ $(document).ready(function() {
     if (userDgPage) {
     	BasePage.pagerServerFilter(userDgPage,searchUserList);
     }
-    createEvm("qrcode",$("#orderNo").textbox("getValue"),150,150);
+    evm_init();
+    function evm_init(){
+    	var orderNo=$("#orderNo").textbox("getValue");
+    	 $('#qrcode').qrcode({  
+			    text: orderNo,  
+			    width: 150,  
+			    height: 150  
+		 }); 
+      }
+     
     //生成evm
     $("#goHist").click(function(){
 		$("#gotoManageForm").submit();
 	});
     //打印
+    function createPrintEvm(){
+    	var orderNo=$("#orderNo").textbox("getValue");
+		var content="<div style='width:70mm;height:50mm;' id='div_"+orderNo+"'>";
+		   content+="<div  id='"+orderNo+"'></div>";
+		   content+="</div>";
+	   $("#print_hidden").append(content);
+	   var qrcode = $('#'+orderNo).qrcode({  
+		    text: orderNo,  
+		    width: 150,  
+		    height: 150  
+		}).hide(); 
+	   var canvas = $("#"+orderNo+" canvas");
+	   var img = canvas[0].toDataURL("image/png");
+	   var convergeBoxNo=$("#convergeBoxNo").textbox("getValue");
+	   if(convergeBoxNo==undefined){
+		   convergeBoxNo="";
+	   }
+	   $('#div_'+orderNo).html("<img style='width:150px;height:150px' src='" + img + "'/><div ><span>订单编号:"+orderNo+"</span></div><div ><span>箱号:"+convergeBoxNo+"</span></div>");
+
+    };
 	$("#printOrderBtn").click(function(){  
-		//window.open('', '_self');
-        $("#qrcode").jqprint({});
-       //	$("#qrcode").printArea();
+		createPrintEvm();
+        $("#print_hidden").jqprint({debug:false,operaSupport:true});
      });
 });
  

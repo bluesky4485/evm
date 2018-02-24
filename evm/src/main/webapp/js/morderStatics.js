@@ -13,12 +13,18 @@ $(document).ready(function() {
 	var arr = [{'id':'-1','text':'全部',selected:true}];
 	$('#maintainStatus').combobox('loadData',arr.concat(BasePage.MaintainStatus));
     $("#maintainStatus").combobox("setValue",-1);
+    //验收状态	
+    var _arr = [{'id':'-1','text':'全部',selected:true}];
+    var _a=_arr.concat(BasePage.AcceptStatus);
+    $('#acceptStatus').combobox('loadData',_a);
+    $("#acceptStatus").combobox("setValue",-1);
 	//故障类别
 	FaultTypeUtil.BindFaultTypeComoboxControl(bodyId,"faultType",function(data){
 		var arr = [{'faultTypeId':'-1','faultTypeName':'全部',selected:true}];
 		$('#faultType').combobox('loadData',arr.concat(data.bizData));
         $("#faultType").combobox("setValue",-1);
 	});
+	 
 	searchMorderSt();
 	function searchMorderSt(){
 		var para = {};
@@ -45,6 +51,7 @@ $(document).ready(function() {
 			para["maintainEndDate"]=maintainEndDate;
 		}else{
 			alert("派修时间需要输入完整的时间范围！");
+			return;
 		}
 		
 		var completeStartDate=$("#completeStartDate").datebox("getValue");
@@ -99,12 +106,33 @@ $(document).ready(function() {
 		 if(maintainStatus==""){
 			 maintainStatus=-1;
 		 } 
+		
+			
+		 
 		exprotUrl+="&projectId="+projectid+"&maintainStatus="+maintainStatus+"&faultType="+faultType;
+		var acceptStatus=$("#acceptStatus").combobox("getValue");
+		exprotUrl+="&acceptStatus="+acceptStatus;
+		var maintainStartDate=$("#maintainStartDate").datebox("getValue");
+		var maintainEndDate=$("#maintainEndDate").datebox("getValue");
+		if((maintainStartDate!=""&&maintainEndDate!="")||(maintainStartDate==""&&maintainEndDate=="")){
+			exprotUrl+="&maintainStartDate="+maintainStartDate;
+			exprotUrl+="&maintainEndDate="+maintainEndDate;
+		}else{
+			alert("派修时间需要输入完整的时间范围！");
+			return;
+		}
+		var maintainPmName=$("#maintainPmName").textbox("getValue");
+		exprotUrl+="&maintainPmName="+maintainPmName;
+		var cusName=$("#cusName").textbox("getValue");
+		exprotUrl+="&cusName="+cusName;
+		var opt=$("#opt").combobox("getValue");
+		exprotUrl+="&optType="+opt;
+		var maintianDuration=$("#maintianDuration").numberbox("getValue");
+		exprotUrl+="&maintianDuration="+maintianDuration;
 		BasePage.FormSubmit("exportForm",exprotUrl,null,null,'form');
 	};
 	//绑定操作符
 	BasePage.BindOptTypeControl("opt");
-	//验收状态
-	BasePage.BindAccepStatusControl("acceptStatus");
+	 
 	
 });

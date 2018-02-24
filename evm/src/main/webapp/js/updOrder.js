@@ -114,7 +114,12 @@ $(document).ready(function() {
 		orderworkFile.loadCtrl();
 		//更新时间
 		$("#hidden_updDate").val(orderObj["updDate"]);
-		createEvm("qrcode",orderObj["orderNo"],150,150);
+//		createEvm("qrcode",orderObj["orderNo"],150,150);
+		$('#qrcode').qrcode({  
+		    text: orderObj["orderNo"],  
+		    width: 150,  
+		    height: 150  
+	 }); 
 		var updObj=orderObj.project;
 		//项目名称
 		$("#projectName").textbox("setValue", updObj["projectName"]);
@@ -566,10 +571,37 @@ $(document).ready(function() {
 		$("#gotoManageForm").submit();
      });
   //打印
-	$("#printOrderBtn").click(function(){  
-		//window.open('', '_self');
-        $("#qrcode").jqprint({}); 
-       //	$("#qrcode").printArea();
+   
+    function evm_init(){
+    	var orderNo=$("#orderNo").textbox("getValue");
+		var content="<span>订单编号:"+orderNo+"</span>";
+		content="<span>订单编号:"+orderNo+"</span>";
+    	$("#print_evm").append(content);
+    	createEvm("pre_evm",orderNo,120,120);
+    }
+    function createPrintEvm(){
+    	var orderNo=$("#orderNo").textbox("getValue");
+		var content="<div style='width:70mm;height:50mm;' id='div_"+orderNo+"'>";
+		   content+="<div  id='"+orderNo+"'></div>";
+		   content+="</div>";
+	   $("#print_hidden").append(content);
+	   var qrcode = $('#'+orderNo).qrcode({  
+		    text: orderNo,  
+		    width: 150,  
+		    height: 150  
+		}).hide(); 
+	   var canvas = $("#"+orderNo+" canvas");
+	   var img = canvas[0].toDataURL("image/png");
+	   var convergeBoxNo=$("#convergeBoxNo").textbox("getValue");
+	   if(convergeBoxNo==undefined){
+		   convergeBoxNo="";
+	   }
+	   $('#div_'+orderNo).html("<img style='width:150px;height:150px' src='" + img + "'/><div ><span>订单编号:"+orderNo+"</span></div><div ><span>箱号:"+convergeBoxNo+"</span></div>");
+
+    };
+	$("#printOrderBtn").click(function(){ 
+		createPrintEvm();
+		 $("#print_hidden").jqprint({});
      });
 });
   

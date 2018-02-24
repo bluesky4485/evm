@@ -43,6 +43,7 @@ $(document).ready(function() {
 				BasePage.showInfoMessage(BasePage.noSearchData);
 			}else{
 				$("#"+dgid).datagrid('loadData', data.bizData);
+				//createEVMImg();
 			}
 		});
 	};
@@ -50,7 +51,6 @@ $(document).ready(function() {
 		searchOrderSt();
 	});
 	$("#exportOrder").click(function(){
-		debugger;
 		excelExport();
 	});
 	function excelExport(){
@@ -76,18 +76,33 @@ $(document).ready(function() {
 		}
 		BasePage.FormSubmit("exportForm",exprotUrl,null,null,'form');
 	};
+	function createEVMImg(){
+		$("#batch_print_hidden").empty();
+		var data =$("#orderStDg").datagrid("getRows");
+		for(var i=0;i<data.length;i++){
+		   var orderNo=data[i].orderNo;
+		   var convergeBoxNo=data[i].convergeBoxNo;
+		   if(convergeBoxNo==undefined){
+			   convergeBoxNo="";
+		   }
+		   var content="<div style='width:70mm;height:50mm;' id='div_"+orderNo+"'>";
+			   content+="<div  id='"+orderNo+"'></div>";
+			   content+="</div>";
+		   $("#batch_print_hidden").append(content);
+//		   createEvm(orderNo,orderNo,120,120);
+		   var qrcode = $('#'+orderNo).qrcode({  
+			    text: orderNo,  
+			    width: 150,  
+			    height: 150  
+			}).hide(); 
+		   var canvas = $("#"+orderNo+" canvas");
+		   var img = canvas[0].toDataURL("image/png");
+		   $('#div_'+orderNo).html("<img style='width:150px;height:150px' src='" + img + "'/><div ><span>订单编号:"+orderNo+"</span></div><div ><span>箱号:"+convergeBoxNo+"</span></div>");
+	   }
+	}
 	//打印
 	$("#printOrderBtn").click(function(){
-		$("#batch_print_hidden").empty();
-		var date =$("#orderStDg").datagrid("getRows");
-		for(var i=0;i<date.length;i++){
-		   var orderNo=date[i].orderNo;
-		   var convergeBoxNo=date[i].convergeBoxNo;
-		   var content="<div style='width:70mm;height:50mm' id='"+orderNo+"'></div>";
-		   /*content+="订单编号:"+orderNO+"箱号:"+convergeBoxNo;   */
-		   $("#batch_print_hidden").append(content);
-		   createEvm(orderNo ,orderNo,150,150);
-	   }
-		$("#batch_print_hidden").jqprint({debug: true,operaSupport: true});
+		createEVMImg();
+		$("#batch_print_hidden").jqprint({debug:false,operaSupport:true});
      });
 });

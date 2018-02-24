@@ -173,7 +173,7 @@
 				</div>
 				<!-- 模板下载web_button_templeteDown.png -->
 				<div id="importMorder">
-					<a href="#" title="下载导入模板" > <img
+					<a href="<%=request.getContextPath()%>/import-template.xlsx" title="下载导入模板" > <img
 						onclick=""
 						src="<%=request.getContextPath()%>/images/web_button_templeteDown.png"
 						onMouseOver="this.src='<%=request.getContextPath()%>/images/web_button_templeteDown_on.png'"

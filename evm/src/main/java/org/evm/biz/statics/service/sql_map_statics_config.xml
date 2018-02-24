@@ -216,9 +216,9 @@
 		           ]]>
 		    </isNotEmpty>
 		    <!-- 验收状态 -->
-		    <!-- <isNotEqual property="acceptStatus" compareValue="-1" prepend="and">
+		     <isNotEqual property="acceptStatus" compareValue="-1" prepend="and">
 		           <![CDATA[  mord.ACCEPT_STATUS =#acceptStatus# ]]>
-		    </isNotEqual> -->
+		    </isNotEqual> 
 		    <!-- 维修负责人 -->
 		    <isNotEmpty prepend="and" property="maintainPmName">
 		           <![CDATA[ pmuser.USER_NAME like '%$maintainPmName$%' ]]>
@@ -228,7 +228,7 @@
 		           <![CDATA[ custom.CUS_NAME like '%$cusName$%' ]]>
 		    </isNotEmpty>
 		    <!-- 维修时长 -->
-		    <isNotEmpty  property="maintianDuration">
+		    <isNotEqual  property="maintianDuration" compareValue="0">
 		        <isNotEqual  property="optType" compareValue="-1"  >
 			         <isEqual prepend="and" property="optType" compareValue="1"  >
 			           <![CDATA[ datediff(mord.UPD_DATE,mord.MAINTAIN_BEGIN_DATE) = #maintianDuration#]]>
@@ -243,7 +243,7 @@
 		              AND   mord.MAINTAIN_SPEED=100
 		           ]]>
 		         </isNotEqual>
-		    </isNotEmpty>
+		    </isNotEqual>
 		</dynamic>
 	</select>
 	

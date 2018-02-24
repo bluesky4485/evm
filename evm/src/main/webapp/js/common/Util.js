@@ -117,8 +117,9 @@ BasePage.WorkStatusformater=function(val){
 };
 //验收状态accept
 BasePage.AcceptStatus=[{id:"0",text:"未回访",selected:true},{id:"1",text:"已修好"},{id:"2",text:"未修好"}];
-BasePage.BindAccepStatusControl=function(ctrId){
+BasePage.BindAccepStatusControl=function(ctrId,callback){
 	$('#'+ctrId).combobox('loadData',BasePage.AcceptStatus);
+	callback;
 };
 BasePage.WorkAcceptStatusformater=function(val){
 	for(var i=0;i<BasePage.AcceptStatus.length;i++){
@@ -258,9 +259,17 @@ function createEvm(divId,content,_width,_height){
         qrcode.clear();
     }
     // 创建二维码
-    qrcode = new QRCode(divId, {
+    /*qrcode = new QRCode(divId, {
         width : _width,//设置宽高
         height : _height
-    });
-    qrcode.makeCode(content);
+    });*/
+    qrcode = $('#'+divId).qrcode({  
+	    text: content,  
+	    width: 150,  
+	    height: 150  
+	})
+	var canvas = $("#"+divId+" canvas");
+	var img = canvas[0].toDataURL("image/png");
+	$('#div_'+divId).html("<img style='width:150px;height:150px' src='" + img + "'/>");
+//    qrcode.makeCode(content);
 }

@@ -22,7 +22,7 @@
 <script type="text/javascript" src="<%=request.getContextPath()%>/js/orderPrint.js"></script>
 <script type="text/javascript" src="<%=request.getContextPath()%>/js/util/faultTypeUtil.js"></script>
 <script type="text/javascript" src="<%=request.getContextPath()%>/js/util/projectUtil.js"></script>
-<script type="text/javascript" src="<%=request.getContextPath()%>/jscript/qrcode.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/jscript/jquery.qrcode.min.js"></script>
 <script type="text/javascript" src="<%=request.getContextPath()%>/js/common/jquery.jqprint-0.3.js"></script>
 <%-- <script type="text/javascript" src="<%=request.getContextPath()%>/js/common/jquery.PrintArea.js"></script> --%>
 <script type="text/javascript" src="<%=request.getContextPath()%>/js/common/jquery-migrate-1.2.1.min.js"></script>
@@ -138,12 +138,13 @@
 		   </table>
 	   </div>
 	   <!-- test -->
-	    <div id="batch_print_hidden">
-		      
-		</div>
+	       
 		 <!-- test -->
 	   </div>
 	   <!--批量打印的订单  -->
+	    <div id="batch_print_hidden">
+		      
+		</div> 
 		<!--批量打印的订单  -->	 
 </body>
 </html>

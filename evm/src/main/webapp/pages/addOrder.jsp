@@ -28,7 +28,8 @@
 <script type="text/javascript" src="<%=request.getContextPath()%>/jscript/uploadify/jquery.uploadify.min.js"></script>
 <script type="text/javascript" src="<%=request.getContextPath()%>/jscript/uploadify/upload_order_file.js"></script>
 <script type="text/javascript" src="<%=request.getContextPath()%>/jscript/uploadify/upload_order_completefile.js"></script>
-<script type="text/javascript" src="<%=request.getContextPath()%>/jscript/qrcode.js"></script>
+<%-- <script type="text/javascript" src="<%=request.getContextPath()%>/jscript/qrcode.js"></script> --%>
+<script type="text/javascript" src="<%=request.getContextPath()%>/jscript/jquery.qrcode.min.js"></script>
 <script type="text/javascript" src="<%=request.getContextPath()%>/js/util/orderDeviceUtil.js"></script>
 <script type="text/javascript" src="<%=request.getContextPath()%>/js/util/orderUtil.js"></script>
  <script type="text/javascript" src="<%=request.getContextPath()%>/js/util/BizPageSt.js"></script>
@@ -590,6 +591,7 @@
 		<div   id="mapContainer"style="width: 100%; height: 100%"></div>
 	</div>
 	<form id="gotoManageForm" action="<%=request.getContextPath()%>/orderController.do?method=returnManagePage"  id="isform" method="post">
-		</form>
+	</form>
+	<div id="print_hidden" > </div>
 </body>
 </html>

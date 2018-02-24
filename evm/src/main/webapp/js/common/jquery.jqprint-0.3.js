@@ -19,22 +19,22 @@
 
         var $element = (this instanceof jQuery) ? this : $(this);
         
-     //   if (opt.operaSupport && $.browser.opera) 
-      //  { 
-       //     var tab = window.open("","jqPrint-preview");
-       //     tab.document.open();
+        if (opt.operaSupport && $.browser.opera) 
+        { 
+            var tab = window.open("","jqPrint-preview");
+            tab.document.open();
 
-      //      var doc = tab.document;
-      //  }
-      //  else 
-      //  {
+            var doc = tab.document;
+        }
+        else 
+        {
             var $iframe = $("<iframe  />");
         
             if (!opt.debug) { $iframe.css({ position: "absolute", width: "0px", height: "0px", left: "-600px", top: "-600px" }); }
 
             $iframe.appendTo("body");
             var doc = $iframe[0].contentWindow.document;
-       // }
+        }
         
         if (opt.importCSS)
         {
@@ -57,9 +57,8 @@
         
         doc.close();
         
-        //(opt.operaSupport && $.browser.opera ? tab : $iframe[0].contentWindow).focus();
-       $iframe[0].contentWindow.focus();
-        setTimeout( function() { $iframe[0].contentWindow.print(); }, 1000);
+        (opt.operaSupport && $.browser.opera ? tab : $iframe[0].contentWindow).focus();
+        setTimeout( function() { (opt.operaSupport && $.browser.opera ? tab : $iframe[0].contentWindow).print(); if (tab) { tab.close(); } }, 1000);
     }
     
     $.fn.jqprint.defaults = {
