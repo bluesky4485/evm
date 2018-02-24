@@ -142,9 +142,9 @@
 		<div id="projectEdit" style="background-color: #f3f3f3">
 			<table >
 			  <tr>
-			     <td style="padding-left:20px">项目编号<span class="redStar">*</span></td>
-			     <td><input id="projectid" class="easyui-combobox"  data-options=" panelHeight:'120',valueField:'projectId',textField:'projectNo'" style="width:200px;height:42px"/></td>
-			     <td>项目名称<span class="redStar">*</span></td>
+			     <td style="padding-left:20px">项目名称<span class="redStar">*</span></td>
+			     <td><input id="projectid" class="easyui-combobox"  data-options=" panelHeight:'120',valueField:'projectId',textField:'projectName'" style="width:200px;height:42px"/></td>
+			     <td>项目编号<span class="redStar">*</span></td>
 			     <td><input id="projectName" class="easyui-textbox"  disabled="disabled"   style="width:200px;height:42px"/></td>
 			     <td><div style="float:left;padding-left:30px">录入员： <%=session.getAttribute("LOGIN_NAME") %> </div>
 			         <div style="float:left;padding-left:30px">创建日期：<span id="currentDate"></span></div></td>

@@ -12,7 +12,7 @@ $(document).ready(function() {
 	BasePage.BindUserTypeControl("utype");
 	//项目编号 
 	ProjectUtil.BindProjectList(bodyId,"projectid",{},function(data){
-            $("#projectName").textbox("setValue",data["projectName"]);
+            $("#projectName").textbox("setValue",data["projectNo"]);
 	});
 	//施工内检结果 
 	BasePage.bindWorkCheckResult("checkResult");
@@ -156,7 +156,7 @@ $(document).ready(function() {
 	//选择项目后，回调
 	function queryProject_Callback(updObj){
 		// 项目名称
-		$("#projectName").textbox("setValue", updObj["projectName"]);
+		$("#projectName").textbox("setValue", updObj["projectNo"]);
 		if(updObj.pmUser!=null){
 			//项目经理ID
 			$("#pmId").val(updObj["pmId"]);

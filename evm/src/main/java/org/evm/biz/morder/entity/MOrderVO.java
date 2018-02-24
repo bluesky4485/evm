@@ -17,6 +17,14 @@ public class MOrderVO extends AbstractEntity {
 	 */
 	private static final long serialVersionUID = 1L;
 	/**
+	 * 导入时的批量数据
+	 */
+	private String excelImportString;
+	/**
+	 * 设备唯一ID  add 2018/02/20
+	 */
+	private String deviceItemUid;
+	/**
 	 * 汇聚箱编号 add 2018/01/10
 	 */
 	private String convergeBoxNo;
@@ -242,6 +250,14 @@ public class MOrderVO extends AbstractEntity {
 
 	public void setMaintianDuration(String maintianDuration) {
 		this.maintianDuration = maintianDuration;
+	}
+
+	public String getDeviceItemUid() {
+		return deviceItemUid;
+	}
+
+	public void setDeviceItemUid(String deviceItemUid) {
+		this.deviceItemUid = deviceItemUid;
 	}
 
 	public String getConvergeBoxNo() {
@@ -654,6 +670,14 @@ public class MOrderVO extends AbstractEntity {
 
 	public void setCompleteEndDate(String completeEndDate) {
 		this.completeEndDate = completeEndDate;
+	}
+
+	public String getExcelImportString() {
+		return excelImportString;
+	}
+
+	public void setExcelImportString(String excelImportString) {
+		this.excelImportString = excelImportString;
 	}
 
 	@Override

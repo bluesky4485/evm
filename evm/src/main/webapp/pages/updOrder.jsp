@@ -141,10 +141,10 @@
 		<div id="projectEdit" style="background-color: #f3f3f3">
 			<table >
 			  <tr>
+			    <td>项目名称<span class="redStar">*</span></td>
+			     <td><input id="projectName" disabled="disabled" class="easyui-textbox"  style="width:200px;height:42px"></td>
 			     <td style="padding-left:20px">项目编号<span class="redStar">*</span></td>
 			     <td><input id="projectid" disabled="disabled" class="easyui-textbox"  style="width:200px;height:42px"  ></td>
-			     <td>项目名称<span class="redStar">*</span></td>
-			     <td><input id="projectName" disabled="disabled" class="easyui-textbox"  style="width:200px;height:42px"></td>
 			     <td><div style="float:left;padding-left:30px">录入员：<%=session.getAttribute("LOGIN_NAME") %> </div>
 			         <div style="float:left;padding-left:30px">创建日期：<span id="currentDate"></span></div></td>
 			  </tr>

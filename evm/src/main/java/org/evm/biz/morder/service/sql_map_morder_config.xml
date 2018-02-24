@@ -352,7 +352,41 @@
 			
 			</dynamic>
 	</select>
-	
+	<resultMap id="RESULT_MOREDER_IMPORT" class="org.evm.biz.morder.entity.MOrderVO">
+		<result property="orderId" column="ORDER_ID" />
+		<result property="orderNo" column="ORDER_NO" />
+		<result property="convergeBoxNo" column="CONVERGEBOX_NO" />
+		<result property="deviceItemUid" column="DEVICEITEM_UID" /> 
+		<result property="morderId" column="MORDER_ID" /> 
+		<result property="morderNo" column="MORDER_NO" /> 
+		<result property="maintainStatus" column="MAINTAIN_STATUS" /> 
+	</resultMap>
+	<!-- 导入数据预览 -->
+	<select id="MS_FIND_MORDER_EXCEL_IMPORT" resultMap="RESULT_MOREDER_IMPORT"  parameterClass="java.util.List">
+		<![CDATA[
+		 SELECT
+			ord.order_id ORDER_ID,
+			ord.ORDER_NO ORDER_NO,
+			device.deviceitem_uid DEVICEITEM_UID,
+			ord.convergeBox_No CONVERGEBOX_NO,
+			ifnull(mord.MORDER_ID, 0) MORDER_ID,
+			mord.MORDER_NO MORDER_NO,
+			mord.MAINTAIN_STATUS MAINTAIN_STATUS
+		FROM
+			(SELECT order_id, deviceitem_uid
+				FROM qr_deviceitem item
+				WHERE item.deviceitem_status=0
+				AND	deviceitem_uid IN]]>
+		<iterate open="(" close=")" conjunction=",">    
+            #list[].convergeBoxNo#    
+        </iterate> 
+		 <![CDATA[
+			) device
+		LEFT JOIN qr_order ord ON device.order_id = ord.order_id and ord.order_status=0
+		LEFT JOIN qr_morder mord ON ord.ORDER_ID = mord.ORDER_ID and mord.MORDER_STATUS=0 
+	    ORDER BY ord.order_id desc ,mord.MORDER_ID desc
+		 ]]>
+	</select>
 	<!-- 信息录入 -->
 	<insert id="MS_INSERT_MORDER"  parameterClass="PARA_MOREDER">
 	   <![CDATA[
@@ -600,4 +634,5 @@
 						  and  UPD_DATE=STR_TO_DATE(#updDate#,'%Y-%m-%d %H:%i:%s')
 	    ]]>
 	</update>
+	
 </sqlMap>

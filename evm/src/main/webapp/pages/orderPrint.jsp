@@ -137,14 +137,13 @@
 			</thead>
 		   </table>
 	   </div>
+	   <!-- test -->
+	    <div id="batch_print_hidden">
+		      
+		</div>
+		 <!-- test -->
 	   </div>
 	   <!--批量打印的订单  -->
-			<div id="batch_print_hidden">
-		    <table>
-		       <tr>
-		          
-		       </tr>
-		    </table> 
-		</div>
+		<!--批量打印的订单  -->	 
 </body>
 </html>

@@ -23,6 +23,7 @@
 	$("#doSearch").click(function(){
 		QmMap.Map.clearMap();
 		QmMap.Cluster.clearMarkers(); // 清除聚合点
+		indexPage.markers=[];
 		var projectid=$("#projectid").combobox("getValue");
 		var orderNo=$.trim($("#orderNo").textbox("getValue"));
 		var deviceItemPara=$.trim($("#deviceItemPara").textbox("getValue"));
@@ -66,8 +67,12 @@
 			//alert("项目【"+ $("#projectid").combobox("getText")+"】未创建订单！");
 			return;
 		}
+		indexPage.orderData=data;
 		var arr=[];
 		for(var i=0;i<data.length;i++){
+			if(data[i].lng==0||data[i].lat==0){
+				 continue;
+			 }
 			var orderMarker=createOrderMarker(data[i]);
 			if(orderMarker!=undefined){
 				arr.push(orderMarker);
@@ -319,6 +324,8 @@
  });
  var indexPage={}||indexPage;
  (function() {
+	 //查询的订单数据
+	 indexPage.orderData={};
 	 indexPage.AllProject=[];
 	 indexPage.defaultProjectId=0;
 	 //操作按钮
@@ -382,6 +389,30 @@
 		 }
 		 return comboData;
 	 }
+	 indexPage.pan=function(_type){
+		 for(var i=0;i<indexPage.orderData.length;i++){
+			 var order=indexPage.orderData[i];
+			 if(order.lng==0||order.lat==0){
+				 continue;
+			 }
+			 var orderLocation = new AMap.LngLat(order.lng, order.lat);
+			 if(_type=="1"&&order.workStatus==4){
+				 QmMap.Map.panTo(orderLocation);
+				 return;
+			 }
+			//安装中的
+	    	if(_type=="2"&&order.workStatus!=4&&order.morderCnt==0){
+	    		 QmMap.Map.panTo(orderLocation);
+				 return;
+	    	}
+	    	//故障维修中的
+	    	if(_type=="3"&&order.workStatus!=4&&order.morderCnt!=0){
+	    		 QmMap.Map.panTo(orderLocation);
+				 return;
+	    	}
+		 }
+	 };
+	  
  })();
- 
+  
  

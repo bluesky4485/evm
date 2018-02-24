@@ -169,10 +169,20 @@ public class MOrderDbServiceImpl extends BaseDBService implements IMOrderDbServi
 		return this.update(MS_UPDATE_WORDERCNT, whereCause);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<MOrderVO> findAllMorderForExport(MOrderVO whereCause) {
 		// TODO Auto-generated method stub
 		return this.find(MS_FIND_MORDER_EXCEL_EXPORT, whereCause);
 	}
-
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<MOrderVO> findAllMorderForImport(List<MOrderVO> whereCause){
+		return super.find(MS_FIND_MORDER_EXCEL_IMPORT, whereCause);
+	}
+	@Override
+	@SystemServiceLog(description = "excel导入创建维修订单信息", bizTypeId = BizOptType.add, functionId = FunctionMap.WEB_ADD)
+	public long batchInsertMOrder(List<MOrderVO> whereCause) {
+		return super.batchInsert(MS_INSERT_MORDER, whereCause);
+	}
 }

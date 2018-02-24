@@ -63,7 +63,7 @@ public class UploadHelper {
 		Collection<MultipartFile> collection = files.values();
 		for (Iterator<MultipartFile> iterator = collection.iterator(); iterator.hasNext();) {
 			MultipartFile multipartFile = (MultipartFile) iterator.next();
-			if (validateFile(multipartFile, maxLength, allowExtName)) {
+			if (maxLength==-1||validateFile(multipartFile, maxLength, allowExtName)) {
 				logger.debug("upload multipart files :" + multipartFile.getOriginalFilename() + ","
 						+ multipartFile.getSize());
 				list.add(multipartFile);

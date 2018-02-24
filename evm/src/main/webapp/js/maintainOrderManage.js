@@ -146,13 +146,39 @@ $(document).ready(function() {
 	};
 	//导入
 	$("#importMorder").click(function(){
-		importMorder();
+		$("#fileLoad_window").window("open");
     });
 	
 	function importMorder(){
-//		exportDialog
-//		var fileName= $('#uploadExcel').filebox('getValue');
+        
 	}
+	$("#preViewWindow_OK").click(function(){
+		//TODO:数据导入
+		var para={};
+		var data=$("#dataPreViewDg").datagrid("getSelections");
+		var array=[];
+		for(var i=0;i<data.length;i++){
+			array.push({"orderId":data[i].orderId,"deviceItemUid":data[i].deviceItemUid});
+		}
+		
+		
+		para["excelImportString"]=JSON.stringify(array);
+		BasePage.sendPostRequest(bodyId,'/morderController.do?method=ajaxBatchInsertMorder',para,function(data){
+			if(data.messageType=="error"){
+				BasePage.showInfoMessage(data.message);
+				return;
+			}else{
+				$("#dataPreviewWindow").window("close");
+				alert("保存成功！");
+				searchMorder();
+			}
+		});
+		
+	});
+	$("#preViewWindow_cancel").click(function(){
+		//TODO:关闭
+		$("#dataPreviewWindow").window("close");
+	});
 });
 //操作列
 function formatOper(val,row,index){  
@@ -174,19 +200,4 @@ function formatOrder(val,row,index){
 	var viewproject="<a href='"+BasePage.urlPre+"/orderController.do?method=gotoUpdatePage&orderId="+row.orderId+"' >"+val+"</a>";
 	return  viewproject;
 }
-importDialog = function(options) {
-    var opts = $.extend({
-        title: '导入Excel',
-        width: 400,
-        height: 180,
-        modal: true,
-        onClose: function() {
-            $(this).dialog('destroy');
-        }
-    }, options);
-    opts.modal = true;
-    opts.content = '<iframe id="exportFrame" src="'
-            
-            + '"/orderController.do?method=fileUploadPage" allowTransparency="true" scrolling="auto" width="100%" height="98%" frameBorder="0" name=""></iframe>';
-    return $('<div id="exportDialog"/>').dialog(opts);
-};
+ 

@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.evm.biz.morder.entity.MOrderFileVO;
 import org.evm.biz.morder.entity.MOrderVO;
 import org.evm.biz.morder.service.IMOrderDbService;
+import org.evm.biz.order.common.OrderNoBuilder;
 import org.evm.core.consts.MessageType;
 import org.evm.core.entity.PageResult;
 import org.evm.core.exception.SmartFunctionException;
@@ -20,6 +21,8 @@ import org.evm.core.util.UploadHelper;
 import org.evm.core.web.AbstractMultiController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.alibaba.fastjson.JSON;
 
 public class MOrderController extends AbstractMultiController {
 	IMOrderDbService morderDbService;
@@ -198,6 +201,7 @@ public class MOrderController extends AbstractMultiController {
 		mv.addObject("updObj", whereCause);
 		return mv;
 	}
+
 	/**
 	 * 
 	 * @param request
@@ -213,6 +217,7 @@ public class MOrderController extends AbstractMultiController {
 		mv.addObject("updObj", whereCause);
 		return mv;
 	}
+
 	/**
 	 * 上传文件最大10m
 	 * 
@@ -253,7 +258,7 @@ public class MOrderController extends AbstractMultiController {
 		// Long id = ServletRequestUtils.getLongParameter(request, "id",0);
 		try {
 			logger.debug("调试下载文件功能：download void");
-			
+
 			String filePath = request.getParameter("filePath");
 			String fileName = request.getParameter("fileName");
 			String fileSize = request.getParameter("fileSize");
@@ -289,56 +294,59 @@ public class MOrderController extends AbstractMultiController {
 	public String getFileServerPath(String morderId) {
 		return getServletContext().getRealPath("/") + IMOrderDbService.morderFileDic + "//" + morderId + "//";
 	}
+
 	@Override
 	protected void doExcelWrite(ExcelUtil util, HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		String exportMethod = request.getParameter("exportMethod");
 		ajaxExcelExport(util, request);
 	}
+
 	public void ajaxExcelExport(ExcelUtil util, HttpServletRequest request) throws Exception {
 		MOrderVO whereCause = new MOrderVO();
 		bindObject(request, whereCause);
 		List<MOrderVO> pageResult = morderDbService.findAllMorderForExport(whereCause);
 
-		String[] header = new String[] { "项目编号", "项目名称", "订单编号", "维修订单编号", "运维经理", "派修时间", "故障描述","预约时间", "计划完成时间", "维修人数", "维修开始日期",
-				"维修状态", "维修进度", "故障类别", "维修负责人", "验收状态", "验收回访人", "解决方案", "维修结果描述", "备注", "用户评分","用户评价", "最后一次进度更新时间",
-				"创建人", "创建日期", "修改人", "修改日期" };
+		String[] header = new String[] { "项目编号", "项目名称", "订单编号", "维修订单编号", "运维经理", "派修时间", "故障描述", "预约时间", "计划完成时间",
+				"维修人数", "维修开始日期", "维修状态", "维修进度", "故障类别", "维修负责人", "验收状态", "验收回访人", "解决方案", "维修结果描述", "备注", "用户评分",
+				"用户评价", "最后一次进度更新时间", "创建人", "创建日期", "修改人", "修改日期" };
 		util.createHeader(header);
 		for (int i = 0; i < pageResult.size(); i++) {
 			MOrderVO po = pageResult.get(i);
-			util.setValue(i + 1, 0, po.getProjectNo()==null?"": po.getProjectNo());
-			util.setValue(i + 1, 1, po.getProjectName()==null?"":po.getProjectName());
-			util.setValue(i + 1, 2, po.getOrderNo()==null?"":po.getOrderNo());
-			util.setValue(i + 1, 3, po.getMorderNo()==null?"":po.getMorderNo());
-			util.setValue(i + 1, 4, po.getPmName()==null?"":po.getPmName());
+			util.setValue(i + 1, 0, po.getProjectNo() == null ? "" : po.getProjectNo());
+			util.setValue(i + 1, 1, po.getProjectName() == null ? "" : po.getProjectName());
+			util.setValue(i + 1, 2, po.getOrderNo() == null ? "" : po.getOrderNo());
+			util.setValue(i + 1, 3, po.getMorderNo() == null ? "" : po.getMorderNo());
+			util.setValue(i + 1, 4, po.getPmName() == null ? "" : po.getPmName());
 			//
-			util.setValue(i + 1, 5, po.getMaintainDate()==null?"":po.getMaintainDate());
-			util.setValue(i + 1, 6, po.getFaultDesc()==null?"":po.getFaultDesc());
+			util.setValue(i + 1, 5, po.getMaintainDate() == null ? "" : po.getMaintainDate());
+			util.setValue(i + 1, 6, po.getFaultDesc() == null ? "" : po.getFaultDesc());
 			//
-			util.setValue(i + 1, 7, po.getAppointmentDate()==null?"":po.getAppointmentDate());
-			util.setValue(i + 1, 8, po.getPlanEndDate()==null?"":po.getPlanEndDate());
-			util.setValue(i + 1, 9, po.getMworkerCnt()==null?"":po.getMworkerCnt());
-			util.setValue(i + 1, 10, po.getMaintainBeginDate()==null?"":po.getMaintainBeginDate());
-			util.setValue(i + 1, 11, po.getMaintainStatusDesc()==null?"":po.getMaintainStatusDesc());
-			util.setValue(i + 1, 12, po.getMaintainSpeed()==null?"":po.getMaintainSpeed());
-			util.setValue(i + 1, 13, po.getFaultTypeDesc()==null?"":po.getFaultTypeDesc());
-			util.setValue(i + 1, 14, po.getMaintainPmName()==null?"":po.getMaintainPmName());
-			
-			util.setValue(i + 1, 15, po.getAcceptStatusDesc()==null?"":po.getAcceptStatusDesc());
+			util.setValue(i + 1, 7, po.getAppointmentDate() == null ? "" : po.getAppointmentDate());
+			util.setValue(i + 1, 8, po.getPlanEndDate() == null ? "" : po.getPlanEndDate());
+			util.setValue(i + 1, 9, po.getMworkerCnt() == null ? "" : po.getMworkerCnt());
+			util.setValue(i + 1, 10, po.getMaintainBeginDate() == null ? "" : po.getMaintainBeginDate());
+			util.setValue(i + 1, 11, po.getMaintainStatusDesc() == null ? "" : po.getMaintainStatusDesc());
+			util.setValue(i + 1, 12, po.getMaintainSpeed() == null ? "" : po.getMaintainSpeed());
+			util.setValue(i + 1, 13, po.getFaultTypeDesc() == null ? "" : po.getFaultTypeDesc());
+			util.setValue(i + 1, 14, po.getMaintainPmName() == null ? "" : po.getMaintainPmName());
 
-			util.setValue(i + 1, 16, po.getAcceptecallMan()==null?"":po.getAcceptecallMan());
-			util.setValue(i + 1, 17, po.getSolution()==null?"":po.getSolution());
-			util.setValue(i + 1, 18, po.getMaintainResultdesc()==null?"":po.getMaintainResultdesc());
-			util.setValue(i + 1, 19, po.getMaintainRemark()==null?"":po.getMaintainRemark());
-			util.setValue(i + 1, 20, po.getUserScore()==null?"":po.getUserScore());
-			util.setValue(i + 1, 21, po.getUserProposal()==null?"":po.getUserProposal());
-			util.setValue(i + 1, 22, po.getLastUpdDate()==null?"":po.getLastUpdDate());
-			util.setValue(i + 1, 23, po.getInsUser()==null?"":po.getInsUser());
-			util.setValue(i + 1, 24, po.getInsDate()==null?"":po.getInsDate());
-			util.setValue(i + 1, 25, po.getUpdUser()==null?"":po.getUpdUser());
-			util.setValue(i + 1, 26, po.getUpdDate()==null?"":po.getUpdDate());
+			util.setValue(i + 1, 15, po.getAcceptStatusDesc() == null ? "" : po.getAcceptStatusDesc());
+
+			util.setValue(i + 1, 16, po.getAcceptecallMan() == null ? "" : po.getAcceptecallMan());
+			util.setValue(i + 1, 17, po.getSolution() == null ? "" : po.getSolution());
+			util.setValue(i + 1, 18, po.getMaintainResultdesc() == null ? "" : po.getMaintainResultdesc());
+			util.setValue(i + 1, 19, po.getMaintainRemark() == null ? "" : po.getMaintainRemark());
+			util.setValue(i + 1, 20, po.getUserScore() == null ? "" : po.getUserScore());
+			util.setValue(i + 1, 21, po.getUserProposal() == null ? "" : po.getUserProposal());
+			util.setValue(i + 1, 22, po.getLastUpdDate() == null ? "" : po.getLastUpdDate());
+			util.setValue(i + 1, 23, po.getInsUser() == null ? "" : po.getInsUser());
+			util.setValue(i + 1, 24, po.getInsDate() == null ? "" : po.getInsDate());
+			util.setValue(i + 1, 25, po.getUpdUser() == null ? "" : po.getUpdUser());
+			util.setValue(i + 1, 26, po.getUpdDate() == null ? "" : po.getUpdDate());
 		}
 	}
+
 	/**
 	 * 
 	 * @param request
@@ -348,5 +356,88 @@ public class MOrderController extends AbstractMultiController {
 	 */
 	public ModelAndView fileUploadPage(HttpServletRequest request, HttpServletResponse response) {
 		return new ModelAndView("fileUpload");
+	}
+
+	/**
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws Exception
+	 * @version update by xh 2018年2月24日
+	 */
+	public void uploadExcelFile(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String morderId = request.getParameter("morderId");
+		SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-DD");
+		logger.debug("调试上传文件的维修订单号=" + morderId);
+		if (morderId == null || morderId == "") {
+			morderId = sdf.format(new Date());
+		}
+		UploadHelper helper = new UploadHelper(request);
+		ArrayList<ArrayList<Object>> list = new ArrayList<ArrayList<Object>>();
+		// 上传文件
+		List<MultipartFile> multipartFiles = helper.getFileMap(-1, null);
+		String revPath = "//" + IMOrderDbService.morderFileDic + morderId + "//";
+		for (MultipartFile multipartFile : multipartFiles) {
+			String filePath = helper.uploadFile(multipartFile, getFileServerPath(morderId));
+			// 文件已经读取了
+			ExcelUtil excelUtil = new ExcelUtil();
+			list = excelUtil.readExcel2007(new File(filePath));
+
+		}
+		List<MOrderVO> morderList = new ArrayList<>();
+		for (int i = 0; i < list.size(); i++) {
+			MOrderVO vo = new MOrderVO();
+			morderList.add(vo);
+			for (int j = 0; j < list.get(i).size(); j++) {
+				vo.setConvergeBoxNo(String.valueOf(list.get(i).get(0)));
+			}
+		}
+		List<MOrderVO> previewData = this.morderDbService.findAllMorderForImport(morderList);
+		ReturnAjaxResult(response, previewData);
+	}
+
+	/**
+	 * excel 导入
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws Exception
+	 * @version update by xh 2018年2月21日
+	 */
+	public void ajaxBatchInsertMorder(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		long res = 0;
+		String returnMsgContent = "sucess";
+		MOrderVO whereCause = new MOrderVO();
+		bindObject(request, whereCause);
+		
+		List<MOrderVO> list=JSON.parseArray(whereCause.getExcelImportString(), MOrderVO.class);
+		for(MOrderVO vo:list) {
+			vo.setInsUser(super.getLoginUserId(request));
+			vo.setUpdUser(super.getLoginUserId(request));
+			vo.setMorderNo(OrderNoBuilder.BuildMOrderNo());
+			vo.setMaintainStatus("0");
+			vo.setMaintainSpeed("0");
+			vo.setMworkerCnt("0");
+			vo.setUserScore("0");
+			vo.setAcceptStatus("0");
+			vo.setFaultDesc("设备【"+vo.getDeviceItemUid()+"】故障！");
+			vo.setMaintainRemark("设备"+vo.getDeviceItemUid()+"掉电！");
+		}
+		try {
+			res = this.morderDbService.batchInsertMOrder(list);
+		} catch (SmartFunctionException e1) {
+			returnMsgContent = e1.getMessage();
+			res = -1;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			returnMsgContent = "保存维修订单信息异常！" + e.getMessage();
+			logger.error(returnMsgContent, e);
+			res = -1;
+		}
+		if (res == -1) {
+			super.ReturnAjaxResult(response, res, returnMsgContent, MessageType.error);
+		} else {
+			super.ReturnAjaxResult(response, res, returnMsgContent, MessageType.info);
+		}
 	}
 }

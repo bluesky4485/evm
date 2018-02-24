@@ -82,7 +82,10 @@ $(document).ready(function() {
 		var date =$("#orderStDg").datagrid("getRows");
 		for(var i=0;i<date.length;i++){
 		   var orderNo=date[i].orderNo;
-		   $("#batch_print_hidden").append("<div style='width:70mm;height:50mm' id='"+orderNo+"'></div>")
+		   var convergeBoxNo=date[i].convergeBoxNo;
+		   var content="<div style='width:70mm;height:50mm' id='"+orderNo+"'></div>";
+		   /*content+="订单编号:"+orderNO+"箱号:"+convergeBoxNo;   */
+		   $("#batch_print_hidden").append(content);
 		   createEvm(orderNo ,orderNo,150,150);
 	   }
 		$("#batch_print_hidden").jqprint({debug: true,operaSupport: true});

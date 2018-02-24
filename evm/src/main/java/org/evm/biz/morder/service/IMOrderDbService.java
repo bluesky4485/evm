@@ -5,6 +5,7 @@ import java.util.List;
 import org.evm.core.entity.PageResult;
 import org.evm.biz.morder.entity.MOrderFileVO;
 import org.evm.biz.morder.entity.MOrderVO;
+import org.evm.biz.order.entity.OrderVO;
 
 public interface IMOrderDbService {
 	public final String morderFileDic = "\\upload\\morder\\";
@@ -16,6 +17,8 @@ public interface IMOrderDbService {
 	final String MS_DELETE_MORDER = "MS_DELETE_MORDER";
 	final String MS_GET_MORDER_BYID = "MS_GET_MORDER_BYID";
 	final String MS_FIND_MORDER_EXCEL_EXPORT = "MS_FIND_MORDER_EXCEL_EXPORT";
+	//TODO:根据汇聚箱编号进行导入
+	final String MS_FIND_MORDER_EXCEL_IMPORT="MS_FIND_MORDER_EXCEL_IMPORT";
 	// -------APP-----------------------------------------------------------------------------------------------------
 	final String MS_UPDATE_USERPROPOSAL = "MS_UPDATE_USERPROPOSAL";
 	final String MS_UPDATE_MAINTAIN_BEGIN_DATE = "MS_UPDATE_MAINTAIN_BEGIN_DATE";
@@ -164,4 +167,18 @@ public interface IMOrderDbService {
 	 * @version update by x 2018年1月18日
 	 */
 	List<MOrderVO> findAllMorderForExport(MOrderVO whereCause);
+	/**
+	 * excel导入预览查询
+	 * @param whereCause
+	 * @return
+	 * @version update by xh 2018年2月23日
+	 */
+	List<MOrderVO> findAllMorderForImport(List<MOrderVO> whereCause);
+	/**
+	 * excel 导入批量插入
+	 * @param whereCause
+	 * @return
+	 * @version update by xh 2018年2月24日
+	 */
+	long batchInsertMOrder(List<MOrderVO> whereCause);
 }
