@@ -383,9 +383,10 @@
 		 <![CDATA[
 			) device
 		LEFT JOIN qr_order ord ON device.order_id = ord.order_id and ord.order_status=0
-		LEFT JOIN qr_morder mord ON ord.ORDER_ID = mord.ORDER_ID and mord.MORDER_STATUS=0 
-	    ORDER BY ord.order_id desc ,mord.MORDER_ID desc
+		LEFT JOIN (select * from qr_morder a where convert(a.MAINTAIN_STATUS,SIGNED)<3) mord ON ord.ORDER_ID = mord.ORDER_ID and mord.MORDER_STATUS=0 
+	    ORDER BY device.DEVICEITEM_UID desc,ord.order_id desc ,mord.MORDER_ID desc
 		 ]]>
+		 <!--订单是未完成的  -->
 	</select>
 	<!-- 信息录入 -->
 	<insert id="MS_INSERT_MORDER"  parameterClass="PARA_MOREDER">

@@ -385,7 +385,8 @@ public class MOrderController extends AbstractMultiController {
 
 		}
 		List<MOrderVO> morderList = new ArrayList<>();
-		for (int i = 0; i < list.size(); i++) {
+		// TODO:i=0为标题行
+		for (int i = 1; i < list.size(); i++) {
 			MOrderVO vo = new MOrderVO();
 			morderList.add(vo);
 			for (int j = 0; j < list.get(i).size(); j++) {
@@ -409,9 +410,9 @@ public class MOrderController extends AbstractMultiController {
 		String returnMsgContent = "sucess";
 		MOrderVO whereCause = new MOrderVO();
 		bindObject(request, whereCause);
-		
-		List<MOrderVO> list=JSON.parseArray(whereCause.getExcelImportString(), MOrderVO.class);
-		for(MOrderVO vo:list) {
+
+		List<MOrderVO> list = JSON.parseArray(whereCause.getExcelImportString(), MOrderVO.class);
+		for (MOrderVO vo : list) {
 			vo.setInsUser(super.getLoginUserId(request));
 			vo.setUpdUser(super.getLoginUserId(request));
 			vo.setMorderNo(OrderNoBuilder.BuildMOrderNo());
@@ -420,8 +421,8 @@ public class MOrderController extends AbstractMultiController {
 			vo.setMworkerCnt("0");
 			vo.setUserScore("0");
 			vo.setAcceptStatus("0");
-			vo.setFaultDesc("设备【"+vo.getDeviceItemUid()+"】故障！");
-			vo.setMaintainRemark("设备"+vo.getDeviceItemUid()+"掉电！");
+			vo.setFaultDesc("设备【" + vo.getDeviceItemUid() + "】故障！");
+			vo.setMaintainRemark("设备" + vo.getDeviceItemUid() + "掉电！");
 		}
 		try {
 			res = this.morderDbService.batchInsertMOrder(list);

@@ -242,7 +242,7 @@
 			maximizable : false,
 			shadow : true,
 			striped : true"
-		style="width: 550px; height: 120px;">
+		style="width: 490px; height: 110px;">
 		<form id="filemainForm" method="post" style ="padding:20px 10px 0 0">
 			<div id="container" class="itemForm">
 				<div style="margin-left: 10px">
@@ -267,12 +267,12 @@
 			maximizable : false,
 			shadow : true,
 			striped : true"
-		style="width: 650px; height: 400px;">
+		style="width: 650px; height: 500px;">
 		<input type="hidden" id="openType"/>
 		    <div class="easyui-layout" style="width:100%;height:100%;">
 		        <div data-options="region:'center',split:false,border:true,collapsible:false">
 			        <table id="dataPreViewDg"class="easyui-datagrid" style="width:auto;height:auto"   
-						data-options="singleSelect:false,collapsible:false,fit:true,pagination:true,rownumbers:true,pageSize:12,pageList:[12,20,50],checkbox:true">
+						data-options="singleSelect:false,collapsible:false,fit:true,pagination:false,rownumbers:true,pageSize:12,pageList:[12,20,50],checkbox:true">
 						<thead>
 							<tr>
 							    <th data-options="field:'ck',checkbox:true,width:50"></th>
