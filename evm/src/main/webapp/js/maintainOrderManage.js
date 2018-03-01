@@ -158,7 +158,7 @@ $(document).ready(function() {
 		var data=$("#dataPreViewDg").datagrid("getSelections");
 		var array=[];
 		for(var i=0;i<data.length;i++){
-			array.push({"orderId":data[i].orderId,"deviceItemUid":data[i].deviceItemUid});
+			array.push({"orderId":data[i].orderId,"deviceItemUid":data[i].deviceItemUid,'morderId':data[i].morderId,"morderNo":data[i].morderNo});
 		}
 		
 		

@@ -19,6 +19,8 @@ public interface IMOrderDbService {
 	final String MS_FIND_MORDER_EXCEL_EXPORT = "MS_FIND_MORDER_EXCEL_EXPORT";
 	//TODO:根据汇聚箱编号进行导入
 	final String MS_FIND_MORDER_EXCEL_IMPORT="MS_FIND_MORDER_EXCEL_IMPORT";
+	final String MS_FIND_DEVICEITEM_EXCEL_IMPORT="MS_FIND_DEVICEITEM_EXCEL_IMPORT";
+	final String MS_UPDATE_MORDER_FALUTDESC_EXCEL_IMPORT="MS_UPDATE_MORDER_FALUTDESC_EXCEL_IMPORT";
 	// -------APP-----------------------------------------------------------------------------------------------------
 	final String MS_UPDATE_USERPROPOSAL = "MS_UPDATE_USERPROPOSAL";
 	final String MS_UPDATE_MAINTAIN_BEGIN_DATE = "MS_UPDATE_MAINTAIN_BEGIN_DATE";
@@ -181,4 +183,19 @@ public interface IMOrderDbService {
 	 * @version update by xh 2018年2月24日
 	 */
 	long batchInsertMOrder(List<MOrderVO> whereCause);
+	/**
+	 * 校验导入的设备是否存在
+	 * @param whereCause
+	 * @return
+	 * @version update by xh 2018年3月1日
+	 */
+	List<String> findDeviceItemByImportData(List<String> whereCause);
+	/**
+	 * 如果存在维修订单的更新描述
+	 * @param whereCause
+	 * @return
+	 * @version update by xh 2018年3月1日
+	 */
+	long batchUpdateMorderFaultDescByImort(List<MOrderVO> whereCause);
+ 
 }

@@ -352,6 +352,15 @@
 			
 			</dynamic>
 	</select>
+	<!-- 导入前设备校验 -->
+	<select id="MS_FIND_DEVICEITEM_EXCEL_IMPORT" resultClass="java.lang.String"   >
+		<![CDATA[
+		select item.deviceitem_uid from qr_deviceitem item  where item.deviceitem_status=0  and  item.deviceitem_uid in 
+		  ]]>
+		  <iterate open="(" close=")" conjunction=",">  
+		   #[]# 
+		  </iterate>
+	</select>
 	<resultMap id="RESULT_MOREDER_IMPORT" class="org.evm.biz.morder.entity.MOrderVO">
 		<result property="orderId" column="ORDER_ID" />
 		<result property="orderNo" column="ORDER_NO" />
@@ -360,6 +369,7 @@
 		<result property="morderId" column="MORDER_ID" /> 
 		<result property="morderNo" column="MORDER_NO" /> 
 		<result property="maintainStatus" column="MAINTAIN_STATUS" /> 
+		<result property="faultDesc" column="FAULT_DESC" /> 
 	</resultMap>
 	<!-- 导入数据预览 -->
 	<select id="MS_FIND_MORDER_EXCEL_IMPORT" resultMap="RESULT_MOREDER_IMPORT"  parameterClass="java.util.List">
@@ -371,7 +381,8 @@
 			ord.convergeBox_No CONVERGEBOX_NO,
 			ifnull(mord.MORDER_ID, 0) MORDER_ID,
 			mord.MORDER_NO MORDER_NO,
-			mord.MAINTAIN_STATUS MAINTAIN_STATUS
+			mord.MAINTAIN_STATUS MAINTAIN_STATUS,
+			mord.FAULT_DESC
 		FROM
 			(SELECT order_id, deviceitem_uid
 				FROM qr_deviceitem item
@@ -383,11 +394,34 @@
 		 <![CDATA[
 			) device
 		LEFT JOIN qr_order ord ON device.order_id = ord.order_id and ord.order_status=0
-		LEFT JOIN (select * from qr_morder a where convert(a.MAINTAIN_STATUS,SIGNED)<3) mord ON ord.ORDER_ID = mord.ORDER_ID and mord.MORDER_STATUS=0 
+		LEFT JOIN  (select * from qr_morder a where a.MORDER_STATUS=0 and a.ORDER_ID in(SELECT order_id
+				FROM qr_deviceitem item
+				WHERE item.deviceitem_status=0 
+				AND	deviceitem_uid IN  
+		]]>
+		<iterate open="(" close=")" conjunction=",">    
+            #list[].convergeBoxNo#    
+        </iterate>  
+		 <![CDATA[) order by MORDER_ID desc limit 1) mord ON ord.ORDER_ID = mord.ORDER_ID and mord.MORDER_STATUS=0 
 	    ORDER BY device.DEVICEITEM_UID desc,ord.order_id desc ,mord.MORDER_ID desc
 		 ]]>
 		 <!--订单是未完成的  -->
 	</select>
+	<!-- 按导入批量更新维修结果 -->
+	<update id="MS_UPDATE_MORDER_FALUTDESC_EXCEL_IMPORT" parameterClass="PARA_MOREDER">
+	    <![CDATA[
+	        update qr_morder set fault_Desc=concat(#faultDesc#,fault_Desc),
+							        MAINTAIN_REMARK=concat(#maintainRemark#,MAINTAIN_REMARK),
+							        UPD_USER=#updUser#,
+							        UPD_DATE=sysdate() 
+	        where   MORDER_ID=#morderId#
+	    ]]>
+		<dynamic>
+			<isNotEmpty prepend=" and " property="updDate">
+				<![CDATA[ UPD_DATE=STR_TO_DATE(#updDate#,'%Y-%m-%d %H:%i:%s')]]>
+			</isNotEmpty>
+		</dynamic>
+	</update>
 	<!-- 信息录入 -->
 	<insert id="MS_INSERT_MORDER"  parameterClass="PARA_MOREDER">
 	   <![CDATA[

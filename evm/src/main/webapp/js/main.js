@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	          $("#center_iframe").width(document.body.offsetWidth-222);
+	        $("#center_iframe").width(document.body.offsetWidth-230);
 			var isIE = navigator.userAgent.toUpperCase().indexOf("MSIE") != -1 ? true : false;
 			var isFirefox = navigator.userAgent.toUpperCase().indexOf("Firefox") != -1 ? true : false;
 			var isChrome = window.navigator.userAgent.indexOf("Chrome") != -1 ? true : false;

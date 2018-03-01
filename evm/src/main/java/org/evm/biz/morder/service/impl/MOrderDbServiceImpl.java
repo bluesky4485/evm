@@ -185,4 +185,16 @@ public class MOrderDbServiceImpl extends BaseDBService implements IMOrderDbServi
 	public long batchInsertMOrder(List<MOrderVO> whereCause) {
 		return super.batchInsert(MS_INSERT_MORDER, whereCause);
 	}
+
+	@Override
+	public List<String> findDeviceItemByImportData(List<String> whereCause) {
+		// TODO Auto-generated method stub
+		return super.find(MS_FIND_DEVICEITEM_EXCEL_IMPORT, whereCause);
+	}
+
+	@Override
+	public long batchUpdateMorderFaultDescByImort(List<MOrderVO> whereCause) {
+		// TODO Auto-generated method stub
+		return super.batchUpdate(MS_UPDATE_MORDER_FALUTDESC_EXCEL_IMPORT, whereCause);
+	}
 }

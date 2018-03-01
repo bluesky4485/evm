@@ -87,22 +87,13 @@ $(function(){
 		up.removeFile(file);
 		//window.parent.exportFinish(info.response);
 		var data=JSON.parse(info.response)
-		//TODO:导入数据预览
-		$("#dataPreviewWindow").window("open");
-		$("#dataPreViewDg").datagrid('loadData', data.bizData);
-		
-		
-		//$.messager.alert('提示', '上传完毕！', 'info');
-		//$('#' + file.id + '>strong').html("100%");
-		/* var response = $.parseJSON(info.response);
-		if (response.status) {
-			$('#' + file.id + '>strong').html("100%");
-			//console.info(response.fileUrl);
-			//console.info(file.name);
-			//$('#f1').append('<input type="hidden" name="fileUrl" value="'+response.fileUrl+'"/>');
-			//$('#f1').append('<input type="hidden" name="fileName" value="'+file.name+'"/><br/>');
-			//$(':input[name="data.photo"]').val(response.fileUrl);
-		} */
+		if(data.messageType=="error"){
+			alert(data.message);
+		}else{
+			//TODO:导入数据预览
+			$("#dataPreviewWindow").window("open");
+			$("#dataPreViewDg").datagrid('loadData', data.bizData);
+		}
 	});
 	uploader.bind('StateChanged', function(uploader) {
 		/* if (uploader.files.length === (uploader.total.uploaded + uploader.total.failed)) {

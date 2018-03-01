@@ -267,7 +267,7 @@
 			maximizable : false,
 			shadow : true,
 			striped : true"
-		style="width: 650px; height: 500px;">
+		style="width: 780px; height: 500px;">
 		<input type="hidden" id="openType"/>
 		    <div class="easyui-layout" style="width:100%;height:100%;">
 		        <div data-options="region:'center',split:false,border:true,collapsible:false">
@@ -283,6 +283,8 @@
 								<th data-options="field:'morderId',width:80,align:'center',hidden:true">运维订单ID</th>
 								<th data-options="field:'morderNo',width:130,align:'center'">运维订单编号</th>
 								<th data-options="field:'maintainStatus',width:80,align:'center',formatter:function(value,row,index){return BasePage.WorkMaintainStatusformater(value);}">维修状态</th>
+								<th data-options="field:'faultDesc',width:130,align:'center'">故障描述</th>
+								
 							</tr>
 						</thead>
 					   </table>

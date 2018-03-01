@@ -385,6 +385,7 @@ public class MOrderController extends AbstractMultiController {
 
 		}
 		List<MOrderVO> morderList = new ArrayList<>();
+		List<String> itemUidList = new ArrayList<>();
 		// TODO:i=0为标题行
 		for (int i = 1; i < list.size(); i++) {
 			MOrderVO vo = new MOrderVO();
@@ -392,9 +393,34 @@ public class MOrderController extends AbstractMultiController {
 			for (int j = 0; j < list.get(i).size(); j++) {
 				vo.setConvergeBoxNo(String.valueOf(list.get(i).get(0)));
 			}
+			itemUidList.add(String.valueOf(list.get(i).get(0)));
 		}
-		List<MOrderVO> previewData = this.morderDbService.findAllMorderForImport(morderList);
-		ReturnAjaxResult(response, previewData);
+		List<String> canFindUid = morderDbService.findDeviceItemByImportData(itemUidList);
+		// TODO:校验输入的UID是否是库中存在的
+		boolean checkResult = true;
+		StringBuilder msgContent = new StringBuilder();
+		if (canFindUid == null || canFindUid.size() == 0) {
+			checkResult = false;
+			for (String str : itemUidList) {
+				msgContent.append(str).append(",");
+			}
+		} else {
+			for (String str : itemUidList) {
+				if (!canFindUid.contains(str)) {
+					msgContent.append(str).append(",");
+					checkResult = false;
+				}
+			}
+		}
+
+		if (!checkResult) {
+			String msg = "excel中有[" + msgContent.toString().substring(0, msgContent.length() - 1)
+					+ "]未能找到相关设备，请核对导入信息!";
+			ReturnAjaxMessage(response, msg, MessageType.error);
+		} else {
+			List<MOrderVO> previewData = this.morderDbService.findAllMorderForImport(morderList);
+			ReturnAjaxResult(response, previewData);
+		}
 	}
 
 	/**
@@ -412,6 +438,8 @@ public class MOrderController extends AbstractMultiController {
 		bindObject(request, whereCause);
 
 		List<MOrderVO> list = JSON.parseArray(whereCause.getExcelImportString(), MOrderVO.class);
+		List<MOrderVO> insertList = new ArrayList<>();
+		List<MOrderVO> updList = new ArrayList<>();
 		for (MOrderVO vo : list) {
 			vo.setInsUser(super.getLoginUserId(request));
 			vo.setUpdUser(super.getLoginUserId(request));
@@ -423,9 +451,19 @@ public class MOrderController extends AbstractMultiController {
 			vo.setAcceptStatus("0");
 			vo.setFaultDesc("设备【" + vo.getDeviceItemUid() + "】故障！");
 			vo.setMaintainRemark("设备" + vo.getDeviceItemUid() + "掉电！");
+			if (vo.getMorderId() == 0 || vo.getMorderNo() == "") {
+				insertList.add(vo);
+			} else {
+				updList.add(vo);
+			}
 		}
 		try {
-			res = this.morderDbService.batchInsertMOrder(list);
+			if (insertList.size() > 0) {
+				res = this.morderDbService.batchInsertMOrder(insertList);
+			}
+			if (updList.size() > 0) {
+				res = this.morderDbService.batchUpdateMorderFaultDescByImort(updList);
+			}
 		} catch (SmartFunctionException e1) {
 			returnMsgContent = e1.getMessage();
 			res = -1;
