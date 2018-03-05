@@ -384,6 +384,9 @@ public class MOrderController extends AbstractMultiController {
 			list = excelUtil.readExcel2007(new File(filePath));
 
 		}
+		if (list.size() < 1) {
+
+		}
 		List<MOrderVO> morderList = new ArrayList<>();
 		List<String> itemUidList = new ArrayList<>();
 		// TODO:i=0为标题行
@@ -406,7 +409,7 @@ public class MOrderController extends AbstractMultiController {
 			}
 		} else {
 			for (String str : itemUidList) {
-				if (!canFindUid.contains(str)) {
+				if (str != "" && !canFindUid.contains(str)) {
 					msgContent.append(str).append(",");
 					checkResult = false;
 				}
