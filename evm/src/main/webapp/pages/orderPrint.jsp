@@ -68,7 +68,7 @@
          		项目名称:<input id="projectid" class="easyui-combobox"  data-options=" panelHeight:'120',valueField:'projectId',textField:'projectName'" style="width:120px;height:28px"/>
                                   订单编号<input id="oNo"  type="text"   class="easyui-textbox"  style="height:30px;width:150px;" />
                                   汇聚箱编号：<input id="convergeBoxNo"  type="text"   class="easyui-textbox"  style="height:30px;width:150px;" />                  
-                                  施工类型：<input id="workType"  type="text"  class="easyui-combobox"  data-options=" panelHeight:'auto',valueField:'id',textField:'text',editable:false"style="width:120px;height:28px"/>                  
+                                  施工类型：<input id="workType"  type="text"  class="easyui-combobox"  data-options=" panelHeight:'auto',valueField:'id',textField:'text',editable:false"style="width:100px;height:28px"/>                  
                                   施工状态:<input  id="workStatus"   class="easyui-combobox" data-options=" panelHeight:'100',valueField:'id',textField:'text'" style="width:120px;height:28px"/>
                 <a id="doSearch" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'" style="width:80px">查询</a>
 		    </form>
