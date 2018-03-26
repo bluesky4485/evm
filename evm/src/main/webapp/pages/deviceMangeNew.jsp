@@ -249,11 +249,11 @@
                            <td><input id="upd_deviceItemAddr"  type="text"   class="easyui-textbox"  multiline="true" style="height:60px;width:150px;" /><a id="updMap" href="#" class="easyui-linkbutton">地图</a></td>
                          </tr>
                           <tr>
-                           <td>维度:</td>
+                           <td>纬度:</td>
                            <td><input id="hidden_upd_lat"  type="text"   class="easyui-textbox"   style="height:30px;width:150px;" value="0" /></td>
 	                     </tr>
 	                     <tr>
-	                       <td>维度:</td>
+	                       <td>经度:</td>
 	                       <td><input id="hidden_upd_lng"  type="text"   class="easyui-textbox"   style="height:30px;width:150px;" value="0" /></td>
 	                     </tr>
                     </table>

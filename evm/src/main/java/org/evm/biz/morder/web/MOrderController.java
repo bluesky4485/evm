@@ -385,12 +385,18 @@ public class MOrderController extends AbstractMultiController {
 
 		}
 		if (list.size() < 1) {
-
+			String msg = "请使用标准模板进行导入!";
+			ReturnAjaxMessage(response, msg, MessageType.error);
+			return;
 		}
 		List<MOrderVO> morderList = new ArrayList<>();
 		List<String> itemUidList = new ArrayList<>();
 		// TODO:i=0为标题行
 		for (int i = 1; i < list.size(); i++) {
+			//TODO:如果数据为空不进行比对
+			if(list.get(i).get(0).equals("")) {
+				continue;
+			}
 			MOrderVO vo = new MOrderVO();
 			morderList.add(vo);
 			for (int j = 0; j < list.get(i).size(); j++) {
@@ -452,8 +458,14 @@ public class MOrderController extends AbstractMultiController {
 			vo.setMworkerCnt("0");
 			vo.setUserScore("0");
 			vo.setAcceptStatus("0");
-			vo.setFaultDesc("设备【" + vo.getDeviceItemUid() + "】故障！");
-			vo.setMaintainRemark("设备" + vo.getDeviceItemUid() + "掉电！");
+			String info="";
+			String itemUid=vo.getDeviceItemUid();
+			String[] arr=itemUid.split("_");
+			if(arr.length>0) {
+				info=arr[0];
+			}
+			vo.setFaultDesc("设备【" + info + "】故障！");
+			vo.setMaintainRemark("设备" + info + "掉电！");
 			if (vo.getMorderId() == 0 || vo.getMorderNo() == "") {
 				insertList.add(vo);
 			} else {

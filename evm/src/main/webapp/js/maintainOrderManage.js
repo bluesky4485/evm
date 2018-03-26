@@ -152,6 +152,7 @@ $(document).ready(function() {
 	function importMorder(){
         
 	}
+//	$("#dataPreViewDg").datagrid('doCellTip',{cls:{'max-width':'500px'}});
 	$("#preViewWindow_OK").click(function(){
 		//TODO:数据导入
 		var para={};

@@ -355,7 +355,7 @@
 	<!-- 导入前设备校验 -->
 	<select id="MS_FIND_DEVICEITEM_EXCEL_IMPORT" resultClass="java.lang.String"   >
 		<![CDATA[
-		select item.deviceitem_uid from qr_deviceitem item  where item.deviceitem_status=0  and  item.deviceitem_uid in 
+		select substring_index(item.deviceitem_uid,'_',1) from qr_deviceitem item  where item.deviceitem_status=0  and  substring_index(item.deviceitem_uid,'_',1) in 
 		  ]]>
 		  <iterate open="(" close=")" conjunction=",">  
 		   #[]# 
@@ -387,7 +387,7 @@
 			(SELECT order_id, deviceitem_uid
 				FROM qr_deviceitem item
 				WHERE item.deviceitem_status=0
-				AND	deviceitem_uid IN]]>
+				AND	substring_index(deviceitem_uid,'_',1) IN]]>
 		<iterate open="(" close=")" conjunction=",">    
             #list[].convergeBoxNo#    
         </iterate> 
@@ -397,7 +397,7 @@
 		LEFT JOIN  (select * from qr_morder a where a.MORDER_STATUS=0 and a.ORDER_ID in(SELECT order_id
 				FROM qr_deviceitem item
 				WHERE item.deviceitem_status=0 
-				AND	deviceitem_uid IN  
+				AND	substring_index(deviceitem_uid,'_',1) IN  
 		]]>
 		<iterate open="(" close=")" conjunction=",">    
             #list[].convergeBoxNo#    
@@ -510,8 +510,14 @@
 								 MAINTAIN_BEGIN_DATE=if(#maintainBeginDate#='' ,null,STR_TO_DATE(#maintainBeginDate#,'%Y-%m-%d')),
 								 MAINTAIN_STATUS=#maintainStatus#,
 								 MAINTAIN_SPEED=#maintainSpeed#,
-								 FAULT_TYPE=#faultType#,
-								 MAINTAIN_PM=#maintainPmId#,
+								 FAULT_TYPE=#faultType#, 
+			]]>
+			<dynamic>
+				<isNotEmpty   property="maintainPmId">
+					<![CDATA[ MAINTAIN_PM=#maintainPmId#,]]>
+				</isNotEmpty>
+			</dynamic>					 
+			<![CDATA[
 								 ACCEPT_STATUS=#acceptStatus#,
 								 ACCEPTECALL_MAN=#acceptecallMan#,
 								 CALLBACK_DATE=if(#callbackDate#='' ,null,STR_TO_DATE(#callbackDate#,'%Y-%m-%d')),

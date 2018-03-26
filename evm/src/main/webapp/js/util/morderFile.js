@@ -10,7 +10,7 @@ $(function(){
 		runtimes : 'html5,flash,silverlight,html4',//设置运行环境，会按设置的顺序，可以选择的值有html5,gears,flash,silverlight,browserplus,html4
 		flash_swf_url :   '/js/plupload-2.0.0/js/Moxie.swf',// Flash环境路径设置
 		silverlight_xap_url :   '/js/plupload-2.0.0/js/Moxie.xap',
-		url : '/evmis/morderController.do?method=uploadExcelFile',//上传文件的controller
+		url : BasePage.urlPre+'/morderController.do?method=uploadExcelFile',//上传文件的controller
 		max_file_size : '50mb',//100b, 10kb, 10mb, 1gb
 		chunk_size : '50mb',//分块大小，小于这个大小的不分块
 		unique_names : true,//生成唯一文件名
@@ -81,18 +81,22 @@ $(function(){
 	uploader.bind('FileUploaded', function(up, file, info) {//上传完毕
 		parent.$.messager.progress('close');
 		//关闭外围dialog
-		$("#fileLoad_window").window("close");
-		$fileName.val('');
-		$fileID.val('');
-		up.removeFile(file);
-		//window.parent.exportFinish(info.response);
-		var data=JSON.parse(info.response)
-		if(data.messageType=="error"){
-			alert(data.message);
-		}else{
-			//TODO:导入数据预览
-			$("#dataPreviewWindow").window("open");
-			$("#dataPreViewDg").datagrid('loadData', data.bizData);
+		try{
+			$("#fileLoad_window").window("close");
+			$fileName.val('');
+			$fileID.val('');
+			up.removeFile(file);
+			//window.parent.exportFinish(info.response);
+			var data=JSON.parse(info.response)
+			if(data.messageType=="error"){
+				alert(data.message);
+			}else{
+				//TODO:导入数据预览
+				$("#dataPreviewWindow").window("open");
+				$("#dataPreViewDg").datagrid('loadData', data.bizData);
+			}
+		}catch(err){
+			alert(err);
 		}
 	});
 	uploader.bind('StateChanged', function(uploader) {
