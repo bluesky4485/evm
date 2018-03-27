@@ -106,18 +106,21 @@ $(document).ready(function() {
 		morderFile.loadCtrl();
 		//初始客户信息
 		var cusUpdObj=maintainOrderObj.order.project.custom;
-		// 客户姓名
-		$("#cName").textbox("setValue", cusUpdObj["cname"]);
-		//客户电话1
-		$("#ctel1").textbox("setValue", cusUpdObj["ctel1"]);
-		//客户电话2
-		$("#ctel2").textbox("setValue", cusUpdObj["ctel2"]);
-		//客户地址
-		$("#caddress").textbox("setValue", cusUpdObj["caddress"]);
-		$("#lng").val(cusUpdObj["lng"]);
-		$("#lat").val(cusUpdObj["lat"]);
-		//用户类别
-		$("#utype").combobox("setValue", cusUpdObj["ctype"]);
+		if(cusUpdObj!=undefined){
+			// 客户姓名
+			$("#cName").textbox("setValue", cusUpdObj["cname"]);
+			//客户电话1
+			$("#ctel1").textbox("setValue", cusUpdObj["ctel1"]);
+			//客户电话2
+			$("#ctel2").textbox("setValue", cusUpdObj["ctel2"]);
+			//客户地址
+			$("#caddress").textbox("setValue", cusUpdObj["caddress"]);
+			$("#lng").val(cusUpdObj["lng"]);
+			$("#lat").val(cusUpdObj["lat"]);
+			//用户类别
+			$("#utype").combobox("setValue", cusUpdObj["ctype"]);
+		}
+		
 		//服务截止日期
 		$("#serviceEndDate").datebox("setValue", maintainOrderObj.order.project["serviceEndDate"]);
 		//初始运维经理
