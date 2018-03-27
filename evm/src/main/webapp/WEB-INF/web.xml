@@ -29,13 +29,13 @@
 		<param-value>classpath:log4j.properties</param-value>
 	</context-param>
 	<listener>
-        <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
-    </listener>
+		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+	</listener>
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
 		    /WEB-INF/config/applicationContext-config.xml
-			,/WEB-INF/config/applicationContext-datasource.xml
+			,/WEB-INF/config/applicationContext-drdatasource.xml
 			,/WEB-INF/config/applicationContext-service.xml
 			,/WEB-INF/config/applicationContext-filter.xml
 		   ,/WEB-INF/config/applicationContext-transaction.xml
@@ -71,8 +71,8 @@
 		<servlet-name>ImageServlet</servlet-name>
 		<url-pattern>/imageServlet</url-pattern>
 	</servlet-mapping>
-	 
- 
+
+
 	<!-- 登录过滤器配置 -->
 	<filter>
 		<filter-name>DelegatingFilterProxy</filter-name>
@@ -102,6 +102,27 @@
 	<servlet-mapping>
 		<servlet-name>CXFService</servlet-name>
 		<url-pattern>/webService/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>druidStatView</servlet-name>
+		<servlet-class>com.alibaba.druid.support.http.StatViewServlet</servlet-class>
+		<init-param>
+			<param-name>resetEnable</param-name>
+			<param-value>false</param-value>
+		</init-param>
+		<init-param>
+			<param-name>loginUsername</param-name>
+			<param-value>admin</param-value>
+		</init-param>
+		<init-param>
+			<param-name>loginPassword</param-name>
+			<param-value>sb!@#admin</param-value>
+		</init-param>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>druidStatView</servlet-name>
+		<url-pattern>/druid/*</url-pattern>
 	</servlet-mapping>
 </web-app>
 

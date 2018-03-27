@@ -182,6 +182,6 @@
 		<property name="methodNameResolver">
 			<ref bean="paraMethodResolver" />
 		</property>
-		<property name="comboPooledDataSource" ref="dataSource" />
+		<property name="druidDataSource" ref="dataSource" />
 	</bean>
 </beans>

@@ -1,13 +1,7 @@
 package org.evm.biz.dbmanager.web;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.nio.channels.FileChannel;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -20,20 +14,33 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.evm.biz.custom.entity.CustomVO;
 import org.evm.biz.dbmanager.entity.BakFileVO;
 import org.evm.biz.sys.SystemConfig;
 import org.evm.core.consts.MessageType;
 import org.evm.core.web.AbstractMultiController;
 
+import com.alibaba.druid.pool.DruidDataSource;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 public class DatabaseManagerController extends AbstractMultiController {
 	private ComboPooledDataSource comboPooledDataSource;
+	private DruidDataSource druidDataSource;
 
 	public void setComboPooledDataSource(ComboPooledDataSource comboPooledDataSource) {
 		this.comboPooledDataSource = comboPooledDataSource;
 	}
+
+	public void setDruidDataSource(DruidDataSource druidDataSource) {
+		this.druidDataSource = druidDataSource;
+	}
+
+	private String getUserName() {
+		return druidDataSource.getUsername();
+	}
+	private String getUserPwd() {
+		return druidDataSource.getPassword();
+	}
+ 
 
 	/**
 	 * 备份
@@ -70,7 +77,7 @@ public class DatabaseManagerController extends AbstractMultiController {
 
 			} else {
 				execStr = " cmd /c mysqldump -h" + hostIP + " -p" + port + " -u" + userName + " -p" + password
-						+ " --lock-all-tables " + databaseName + ">\"" + filePath+"\"";
+						+ " --lock-all-tables " + databaseName + ">\"" + filePath + "\"";
 				logger.debug(osname + "执行备份语句" + execStr);
 				rt.exec(execStr).waitFor();
 			}
@@ -110,7 +117,7 @@ public class DatabaseManagerController extends AbstractMultiController {
 				logger.debug(osname + "执行还原语句" + execStr);
 				rt.exec(new String[] { "sh", "-c", execStr }).waitFor();
 			} else {
-				execStr = " cmd /c mysql -u" + userName + " -p" + password + "  " + databaseName + "<\"" + fPath+"\"";
+				execStr = " cmd /c mysql -u" + userName + " -p" + password + "  " + databaseName + "<\"" + fPath + "\"";
 				logger.debug(osname + "执行备份语句" + execStr);
 				rt.exec(execStr).waitFor();
 			}
